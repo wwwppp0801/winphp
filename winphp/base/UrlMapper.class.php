@@ -6,7 +6,7 @@ class UrlMapper
     private $action;
     public function __construct($url)
     {
-        $this->url = $url;
+        $this->url = trim($url," \t\n/");
         $tokens = explode('/', $this->url);
         $this->controllerName = array_shift($tokens);
         $this->actionName = array_shift($tokens);
@@ -71,8 +71,13 @@ class UrlMapper
             if (file_exists($classFile))
             {
                 require_once ($classFile);
+                if (!class_exists($className))
+                {
+                    throw new SystemException("file: $classFile does not have class: $className");
+                }
             }
         }
+
         if (class_exists($className))
         {
             $action = new $className();

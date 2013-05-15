@@ -23,10 +23,11 @@ function __autoload($classname)
         "Utils"=>"lib/Utils.class.php",
         "DB"=>"lib/DB.class.php",
         "IPUtils"=>"lib/IPUtils.class.php",
+        "Soso_Logger"=>"lib/Logger.class.php",
         'Memcache_Pool'=>"lib/Memcache_Pool.class.php",
     );
     $classpath['Smarty']="lib/Smarty/Smarty.class.php";
-    $file = $classpath[$classname];
+    $file = @$classpath[$classname];
     if (! empty($file))
     {
         if ($file[0] == '/')

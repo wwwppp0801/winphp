@@ -68,21 +68,8 @@ class Utils {
             memcache_close($memcache_obj);
             return false;
         }
-        
         memcache_close($memcache_obj);
-        
         return $res;
-    }
-    
-    private static $_timeout = array('send'=>array('sec'=>0, 'usec'=>50000), 'recv'=>array('sec'=>0, 'usec'=>500000), );
-    private static function _createUDPSocket() {
-        if (($sock = @socket_create(AF_INET, SOCK_DGRAM, SOL_UDP)) === false)
-            return false;
-        $sendPort = rand(10240, 60000);
-        @socket_bind($sock, '0.0.0.0', $sendPort);
-        socket_set_option($sock, SOL_SOCKET, SO_RCVTIMEO, self::$_timeout['recv']);
-        socket_set_option($sock, SOL_SOCKET, SO_SNDTIMEO, self::$_timeout['send']);
-        return $sock;
     }
     
     public static function getClientIP() {

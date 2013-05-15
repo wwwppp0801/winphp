@@ -1,6 +1,4 @@
 <?php
-var_dump($_SERVER);
-exit();
 define('ROOT_PATH', dirname(dirname(__FILE__)));
 require (ROOT_PATH."/config/classpath.php");
 require (ROOT_PATH."/config/conf.php");
@@ -8,7 +6,7 @@ require (ROOT_PATH."/config/conf.php");
 Soso_Logger::open(LOG_PATH);
 try
 {
-    $mapper = new UrlMapper(WinRequest::getParameter($_SERVER['SCRIPT_NAME']));
+    $mapper = new UrlMapper($_SERVER['SCRIPT_NAME']);
     WinRequest::setAttribute("mapper", $mapper);
     $controller = $mapper->getController();
    

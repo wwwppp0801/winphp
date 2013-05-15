@@ -81,7 +81,7 @@ class WinRequest
     
     public static function getParameter($key)
     {
-        return self::$request[$key];
+        return isset(self::$request[$key])?self::$request[$key]:null;
     }
     
     public static function setParameter($key, $value)
