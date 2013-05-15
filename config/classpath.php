@@ -21,6 +21,7 @@ function __autoload($classname)
         "DefaultViewSetting"=>"config/DefaultViewSetting.class.php",
 
         "Utils"=>"lib/Utils.class.php",
+        "DB"=>"lib/DB.class.php",
         "IPUtils"=>"lib/IPUtils.class.php",
         'Memcache_Pool'=>"lib/Memcache_Pool.class.php",
     );
