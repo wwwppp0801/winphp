@@ -14,7 +14,7 @@ else
     Soso_Logger::setLevel(1);
 }
 date_default_timezone_set('Asia/Shanghai');
-define("LOG_PATH", ROOT_PATH."/log");
+define("LOG_PATH", ROOT_PATH."/log/");
 define("IS_DEBUG", $IS_DEBUG);
 define("VERSION", 1);
 

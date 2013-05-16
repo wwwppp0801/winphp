@@ -7,105 +7,110 @@ class UrlMapper
     public function __construct($url)
     {
         $this->url = trim($url," \t\n/");
-        $tokens = explode('/', $this->url);
-        $this->controllerName = array_shift($tokens);
-        $this->actionName = array_shift($tokens);
-        $this->methodName = array_shift($tokens);
-        while (count($tokens) > 0)
-        {
-            $key = array_shift($tokens);
-            $value = array_shift($tokens);
-            if (strlen($key) > 0)
-            {
-                WinRequest::setParameter($key, $value);
+        $tokens = array_filter(explode('/', $this->url));
+
+        $this->controller=$this->getController($tokens);
+        if($tokens[0] && method_exists($this->controller,$tokens[0]."Action")){
+            $this->method=array($this->controller,$tokens[0]."Action");
+            array_shift($tokens);
+        }else{
+            $this->action=$this->getAction($tokens);
+            if($tokens[0] && method_exists($this->action,$tokens[0])){
+                $this->method=array($this->action,$tokens[0]);
+                array_shift($tokens);
+            }else if(!$this->action && method_exists($this->controller,"indexAction")){
+                $this->method=array($this->controller,"indexAction");
+            }else if(method_exists($this->action,'index')){
+                $this->method=array($this->action,"index");
             }
         }
-    }
-    public function getActionName(){
-    	if(!$this->actionName){
-    		return "index";
-    	}
-        return $this->actionName;
-    }
-    public function getControllerName(){
-    	if(!$this->controllerName){
-    		return "index";
-    	}
-        return $this->controllerName;
-    }
-    public function getMethodName(){
-        if(!$this->methodName){
-    		return "index";
-    	}
-        return $this->methodName;
+        if(!$this->method){
+            throw new SystemException("no match method: $url");
+        }
+
+        foreach($tokens as $i=>$token){
+            if (strlen($token) > 0)
+            {
+                WinRequest::setParameter($i, $token);
+            }
+        }
+
     }
     
-    public function getController()
+    public function getController(&$tokens=null)
     {
         if ($this->controller)
         {
             return $this->controller;
         }
-        $controllerName = $this->getControllerName();
-        $className = ucfirst($controllerName."Controller");
-        
-        if (!class_exists($className))
-        {
-            throw new SystemException("no controller:{$controllerName}");
+
+        if(count($tokens)==0){
+            $tokens=array('index');
         }
-        $controller = new $className($controllerName);
-        $this->controller = &$controller;
-        return $controller;
+
+        for($i=count($tokens);$i>0;$i--){
+            $ctokens=array_slice($tokens,0,$i);
+            $classFile = ROOT_PATH."/app/controller/"
+                .implode(array_slice($ctokens,0,count($ctokens)-1),"/")
+                .ucfirst("{$ctokens[count($ctokens)-1]}Controller.class.php");
+            if (file_exists($classFile)){
+                require_once($classFile);
+                $controllerClass=ucfirst($ctokens[count($ctokens)-1]."Controller");
+                if (class_exists($controllerClass))
+                {
+                    $this->controller=new $controllerClass();
+
+                    $this->actionPath=implode($ctokens,'/');
+                    $tokens=array_slice($tokens,$i);
+                    return $this->controller;
+                }else{
+                    throw new SystemException("file: $classFile does not have class: $controllerClass");
+                }
+            }
+        }
+        $this->actionPath='';
+        $this->controller=new BaseController();
+        return $this->controller;
     }
-    public function getAction()
+
+    public function getAction(&$tokens)
     {
         if ($this->action)
         {
             return $this->action;
         }
-        $actionName = $this->getActionName();
-        $className = ucfirst($actionName)."Action";
         
-        if(!class_exists($className)){
-            $classFile = ROOT_PATH."/app/controller/{$this->getControllerName()}/$className.class.php";
-            if (file_exists($classFile))
-            {
-                require_once ($classFile);
-                if (!class_exists($className))
-                {
-                    throw new SystemException("file: $classFile does not have class: $className");
+        if(count($tokens)==0){
+            $tokens=array('index');
+        }
+
+        for($i=count($tokens);$i>0;$i--){
+            $ctokens=array_slice($tokens,0,$i);
+            $classFile = ROOT_PATH."/app/controller/"
+                .$this->actionPath."/"
+                .implode(array_slice($ctokens,0,count($ctokens)-1),"/")
+                .ucfirst("{$ctokens[count($ctokens)-1]}Action.class.php");
+            if (file_exists($classFile)){
+                require_once($classFile);
+                $actionClass=ucfirst($ctokens[count($ctokens)-1]."Action");
+                if (class_exists($actionClass)){
+                    $this->action=new $actionClass();
+                    $tokens=array_slice($tokens,$i);
+                    return $this->action;
+                }else{
+                    throw new SystemException("file: $classFile does not have class: $actionClass");
                 }
             }
         }
 
-        if (class_exists($className))
-        {
-            $action = new $className();
-            $this->action = $action;
-            return $action;
-		}elseif(method_exists($this->getController(),"{$actionName}Action")){
-			//支持直接在controller里面写action方法
-			return $this->getController();
-		}
-        else
-        {
-            throw new SystemException("no action:$actionName -> $className ");
-        }
+        return null;
     }
     public function getMethod()
     {
-        $methodName = $this->getMethodName();
-        if (method_exists($this->getAction(), $methodName) || method_exists($this->getAction(), '__call'))
-        {
-            return $methodName;
-        }elseif(method_exists($this->getController(),$this->getActionName()."Action")){
-			//支持直接在controller里面写action方法
-			return $this->getActionName()."Action";
-		}
-        else
-        {
-            throw new SystemException("no method:{$this->controllerName } -> {$this->getActionName()} -> $methodName ");
+        if($this->method){
+            return $this->method;
         }
+        throw new SystemException("no method:".implode($tokens,"/"));
     }
     
 }

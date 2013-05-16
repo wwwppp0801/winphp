@@ -26,13 +26,11 @@ class BaseController
     {
         $mapper = WinRequest::getAttribute("mapper");
 		
-        $action = $mapper->getAction();
         $method = $mapper->getMethod();
-        $actionName = $mapper->getActionName();
-        $methodName = $mapper->getMethodName();
-		$executeInfo = array('controllerName'=>$mapper->getControllerName(), 
-							'methodName'=>$methodName,
-							'actionName'=>$actionName);
+        
+        $executeInfo = array('controllerName'=>preg_replace("/[A-Z][a-z]+$/","",get_class($mapper->getController())), 
+							'methodName'=>$method[1],
+							'actionName'=>preg_replace("/[A-Z][a-z]+$/","",get_class($method[0])));
 		WinRequest::mergeModel(array('executeInfo'=>$executeInfo));
 		WinRequest::mergeModel(array('version'=>VERSION));
 		WinRequest::mergeModel(array('isDebug'=>IS_DEBUG));
@@ -44,7 +42,7 @@ class BaseController
             {
                 $interceptor->beforeAction();
             }
-            list($view, $model) = $this->getViewAndModel($action->$method());
+            list($view, $model) = $this->getViewAndModel(call_user_func($method));
             WinRequest::mergeModel($model);
             for($i=count($interceptors)-1;$i>=0;$i--)
             {
