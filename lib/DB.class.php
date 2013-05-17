@@ -1,5 +1,12 @@
 <?php
 class DB{
+    public static function init($dsn,$username,$password){
+        //$this->user = 'root'; 
+        //$this->pass = ''; 
+        //$dns = $this->engine.':dbname='.$this->database.";host=".$this->host; 
+        list(self::$dsn,self::$username,self::$password)=array($dsn,$username,$password);
+    
+    }
     private static function execute_sql($sql){
         $params=func_get_args();
         if (count($params)>2||is_scalar($params[1])){
@@ -9,12 +16,12 @@ class DB{
         }
         try{
             if(!self::$dbh){
-                self::$dbh = new PDO("sqlite:".PROJECT_ROOT."/db/sqlite.db"); 
+                self::$dbh = new PDO(self::$dsn,self::$username,self::$password); 
             }
             $sth=self::$dbh->prepare($sql);
             $sth->execute($params);
         }catch(Exception $e){
-            var_dump($e);
+            throw new SystemException("exec sql error, ".self::$dsn." '$sql'");
         }
         
         return array(self::$dbh,$sth);

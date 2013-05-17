@@ -22,7 +22,7 @@ class DefaultViewSetting
 		$template->template_dir = self::getRootDir();
 		$template->compile_dir = ROOT_PATH."/ctemplates/";
 //		echo $template->template_dir;
-		$template->config_dir   = ROOT_PATH."/app/view/";
+		$template->config_dir   = ROOT_PATH."/template/";
 		$template->compile_check = true;
 		// this helps if php is running in 'safe_mode'
 		$template->use_sub_dirs = false;
