@@ -8,34 +8,50 @@ class RedirectController extends BaseController{
         ///get access token
         $code=$_GET['code'];
         $state=$_GET['state'];
-        $raw=file_get_contents("https://graph.qq.com/oauth2.0/token?grant_type=authorization_code&client_id=".APPID."&client_secret=".APPKEY."&code=$code&state=state");
+        $raw=Utils::curlGet("https://graph.qq.com/oauth2.0/token?grant_type=authorization_code&client_id=".APPID."&client_secret=".APPKEY."&code=$code&state=state&redirect_uri=".urlencode("http://".DOMAIN_NAME));
         parse_str($raw,$arr);
-        var_dump($arr);
+        //var_dump($arr);
         $access_token=$arr['access_token'];
+        if(!$access_token){
+            throw new BizException("get access_token error:".$raw);
+        }
 
         ///get open id
-        $raw=file_get_contents("https://graph.qq.com/oauth2.0/me?access_token={$access_token}");
-        var_dump($raw);
+        $raw=Utils::curlGet("https://graph.qq.com/oauth2.0/me?access_token={$access_token}");
+        //var_dump($raw);
         //remove "callback()"
         $lpos = strpos($raw, "(");
         $rpos = strrpos($raw, ")");
         $raw  = substr($raw, $lpos + 1, $rpos - $lpos -1);
 
         $user = json_decode($raw,true);
-        if (isset($user['error']))
-        {
-            echo "<h3>error:</h3>" . $user['error'];
-            echo "<h3>msg  :</h3>" . $user['error_description'];
-            exit;
+        if (isset($user['error'])){
+            throw new BizException( $user['error'].":".$user['error_description']);
         }
         $openid=$user['openid'];
 
-        ///get user info
-        $userinfo=file_get_contents("https://graph.qq.com/user/get_user_info?access_token=$access_token&oauth_consumer_key=".APPID."&openid=$openid");
-        var_dump($userinfo);
-        
 
-        return array('view'=>"text:redirect");
+        $userinfo=DB::queryForOne("select * from users where openid=?",$openid);
+        if(!$userinfo){
+            ///get user info
+            $userinfo=Utils::curlGet("https://graph.qq.com/user/get_user_info?access_token=$access_token&oauth_consumer_key=".APPID."&openid=$openid");
+            $userinfo=json_decode($userinfo,true);
+            $userinfo['figureurl']=$userinfo['figureurl_1']?$userinfo['figureurl_1']:$userinfo['figureurl_qq_1'];
+            DB::insert("insert into users(accesstoken,openid,nickname,gender,figureurl) values(?,?,?,?,?)",
+                $access_token,$openid,$userinfo['nickname'],$userinfo['gender'],$userinfo['figureurl']
+            );
+        }
+        //var_dump($userinfo);
+        $_SESSION['user']['openid']=$openid;
+        $_SESSION['user']['access_token']=$access_token;
+        $_SESSION['user']['nickname']=$userinfo['nickname'];
+        $_SESSION['user']['gender']=$userinfo['gender'];
+        $_SESSION['user']['figureurl']=$userinfo['figureurl'];
+        return array('view'=>"redirect:/");
+    }
+    public function logoutAction(){
+        session_unset();
+        return array('view'=>"redirect:/");
     }
     public function qqloginAction(){
         $appid=APPID;

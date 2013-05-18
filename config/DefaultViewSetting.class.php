@@ -9,7 +9,7 @@ class DefaultViewSetting
 	}
     public static function getRootDir()
     {
-        return ROOT_PATH."/app/view/";
+        return ROOT_PATH."/template/";
     }
 	
 	public static function setTemplateSetting($template)
@@ -22,14 +22,14 @@ class DefaultViewSetting
 		$template->template_dir = self::getRootDir();
 		$template->compile_dir = ROOT_PATH."/ctemplates/";
 //		echo $template->template_dir;
-		$template->config_dir   = ROOT_PATH."/template/";
+		$template->config_dir   = ROOT_PATH."/config/";
 		$template->compile_check = true;
 		// this helps if php is running in 'safe_mode'
 		$template->use_sub_dirs = false;
-		$template->left_delimiter='<{';
-		$template->right_delimiter='}>';
+		$template->left_delimiter='{%';
+		$template->right_delimiter='%}';
 		// register dynamic block for every template instance
-		$template->register_block('dynamic', 'smarty_block_dynamic', false);      
+		//$template->register_block('dynamic', 'smarty_block_dynamic', false);      
 	}
 }
 ?>

@@ -1,5 +1,9 @@
 <?php
 class DB{
+    private static $dsn;
+    private static $username;
+    private static $password;
+    private static $dbh;
     public static function init($dsn,$username,$password){
         //$this->user = 'root'; 
         //$this->pass = ''; 
@@ -34,6 +38,10 @@ class DB{
     public static function queryForCount($sql){
         list($dbh,$sth)=call_user_func_array('DB::execute_sql',func_get_args());
         return current($sth->fetch( PDO::FETCH_ASSOC ));
+    }
+    public static function queryForOne($sql){
+        list($dbh,$sth)=call_user_func_array('DB::execute_sql',func_get_args());
+        return $sth->fetch( PDO::FETCH_ASSOC );
     }
 
     public static function insert(){

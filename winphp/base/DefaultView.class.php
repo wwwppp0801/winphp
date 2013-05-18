@@ -1,51 +1,4 @@
 <?php 
-function smarty_modifier_startWith($string, $startStr)
-{
-    return (strncmp($string, $startStr, strlen($startStr)) === 0);
-}
-
-
-function smarty_modifier_toUTF8($string)
-{
-    return Utils::toUTF8($string);
-}
-
-function smarty_modifier_toGBK($string)
-{
-    return Utils::toGBK($string);
-}
-
-function smarty_modifier_decodeURIComponent($string)
-{
-	return Utils::_decodeURIComponent($string);
-}
-function smarty_modifier_numberFormat($string){
-	return number_format($string);
-}
-
-function smarty_modifier_relTime($string){
-    $now=time();
-    $srcTS=intval($string);
-    $hours = ($now - $srcTS) / 3600;
-    if ($hours > 24) {
-        $time = (date('Y',$srcTS)==date('Y',$now)?"":date('Y',$srcTS)."年") . date('n',$srcTS) . "月" . date('j',$srcTS) . "日";
-    }
-    else {
-        if ($hours > 1) {
-            $time = intval($hours) . "小时前";
-        }
-        else {
-            $time = intval($hours * 60 < 1 ? 1 : $hours * 60). "分钟前";
-        }
-    }
-    return $time;
-}
-
-function smarty_function_json_encode($params)
-{
-    return json_encode($params['obj']);
-}
-
 class DefaultView
 {
     private $templateFile;
@@ -127,13 +80,6 @@ class DefaultView
         }
         DefaultViewSetting::setTemplateSetting($template);
 		//var_dump($this->data);
-        $template->register_modifier('startWith', 'smarty_modifier_startWith');
-        $template->register_modifier('toUTF8', 'smarty_modifier_toUTF8');
-        $template->register_modifier('toGBK', 'smarty_modifier_toGBK');
-		$template->register_modifier('decodeURIComponent', 'smarty_modifier_decodeURIComponent');
-		$template->register_modifier('numberFormat','smarty_modifier_numberFormat');
-		$template->register_modifier('relTime','smarty_modifier_relTime');
-        $template->register_function('json_encode', 'smarty_function_json_encode');
         $template->assign($this->data);
 
         return $template->fetch($this->templateFile);
