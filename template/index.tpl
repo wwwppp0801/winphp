@@ -27,7 +27,8 @@ function closeChildWindow()
 <p>figure:<img src="{%$user.figureurl%}"/></p>
 {%/if%}
 
-<a href="#" onclick='toQzoneLogin()'><img src="img/qq_login.png"></a>
+<!--a href="#" onclick='toQzoneLogin()'><img src="img/qq_login.png"></a-->
+<a href="redirect/qqLogin"><img src="img/qq_login.png"></a>
 <br><br>
 <a href="user/get_user_info.php"    target="_blank">获取用户信息</a>
 <br><br>
