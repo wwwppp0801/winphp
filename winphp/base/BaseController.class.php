@@ -16,7 +16,7 @@ class BaseController
      can be override, select interceptors for an action
      by default, select all interceptors
      */
-    public function loadIntercepters($actionName, $methodName)
+    public function loadIntercepters($method, $controller)
     {
         return $this->interceptors;
     }
@@ -35,7 +35,7 @@ class BaseController
 		WinRequest::mergeModel(array('version'=>VERSION));
 		WinRequest::mergeModel(array('isDebug'=>IS_DEBUG));
 		
-		$interceptors = $this->loadIntercepters($actionName, $methodName);
+		$interceptors = $this->loadIntercepters($method,$mapper->getController());
         try
         {
             foreach ($interceptors as $interceptor)
