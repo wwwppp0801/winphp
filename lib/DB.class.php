@@ -23,7 +23,13 @@ class DB{
                 self::$dbh = new PDO(self::$dsn,self::$username,self::$password); 
             }
             $sth=self::$dbh->prepare($sql);
-            $sth->execute($params);
+            $res=$sth->execute($params);
+            if($res===false){
+                Soso_Logger::error(var_export(self::$dbh->errorInfo(),true)
+                    .var_export(self::$dbh->errorCode,true)
+                    .var_export($params,true)
+                );
+            }
         }catch(Exception $e){
             throw new SystemException("exec sql error, ".self::$dsn." '$sql'");
         }

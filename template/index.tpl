@@ -26,9 +26,14 @@ function closeChildWindow()
 <p>nick:<b>{%$user.nickname|escape%}</b></p>
 <p>figure:<img src="{%$user.figureurl%}"/></p>
 {%/if%}
-
-<!--a href="#" onclick='toQzoneLogin()'><img src="img/qq_login.png"></a-->
+<div>
 <a href="redirect/qqLogin"><img src="img/qq_login.png"></a>
+</div>
+
+<div>
+<a href="/question/start">开始答题</a>
+</div>
+<!--a href="#" onclick='toQzoneLogin()'><img src="img/qq_login.png"></a
 <br><br>
 <a href="user/get_user_info.php"    target="_blank">获取用户信息</a>
 <br><br>
@@ -44,6 +49,6 @@ function closeChildWindow()
 <br><br>
 <a href="topic/add_topic.html"     target="_blank">发表说说</a>
 <br><br>
-<a href="weibo/add_weibo.html"     target="_blank">发表微博</a>
+<a href="weibo/add_weibo.html"     target="_blank">发表微博</a-->
 </body>
 </html>

@@ -16,7 +16,7 @@ else
 date_default_timezone_set('Asia/Shanghai');
 
 
-DB::init("mysql:yangleduo;host=localhost",'root','root123');
+DB::init("mysql:host=localhost;dbname=yangleduo;port:3306",'root','root123');
 define("LOG_PATH", ROOT_PATH."/log/");
 define("IS_DEBUG", $IS_DEBUG);
 define("VERSION", 1);

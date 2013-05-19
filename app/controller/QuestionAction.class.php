@@ -1,4 +1,5 @@
 <?php
+require_once("CaptchaAction.class.php");
 class QuestionAction{
     public static $QUESTION_NUM=5;
     public static $STEP_CONFIG=array(
@@ -14,7 +15,7 @@ class QuestionAction{
     }
     public function index(){
         $_SESSION['starttime']=time();
-        $step=intval(WinRequest::getParameter("step",0));
+        $step=intval($_SESSION['step']);
         $questions=$this->getQuestions($step);
         if(isset($_SESSION['wrong_question'])){
             //上次答错了，重新回答
@@ -32,6 +33,10 @@ class QuestionAction{
             $wrong_time=$_SESSION['wrong_time'];
             unset($_SESSION['wrong_time']);
         }
+        if(isset($_SESSION['wrong_captcha'])){
+            $wrong_captcha=$_SESSION['wrong_captcha'];
+            unset($_SESSION['wrong_captcha']);
+        }
         shuffle($questions);
         $questions=array_slice($questions,0,self::$STEP_CONFIG[$step]['QUESTION_NUM']);
         $_SESSION['question_ids']=Utils::array2Simple($questions,'id');
@@ -42,16 +47,21 @@ class QuestionAction{
             'starttime'=>$_SESSION['starttime'],
             'wrong_question'=>isset($wrong_question)?$wrong_question:false,
             'wrong_time'=>isset($wrong_time)?$wrong_time:false,
+            'wrong_captcha'=>isset($wrong_captcha)?$wrong_captcha:false,
             'time'=>self::$STEP_CONFIG[$step]['time'],
         ));
     }
     public function answer(){
-        $step=intval(WinRequest::getParameter("step",0));
+        $step=intval($_SESSION['step']);
         $questions=$this->getQuestions($step);
         $is_right=true;
-        for($i=0;$i<self::$STEP_CONFIG[$step]['QUESTION_NUM'];$i++){
-            $qid=$_SESSION['question_ids'][$i];
-            if(WinRequest::getParameter("q".($i+1))!=$questions[$qid]['answer']){
+        if(!$_SESSION['question_ids']){
+            return array("redirect:/question");
+        }
+        foreach($_SESSION['question_ids'] as $i=>$qid){
+            //$qid=$_SESSION['question_ids'][$i];
+            //var_dump($questions[$qid]);
+            if(!$questions[$qid]||WinRequest::getParameter("q".($i+1))!=$questions[$qid]['answer']){
                 $is_right=false;
                 break;
             }
@@ -60,16 +70,16 @@ class QuestionAction{
             if($step==2){
                 //最后一次回答，检查验证码
                 $captcha=WinRequest::getParameter("captcha");
-                if($captcha && $captcha==$_SESSION['captcha']){
-                    unset($_SESSION['captcha']);
+                if(CaptchaAction::check($captcha)){
                     if(!$this->timeOK($step)){
                         $_SESSION['wrong_time']=1;
                     }else{
-                        DB::insert("insert into answers(openid,starttime,endtime) values(?,?,?);",
+                        $res=DB::insert("insert into answers(openid,starttime,endtime) values(?,?,?)",
                             $_SESSION['user']['openid'],
                             $_SESSION['all_starttime'],
-                            time(),
+                            time()
                         );
+                        Soso_Logger::debug("insert result: $res, openid:{$_SESSION['user']['openid']},starttime:{$_SESSION['all_starttime']}");
                         return array("redirect:/question/right");
                     }
                 }else{
@@ -82,8 +92,9 @@ class QuestionAction{
                     $_SESSION['wrong_time']=1;
                 }
             }
+            unset($_SESSION['question_ids']);
         }else{
-            $_SESSION['wrong']=$qid;
+            $_SESSION['wrong_question']=$qid;
         }
         return array("redirect:/question");
     }
@@ -101,7 +112,7 @@ class QuestionAction{
     }
 
     private function getQuestions($step){
-        require(ROOT_PATH."/config/questions.php");
+        require(ROOT_PATH."/resource/questions.php");
         if(!$questions[$step]){
             throw new BizException("no questions, step: $step");
         }

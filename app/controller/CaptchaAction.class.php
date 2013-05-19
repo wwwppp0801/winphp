@@ -68,7 +68,7 @@ class YL_Security_Secoder {
         // 输出图像   
         imageJPEG(self::$_image);    
         imagedestroy(self::$_image);   
-    }   
+    }
        
     /**   
      * 画一条由两条连在一起构成的随机正弦函数曲线作干扰线(你可以改成更帅的曲线函数)   
@@ -156,6 +156,15 @@ class CaptchaAction{
         YL_Security_Secoder::$useCurve = true;   //是否启用干扰曲线
         YL_Security_Secoder::entry(); 
         return array("blank.tpl");
+    }
+    public static function check($input){
+        if((time()-$_SESSION[YL_Security_Secoder::$seKey]['time'])>YL_Security_Secoder::$expire){
+            return false;
+        }
+        if($input && strtolower($input) == strtolower($_SESSION[YL_Security_Secoder::$seKey]['code'])){
+            return true;
+        }
+        return false;
     }
 
 }
