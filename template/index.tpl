@@ -24,7 +24,7 @@ function closeChildWindow()
 <a href="redirect/logout">登出</a>
 {%if $user%}
 <p>nick:<b>{%$user.nickname|escape%}</b></p>
-<p>figure:<img src="{%$user.figureurl%}"/></p>
+<p>figure:<img src="{%$user.figure_url%}"/></p>
 {%/if%}
 <div>
 <a href="redirect/qqLogin"><img src="img/qq_login.png"></a>

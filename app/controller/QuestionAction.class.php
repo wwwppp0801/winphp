@@ -14,20 +14,22 @@ class QuestionAction{
         return array('redirect:/question');
     }
     public function index(){
-        $_SESSION['starttime']=time();
+        if(!isset($_SESSION['all_starttime'])){
+            $_SESSION['all_starttime']=time();
+        }
+        if(!isset($_SESSION['step'])){
+            $_SESSION['step']=0;
+        }
+        if(!isset($_SESSION['wrong_captcha'])){
+            //输错验证码时需要保留当前的答案状态
+            $_SESSION['starttime']=time();
+        }
         $step=intval($_SESSION['step']);
         $questions=$this->getQuestions($step);
         if(isset($_SESSION['wrong_question'])){
             //上次答错了，重新回答
             $wrong_question=$questions[$_SESSION['wrong_question']];
             unset($_SESSION['wrong_question']);
-            /*
-            $tmp=array();
-            foreach($_SESSION['question_ids'] as $qid){
-                $tmp[]=$questions[$qid];
-            }
-            $questions=$tmp;
-            */
         }
         if(isset($_SESSION['wrong_time'])){
             $wrong_time=$_SESSION['wrong_time'];
@@ -37,18 +39,34 @@ class QuestionAction{
             $wrong_captcha=$_SESSION['wrong_captcha'];
             unset($_SESSION['wrong_captcha']);
         }
-        shuffle($questions);
-        $questions=array_slice($questions,0,self::$STEP_CONFIG[$step]['QUESTION_NUM']);
-        $_SESSION['question_ids']=Utils::array2Simple($questions,'id');
+        if(isset($_SESSION['answers'])){
+            $answers=$_SESSION['answers'];
+            unset($_SESSION['answers']);
+        }
+        if(!$answers){
+            //只有“保留答案”的状态，才重用上次的题目，否则都重新生成随机题目
+            shuffle($questions);
+            $questions=array_slice($questions,0,self::$STEP_CONFIG[$step]['QUESTION_NUM']);
+            $_SESSION['question_ids']=Utils::array2Simple($questions,'id');
+        }else{
+            $tmp=array();
+            foreach($_SESSION['question_ids'] as $qid){
+                $tmp[]=$questions[$qid];
+            }
+            $questions=$tmp;
+        }
+        $now=time();
         return array("question.tpl",array(
             'questions'=>$questions,
             'step'=>$step,
-            'now'=>time(),
+            'now'=>$now,
             'starttime'=>$_SESSION['starttime'],
             'wrong_question'=>isset($wrong_question)?$wrong_question:false,
             'wrong_time'=>isset($wrong_time)?$wrong_time:false,
             'wrong_captcha'=>isset($wrong_captcha)?$wrong_captcha:false,
-            'time'=>self::$STEP_CONFIG[$step]['time'],
+            'answers'=>isset($answers)?$answers:false,
+            //剩余的答题时间
+            'time'=>self::$STEP_CONFIG[$step]['time']-($now-$_SESSION['starttime']),
         ));
     }
     public function answer(){
@@ -80,10 +98,20 @@ class QuestionAction{
                             time()
                         );
                         Soso_Logger::debug("insert result: $res, openid:{$_SESSION['user']['openid']},starttime:{$_SESSION['all_starttime']}");
+                        unset($_SESSION['question_ids']);
+                        unset($_SESSION['step']);
+                        unset($_SESSION['all_starttime']);
                         return array("redirect:/question/right");
                     }
                 }else{
                     $_SESSION['wrong_captcha']=true;
+                    //只是验证码输错了的话，需要保存当前的状态
+                    $answers=array();
+                    foreach($_SESSION['question_ids'] as $i=>$qid){
+                        $answers[]=WinRequest::getParameter("q".($i+1));
+                    }
+                    $_SESSION['answers']=$answers;
+                    return array("redirect:/question");
                 }
             }else{
                 if($this->timeOK($step)){

@@ -25,7 +25,7 @@
     <h3>{%$question.title|escape%}{%$question.answer%}</h3>
     {%foreach $question.choices as $j=>$choice%}
         {%if trim($choice)%}
-            <label><input name="q{%$i+1%}" type="radio" value="{%$j+1%}">{%$choice|escape%}</label>
+            <label><input {%if isset($answers[$i]) && $answers[$i]==$j+1%}checked="checked"{%/if%} name="q{%$i+1%}" type="radio" value="{%$j+1%}">{%$choice|escape%}</label>
         {%/if%}
     {%/foreach%}
 </div>
@@ -48,8 +48,8 @@ setInterval(function(){
         time-=1;
         if(time<=0){
             $("form").submit();
-            $("#time").html(time);
         }
+        $("#time").html(time);
 },1000);
 </script>
 </form>

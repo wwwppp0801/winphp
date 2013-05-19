@@ -36,17 +36,16 @@ class RedirectController extends BaseController{
             ///get user info
             $userinfo=Utils::curlGet("https://graph.qq.com/user/get_user_info?access_token=$access_token&oauth_consumer_key=".APPID."&openid=$openid");
             $userinfo=json_decode($userinfo,true);
-            $userinfo['figureurl']=$userinfo['figureurl_1']?$userinfo['figureurl_1']:$userinfo['figureurl_qq_1'];
-            DB::insert("insert into users(accesstoken,openid,nickname,gender,figureurl) values(?,?,?,?,?)",
-                $access_token,$openid,$userinfo['nickname'],$userinfo['gender'],$userinfo['figureurl']
+            $userinfo['figure_url']=$userinfo['figureurl_1']?$userinfo['figureurl_1']:$userinfo['figureurl_qq_1'];
+            DB::insert("insert into users(accesstoken,openid,nickname,gender,figure_url) values(?,?,?,?,?)",
+                $access_token,$openid,$userinfo['nickname'],$userinfo['gender'],$userinfo['figure_url']
             );
         }
-        //var_dump($userinfo);
         $_SESSION['user']['openid']=$openid;
         $_SESSION['user']['access_token']=$access_token;
         $_SESSION['user']['nickname']=$userinfo['nickname'];
         $_SESSION['user']['gender']=$userinfo['gender'];
-        $_SESSION['user']['figureurl']=$userinfo['figureurl'];
+        $_SESSION['user']['figure_url']=$userinfo['figure_url'];
         return array('view'=>"redirect:/");
     }
     public function logoutAction(){
