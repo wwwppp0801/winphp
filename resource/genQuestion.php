@@ -20,6 +20,7 @@ if (($handle = fopen("questions_utf8.csv", "r")) !== FALSE) {
         }
         //var_dump($data);
     }
-    var_dump($results);
+    $var_def=var_export($results,1);
+    file_put_contents("questions.php","<?php\n\$questions=$var_def;");
     fclose($handle);
 }
