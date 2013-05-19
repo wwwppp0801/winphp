@@ -101,6 +101,7 @@ class QuestionAction{
                         unset($_SESSION['question_ids']);
                         unset($_SESSION['step']);
                         unset($_SESSION['all_starttime']);
+                        $_SESSION['all_right']=true;
                         return array("redirect:/question/right");
                     }
                 }else{
@@ -135,8 +136,10 @@ class QuestionAction{
     }
 
     public function right(){
-        unset($_SESSION['step']);
-        return array("text:answer_right");
+        if(!$_SESSION['all_right']){
+            return array("redirect:/");
+        }
+        return array("right.tpl");
     }
 
     private function getQuestions($step){

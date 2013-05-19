@@ -46,6 +46,10 @@ class RedirectController extends BaseController{
         $_SESSION['user']['nickname']=$userinfo['nickname'];
         $_SESSION['user']['gender']=$userinfo['gender'];
         $_SESSION['user']['figure_url']=$userinfo['figure_url'];
+        //这三个字段只有用户填写过才会有
+        $_SESSION['user']['realname']=$userinfo['realname'];
+        $_SESSION['user']['phone']=$userinfo['phone'];
+        $_SESSION['user']['address']=$userinfo['address'];
         return array('view'=>"redirect:/");
     }
     public function logoutAction(){
