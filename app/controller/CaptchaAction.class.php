@@ -36,7 +36,7 @@ class YL_Security_Secoder {
         // 验证码字体随机颜色   
         self::$_color = imagecolorallocate(self::$_image, mt_rand(1,120), mt_rand(1,120), mt_rand(1,120));   
         // 验证码使用随机字体，保证目录下有这些字体集   
-        $ttf = ROOT_PATH . '/resource/ttfs/t' . mt_rand(1, 10) . '.ttf';     
+        $ttf = ROOT_PATH . '/resource/ttfs/t' . mt_rand(1, 9) . '.ttf';     
   
         if (self::$useNoise) {   
             // 绘杂点   
