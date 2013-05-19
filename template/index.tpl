@@ -18,10 +18,8 @@ function closeChildWindow()
     childWindow.close();
 }
 </script>
-<font size=10><a href="http://wiki.opensns.qq.com/wiki/%E3%80%90QQ%E7%99%BB%E5%BD%95%E3%80%91Qzone_OAuth2.0%E7%AE%80%E4%BB%8B" target="_blank">新手教程</a></font>
-<p>请开发者修改comm/config.php文件中的$_SESSION["appid"]，$_SESSION["appkey"], $_SESSION["callback"]三个变量的值，以确保可以正常登录.</p>
-<br><br>
 <a href="redirect/logout">登出</a>
+<a href="user">修改个人信息</a>
 {%if $user%}
 <p>nick:<b>{%$user.nickname|escape%}</b></p>
 <p>figure:<img src="{%$user.figure_url%}"/></p>

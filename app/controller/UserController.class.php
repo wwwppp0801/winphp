@@ -1,6 +1,6 @@
 <?php
 class UserController extends BaseController{
-    public function update(){
+    public function updateAction(){
         $openid=$_SESSION['user']['openid'];
         if(!$openid){
             return array("redirect:/");
@@ -17,11 +17,11 @@ class UserController extends BaseController{
         $_SESSION['user']['address']=$user['address'];
         return array("redirect:/");
     }
-    public function index(){
+    public function indexAction(){
         $openid=$_SESSION['user']['openid'];
         if(!$openid){
             return array("redirect:/");
         }
-        return array("user.tpl",array('user',$_SESSION['user']));
+        return array("user.tpl",array('user'=>$_SESSION['user']));
     }
 }
