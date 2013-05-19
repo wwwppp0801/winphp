@@ -1,4 +1,8 @@
 <?php
+if (preg_match('/\.(?:png|jpg|jpeg|gif|js|css)$/', $_SERVER["REQUEST_URI"])) {
+    return false;    // serve the requested resource as-is.
+}
+
 define('ROOT_PATH', dirname(dirname(__FILE__)));
 require (ROOT_PATH."/config/classpath.php");
 require (ROOT_PATH."/config/conf.php");
