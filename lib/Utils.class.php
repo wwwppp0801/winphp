@@ -9,7 +9,7 @@ class Utils {
         return mb_convert_encoding($str, 'GBK', 'UTF-8');
     }
     
-    public static function curlGet($url, $timeout = 1, $headerAry = '') {
+    public static function curlGet($url, $timeout = 3, $headerAry = '') {
         //var_dump($url);
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, $url);
@@ -30,7 +30,7 @@ class Utils {
         return $res;
     }
     
-    public static function curlPost($url, $data, $timeout = 1, $headerAry = '') {
+    public static function curlPost($url, $data, $timeout = 3, $headerAry = '') {
         $ch = curl_init();
         //var_dump($url);
         //var_dump($data);
