@@ -1,19 +1,24 @@
 <?php
 require_once("CaptchaAction.class.php");
-class QuestionAction{
+class QuestionController extends BaseController{
     public static $QUESTION_NUM=5;
     public static $STEP_CONFIG=array(
         0=>array('QUESTION_NUM'=>5,'time'=>180),
         1=>array('QUESTION_NUM'=>6,'time'=>240),
         2=>array('QUESTION_NUM'=>9,'time'=>600),
     );
-    public function start(){
+    public function __construct(){
+        $this->addInterceptor(new LoginInterceptor());
+    }
+    
+    public function startAction(){
         //$_SESSION['starttime']=time();
         $_SESSION['all_starttime']=time();
         $_SESSION['step']=0;
-        return array('redirect:/question');
+        $winnerModel=new WinnerModel();
+        return array('start.tpl',array('winners'=>$winnerModel->getWinners()));
     }
-    public function index(){
+    public function indexAction(){
         if(!isset($_SESSION['all_starttime'])){
             $_SESSION['all_starttime']=time();
         }
@@ -69,7 +74,7 @@ class QuestionAction{
             'time'=>self::$STEP_CONFIG[$step]['time']-($now-$_SESSION['starttime']),
         ));
     }
-    public function answer(){
+    public function answerAction(){
         $step=intval($_SESSION['step']);
         $questions=$this->getQuestions($step);
         $is_right=true;
@@ -127,6 +132,14 @@ class QuestionAction{
         }
         return array("redirect:/question");
     }
+    
+    public function rightAction(){
+        if(!$_SESSION['all_right']){
+            return array("redirect:/");
+        }
+        return array("right.tpl");
+    }
+
     private function timeOK($step){
         $time=self::$STEP_CONFIG[$step]['time'];
         //比标准时间多算5s，就算是网络时延了
@@ -135,12 +148,6 @@ class QuestionAction{
         }
     }
 
-    public function right(){
-        if(!$_SESSION['all_right']){
-            return array("redirect:/");
-        }
-        return array("right.tpl");
-    }
 
     private function getQuestions($step){
         require(ROOT_PATH."/resource/questions.php");
