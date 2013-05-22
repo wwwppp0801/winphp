@@ -67,6 +67,16 @@ class WinRequest
             unset(self::$model[$key]);   
         }
     }
+    public static function getFlash($key)
+    {
+        $result=$_SESSION[$key];
+        unset($_SESSION[$key]);
+        return $result;
+    }
+    public static function setFlash($key,$value)
+    {
+        $_SESSION[$key]=$value;
+    }
     
     public static function getCookie($key)
     {

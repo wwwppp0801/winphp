@@ -19,10 +19,14 @@ class QuestionController extends BaseController{
         return array('start.tpl',array('winners'=>$winnerModel->getWinners()));
     }
     public function indexAction(){
+        
+        WinRequest::getFlash("results");
+        WinRequest::getFlash("wrong_questions");
+        
         if(!isset($_SESSION['all_starttime'])){
             $_SESSION['all_starttime']=time();
         }
-        if(!isset($_SESSION['step'])){
+        if(!isset($_SESSION['step'])||$_SESSION['step']>=3){
             $_SESSION['step']=0;
         }
         if(!isset($_SESSION['wrong_captcha'])){
@@ -74,6 +78,33 @@ class QuestionController extends BaseController{
             'time'=>self::$STEP_CONFIG[$step]['time']-($now-$_SESSION['starttime']),
         ));
     }
+
+    public function checkCaptchaAction(){
+        $step=intval($_SESSION['step']);
+        if($step==3){
+            //最后一次回答，检查验证码
+            $captcha=WinRequest::getParameter("captcha");
+            if(CaptchaAction::check($captcha)){
+                if(!$this->timeOK($step)){
+                    $_SESSION['wrong_time']=1;
+                }else{
+                    $res=DB::insert("insert into answers(openid,starttime,endtime) values(?,?,?)",
+                        $_SESSION['user']['openid'],
+                        $_SESSION['all_starttime'],
+                        time()
+                    );
+                    Soso_Logger::debug("insert result: $res, openid:{$_SESSION['user']['openid']},starttime:{$_SESSION['all_starttime']}");
+                    unset($_SESSION['question_ids']);
+                    unset($_SESSION['step']);
+                    unset($_SESSION['all_starttime']);
+                    $_SESSION['all_right']=true;
+                    return array("redirect:/question/right");
+                }
+            }
+        }
+        
+    }
+
     public function answerAction(){
         $step=intval($_SESSION['step']);
         $questions=$this->getQuestions($step);
@@ -81,56 +112,43 @@ class QuestionController extends BaseController{
         if(!$_SESSION['question_ids']){
             return array("redirect:/question");
         }
+        $results=array();
+        $wrong_questions=array();
         foreach($_SESSION['question_ids'] as $i=>$qid){
             //$qid=$_SESSION['question_ids'][$i];
             //var_dump($questions[$qid]);
             if(!$questions[$qid]||WinRequest::getParameter("q".($i+1))!=$questions[$qid]['answer']){
                 $is_right=false;
-                break;
+                $results[]=false;
+                $wrong_questions[]=$questions[$qid];
+            }else{
+                $results[]=true;
             }
         }
         if($is_right){
-            if($step==2){
-                //最后一次回答，检查验证码
-                $captcha=WinRequest::getParameter("captcha");
-                if(CaptchaAction::check($captcha)){
-                    if(!$this->timeOK($step)){
-                        $_SESSION['wrong_time']=1;
-                    }else{
-                        $res=DB::insert("insert into answers(openid,starttime,endtime) values(?,?,?)",
-                            $_SESSION['user']['openid'],
-                            $_SESSION['all_starttime'],
-                            time()
-                        );
-                        Soso_Logger::debug("insert result: $res, openid:{$_SESSION['user']['openid']},starttime:{$_SESSION['all_starttime']}");
-                        unset($_SESSION['question_ids']);
-                        unset($_SESSION['step']);
-                        unset($_SESSION['all_starttime']);
-                        $_SESSION['all_right']=true;
-                        return array("redirect:/question/right");
-                    }
-                }else{
-                    $_SESSION['wrong_captcha']=true;
-                    //只是验证码输错了的话，需要保存当前的状态
-                    $answers=array();
-                    foreach($_SESSION['question_ids'] as $i=>$qid){
-                        $answers[]=WinRequest::getParameter("q".($i+1));
-                    }
-                    $_SESSION['answers']=$answers;
-                    return array("redirect:/question");
-                }
+            if($this->timeOK($step)){
+                $_SESSION['step']+=1;
             }else{
-                if($this->timeOK($step)){
-                    $_SESSION['step']+=1;
-                }else{
-                    $_SESSION['wrong_time']=1;
-                }
+                $_SESSION['wrong_time']=1;
             }
             unset($_SESSION['question_ids']);
         }else{
-            $_SESSION['wrong_question']=$qid;
+            $_SESSION['wrong_question']=true;
         }
-        return array("redirect:/question");
+        $_SESSION["results"]=$results;
+        $_SESSION["wrong_questions"]=$wrong_questions;
+        return array("redirect:/question/result");
+    }
+
+    public function resultAction(){
+        $step=intval($_SESSION['step']);
+        $results=$_SESSION["results"];
+        $wrong_questions=$_SESSION["wrong_questions"];
+        return array("question_result.tpl",array(
+            'step'=>$step,
+            "results"=>$results,
+            'wrong_questions'=>$wrong_questions
+        ));
     }
     
     public function rightAction(){
