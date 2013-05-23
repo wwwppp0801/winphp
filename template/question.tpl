@@ -114,4 +114,4 @@ divs.each(function(i,div){
     });
 });
 </script>
-{%/block%}    
+{%/block%}

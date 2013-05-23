@@ -50,6 +50,7 @@ class RedirectController extends BaseController{
         $_SESSION['user']['realname']=$userinfo['realname'];
         $_SESSION['user']['phone']=$userinfo['phone'];
         $_SESSION['user']['address']=$userinfo['address'];
+        $_SESSION['user']['qq']=$userinfo['qq'];
         return array('view'=>"redirect:/");
     }
     public function logoutAction(){

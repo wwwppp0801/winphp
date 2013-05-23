@@ -5,16 +5,18 @@ class UserController extends BaseController{
         if(!$openid){
             return array("redirect:/");
         }
-        DB::update("update users set realname=?,phone=?,address=? where openid=?",
+        DB::update("update users set realname=?,phone=?,address=?,qq=? where openid=?",
             WinRequest::getParameter("realname"),
             WinRequest::getParameter("phone"),
             WinRequest::getParameter("address"),
+            WinRequest::getParameter("qq"),
             $openid
         );
         $user=DB::queryForOne("select * from users where openid=?",$openid);
         $_SESSION['user']['realname']=$user['realname'];
         $_SESSION['user']['phone']=$user['phone'];
         $_SESSION['user']['address']=$user['address'];
+        $_SESSION['user']['qq']=$user['qq'];
         return array("redirect:/");
     }
     public function indexAction(){

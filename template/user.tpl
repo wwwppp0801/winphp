@@ -1,3 +1,22 @@
+{%extends "question_base.tpl"%}
+{%block name="body"%}
+	<div class="tips">
+    	<div class="tips1">
+            <form class="form" action="/user/update" method="get">
+                <input name="realname" value="{%$user.realname|escape%}" type="text" class="input1" /><br />
+                <input name="phone" value="{%$user.phone|escape%}" type="text" class="input1" /><br />
+                <select name="address" class="select1">
+{%foreach ['北京','天津','上海'] as $city%}
+                  <option {%if $user.address==$city%}checked="checked"{%/if%} value="{%$city%}">{%$city%}</option>
+{%/foreach%}
+                </select><br />
+                <input name="qq" value="{%$user.qq%}" type="text" class="input1" /><br />
+                <input type="submit" value="" class="button1" />
+            </form>
+        </div>
+    </div>
+{%/block%}
+
 <!doctype html>
 <html>
 <head>

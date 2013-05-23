@@ -17,8 +17,8 @@
     </div>
 {%else if $step==3%}
     <div class="tips8">
-        <input name="" type="button" class="button6">
-        <input name="" type="button" class="button8">
+        <input onclick="location.href='/user';" name="" type="button" class="button6">
+        <input onclick="location.href='/question';" name="" type="button" class="button8">
     </div>
 {%/if%}
 </div>
