@@ -57,6 +57,7 @@ CREATE TABLE `users` (
   `realname` varchar(20) DEFAULT NULL,
   `phone` varchar(20) DEFAULT NULL,
   `address` varchar(200) DEFAULT NULL,
+  `qq` varchar(20) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `openid_index` (`openid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
