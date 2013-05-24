@@ -7,23 +7,23 @@
     </div>
 {%else if $step==1%}
     <div class="tips6">
-        <input onclick="location.href='/user';" name="" type="button" class="button6">
+        <input onclick="location.href='/user?redirect={%'/question'|escape:'url'%}';" name="" type="button" class="button6">
         <input onclick="location.href='/question';" name="" type="button" class="button7">
     </div>
 {%else if $step==2%}
     <div class="tips7">
-        <input onclick="location.href='/user';" name="" type="button" class="button6">
-        <input onclick="location.href='/question';" name="" type="button" class="button7">
+        <input onclick="location.href='/user?redirect={%'/question/captcha'|escape:'url'%}';" name="" type="button" class="button6">
+        <input onclick="location.href='/question/captcha';" name="" type="button" class="button7">
     </div>
 {%else if $step==3%}
     <div class="tips8">
-        <input onclick="location.href='/user';" name="" type="button" class="button6">
-        <input onclick="location.href='/question';" name="" type="button" class="button8">
+        <input onclick="location.href='/user?redirect={%'/question/right'|escape:'url'%}';" name="" type="button" class="button6">
+        <input onclick="location.href='/question/replay';" name="" type="button" class="button8">
     </div>
 {%/if%}
 </div>
 
-{%if $wrong_questions%}
+{%if !$wrong_questions%}
 <div class="shadow"></div>
 {%/if%}
 

@@ -78,31 +78,48 @@ class QuestionController extends BaseController{
             'time'=>self::$STEP_CONFIG[$step]['time']-($now-$_SESSION['starttime']),
         ));
     }
+    public function captchaAction(){
+        $step=intval($_SESSION['step']);
+        if($step!=2 || $_SESSION['check_captcha']){
+            return array("redirect:/question");
+        }
+
+        return array('question_captcha.tpl');
+    }
 
     public function checkCaptchaAction(){
         $step=intval($_SESSION['step']);
-        if($step==3){
-            //最后一次回答，检查验证码
+        //第二次回答完成后输入验证码
+        if($step==2 && !$_SESSION['check_captcha']){
             $captcha=WinRequest::getParameter("captcha");
             if(CaptchaAction::check($captcha)){
-                if(!$this->timeOK($step)){
-                    $_SESSION['wrong_time']=1;
-                }else{
-                    $res=DB::insert("insert into answers(openid,starttime,endtime) values(?,?,?)",
-                        $_SESSION['user']['openid'],
-                        $_SESSION['all_starttime'],
-                        time()
-                    );
-                    Soso_Logger::debug("insert result: $res, openid:{$_SESSION['user']['openid']},starttime:{$_SESSION['all_starttime']}");
-                    unset($_SESSION['question_ids']);
-                    unset($_SESSION['step']);
-                    unset($_SESSION['all_starttime']);
-                    $_SESSION['all_right']=true;
-                    return array("redirect:/question/right");
-                }
+                $_SESSION['check_captcha']=1;
+            }else{
+                return array("redirect:/question/captcha");
             }
         }
-        
+        return array("redirect:/question");
+    }
+
+    public function replayAction(){
+        $step=intval($_SESSION['step']);
+        if($step==3&& $_SESSION['check_captcha']){
+            if(!$this->timeOK($step)){
+                $_SESSION['wrong_time']=1;
+            }else{
+                $res=DB::insert("insert into answers(openid,starttime,endtime) values(?,?,?)",
+                    $_SESSION['user']['openid'],
+                    $_SESSION['all_starttime'],
+                    time()
+                );
+                Soso_Logger::debug("insert result: $res, openid:{$_SESSION['user']['openid']},starttime:{$_SESSION['all_starttime']}");
+                unset($_SESSION['question_ids']);
+                unset($_SESSION['step']);
+                unset($_SESSION['check_captcha']);
+                unset($_SESSION['all_starttime']);
+            }
+        }
+        return array("redirect:/question");
     }
 
     public function answerAction(){
@@ -152,10 +169,10 @@ class QuestionController extends BaseController{
     }
     
     public function rightAction(){
-        if(!$_SESSION['all_right']){
+        if(intval($_SESSION['step'])!=3){
             return array("redirect:/");
         }
-        return array("right.tpl");
+        return array("question_right.tpl");
     }
 
     private function timeOK($step){

@@ -81,7 +81,7 @@ body{background:#f9ddb4;margin:0;}
 
 .tips{z-index:95;position:absolute;top:0;left:0;display:block;width:100%;height:100%;text-align:center;}
 .tips1{background:url(/images/cj.png) no-repeat;width:450px;height:400px;margin:150px auto;}
-.tips2{background:url(/images/dc.png) no-repeat;width:620px;height:320px;margin:150px auto;}
+.tips2{background:url(/images/dc.png) no-repeat;width:620px;height:320px;margin:450px auto;}
 .tips3{background:url(/images/dd.png) no-repeat;width:620px;height:320px;margin:150px auto;}
 .tips4{background:url(/images/dr.png) no-repeat;width:620px;height:320px;margin:150px auto;}
 .tips5{background:url(/images/bg.png) no-repeat;width:620px;height:320px;margin:150px auto;padding-top:40px;}

@@ -7,10 +7,11 @@
                 <input name="phone" value="{%$user.phone|escape%}" type="text" class="input1" /><br />
                 <select name="address" class="select1">
 {%foreach ['北京','天津','上海'] as $city%}
-                  <option {%if $user.address==$city%}checked="checked"{%/if%} value="{%$city%}">{%$city%}</option>
+                  <option {%if $user.address==$city%}checked="checked"{%/if%} value="{%$city|escape%}">{%$city|escape%}</option>
 {%/foreach%}
                 </select><br />
-                <input name="qq" value="{%$user.qq%}" type="text" class="input1" /><br />
+                <input name="qq" value="{%$user.qq|escape%}" type="text" class="input1" /><br />
+                <input name="redirect" value="{%$redirect|escape%}" type="hidden" />
                 <input type="submit" value="" class="button1" />
             </form>
         </div>
