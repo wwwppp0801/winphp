@@ -57,6 +57,9 @@
 {%foreach range($step+1,3) as $i%}
         	<div class="step{%$i%}"></div>
 {%/foreach%}
+{%for $i=4;$i<=3+$step;$i++%}
+        	<div class="step{%$i%}"></div>
+{%/for%}
         	<div class="begin zb_1"></div>
 <form action="/question/answer">
 {%foreach $questions as $i=>$question%}
