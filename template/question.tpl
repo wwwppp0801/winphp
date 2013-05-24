@@ -54,17 +54,19 @@
 	<div class="dt_main">
     	<div id="time" class="time">{%$time%}</div>
         <div class="center">
-        	<div class="step{%$step+1%}"></div>
+{%foreach range($step+1,3) as $i%}
+        	<div class="step{%$i%}"></div>
+{%/foreach%}
         	<div class="begin zb_1"></div>
 <form action="/question/answer">
 {%foreach $questions as $i=>$question%}
             <div class="q"{%if $i!=0%} style="display:none"{%/if%}>
             	<p class="title">{%$question.title|escape%} {%$question.answer%}</p>
-{%foreach $question.choices as $j=>$choice%}
-    {%if trim($choice)%}
-            	<a href="javascript:;">{%chr(65+$j)%}：{%$choice|escape%}</a>
-    {%/if%}
-{%/foreach%}
+    {%foreach $question.choices as $j=>$choice%}
+        {%if trim($choice)%}
+                    <a href="javascript:;">{%chr(65+$j)%}：{%$choice|escape%}</a>
+        {%/if%}
+    {%/foreach%}
                 <input name="q{%$i+1%}" type="hidden" value="">
             </div>
 {%/foreach%}
@@ -84,7 +86,9 @@
             </div>
 *%}
         </div>
-    	<a href="http://wenwen.soso.com/z/Search.e?sp={%urlencode($question.title)%}" target="_blank" class="search" title="搜搜找答案"></a>
+{%foreach $questions as $i=>$question%}
+    	<a {%if $i!=0%} style="display:none"{%/if%} href="http://wenwen.soso.com/z/Search.e?sp={%urlencode($question.title)%}" target="_blank" class="search" title="搜搜找答案"></a>
+{%/foreach%}
     </div>
 <script src="http://faxin.soso.com/scripts/jquery.js"></script>
 <script>
@@ -98,6 +102,7 @@ setInterval(function(){
 },1000);
 
 var divs=$(".q");
+var searches=$(".search");
 divs.each(function(i,div){
     var input=$(div).find("input");
     var links=$(div).find("a");
@@ -107,6 +112,8 @@ divs.each(function(i,div){
             if(divs.eq(i+1).size()>0){
                 $(div).hide();
                 divs.eq(i+1).show();
+                searches.eq(i).hide();
+                searches.eq(i+1).show();
             }else{
                 $("form").submit();
             }

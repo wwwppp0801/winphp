@@ -34,6 +34,12 @@ class QuestionController extends BaseController{
             $_SESSION['starttime']=time();
         }
         $step=intval($_SESSION['step']);
+
+        if($step==2&&!$_SESSION['check_captcha']){
+            //没输验证码
+            return array("redirect:/question/captcha");
+        }
+
         $questions=$this->getQuestions($step);
         if(isset($_SESSION['wrong_question'])){
             //上次答错了，重新回答
@@ -104,20 +110,16 @@ class QuestionController extends BaseController{
     public function replayAction(){
         $step=intval($_SESSION['step']);
         if($step==3&& $_SESSION['check_captcha']){
-            if(!$this->timeOK($step)){
-                $_SESSION['wrong_time']=1;
-            }else{
-                $res=DB::insert("insert into answers(openid,starttime,endtime) values(?,?,?)",
-                    $_SESSION['user']['openid'],
-                    $_SESSION['all_starttime'],
-                    time()
-                );
-                Soso_Logger::debug("insert result: $res, openid:{$_SESSION['user']['openid']},starttime:{$_SESSION['all_starttime']}");
-                unset($_SESSION['question_ids']);
-                unset($_SESSION['step']);
-                unset($_SESSION['check_captcha']);
-                unset($_SESSION['all_starttime']);
-            }
+            $res=DB::insert("insert into answers(openid,starttime,endtime) values(?,?,?)",
+                $_SESSION['user']['openid'],
+                $_SESSION['all_starttime'],
+                time()
+            );
+            Soso_Logger::debug("insert result: $res, openid:{$_SESSION['user']['openid']},starttime:{$_SESSION['all_starttime']}");
+            unset($_SESSION['question_ids']);
+            unset($_SESSION['step']);
+            unset($_SESSION['check_captcha']);
+            unset($_SESSION['all_starttime']);
         }
         return array("redirect:/question");
     }
@@ -159,6 +161,9 @@ class QuestionController extends BaseController{
 
     public function resultAction(){
         $step=intval($_SESSION['step']);
+        if(!$step){
+            return array("redirect:/question");
+        }
         $results=$_SESSION["results"];
         $wrong_questions=$_SESSION["wrong_questions"];
         return array("question_result.tpl",array(
@@ -172,6 +177,7 @@ class QuestionController extends BaseController{
         if(intval($_SESSION['step'])!=3){
             return array("redirect:/");
         }
+        $this->replayAction();
         return array("question_right.tpl");
     }
 
