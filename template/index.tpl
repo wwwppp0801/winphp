@@ -1,52 +1,25 @@
-<!doctype html>
-<html>
-<head>
-<meta charset="utf-8" />
-<meta property="qc:admins" content="1610360113544617002763757" />
-<title>养乐多活动</title>
-</head>
-<body>
-<script type="text/javascript">
-var childWindow;
-function toQzoneLogin()
-{
-    childWindow = window.open("redirect/qqlogin","TencentLogin","width=450,height=320,menubar=0,scrollbars=1, resizable=1,status=1,titlebar=0,toolbar=0,location=1");
-} 
-
-function closeChildWindow()
-{
-    childWindow.close();
-}
-</script>
-<a href="redirect/logout">登出</a>
-<a href="user">修改个人信息</a>
-{%if $user%}
-<p>nick:<b>{%$user.nickname|escape%}</b></p>
-<p>figure:<img src="{%$user.figure_url%}"/></p>
-{%/if%}
-<div>
-<a href="redirect/qqLogin"><img src="img/qq_login.png"></a>
-</div>
-
-<div>
-<a href="/question/start">开始答题</a>
-</div>
-<!--a href="#" onclick='toQzoneLogin()'><img src="img/qq_login.png"></a
-<br><br>
-<a href="user/get_user_info.php"    target="_blank">获取用户信息</a>
-<br><br>
-<a href="share/add_share.html"      target="_blank">添加分享</a>
-<br><br>
-<a href="photo/list_album.php"      target="_blank">获取相册列表</a>
-<br><br>
-<a href="photo/add_album.html"      target="_blank">创建相册</a>
-<br><br>
-<a href="photo/upload_pic.html"     target="_blank">上传相片</a>
-<br><br>
-<a href="blog/add_blog.html"     target="_blank">发表日志</a>
-<br><br>
-<a href="topic/add_topic.html"     target="_blank">发表说说</a>
-<br><br>
-<a href="weibo/add_weibo.html"     target="_blank">发表微博</a-->
-</body>
-</html>
+{%extends "index_framework.tpl"%}
+{%block name="title"%}
+<title>活动流程</title>
+{%/block%}
+{%block name="content"%}
+		<div class="content">
+			<div class="left">
+            	<div class="title"><span class="icon"></span>肠道答题能人</div>
+                <span class="list"><span class="num">1、</span>在搜搜问问中的"肠道健康"标签中回答各类肠道健康</span>
+                <span class="list"><span class="num">2、</span>在填写申请中填入回答问题的标题及链接获得抽奖资格</span>
+                <span class="list"><span class="num">3、</span>随机抽取获奖者给予不同的奖品</span>
+                <span class="list"><span class="num">4、</span>得奖名单在活动结束后公布在《达人榜》</span>
+            </div>
+			<div class="right">
+            	<div class="title"><span class="icon"></span>"肠识我懂 一战到底"问答游戏</div>
+                <span class="list"><span class="num">1、</span>点击<a href="/question/start"><img src="img/02.jpg"></a>进入"肠识我懂，一站到底"游戏页面，开始答题游戏页面，开始答题</span>
+                <span class="list"><span class="num">2、</span>答题为限时答题形式，分为三个难度等级</span>
+                <span class="list"><span class="num">3、</span>初级：3分钟内答对5道题</span>
+                <span class="list"><span class="num">4、</span>中级：4分钟内答对6道题</span>
+                <span class="list"><span class="num">5、</span>超级：10分钟内答对9道题</span>
+                <span class="list"><span class="num">6、</span>通过任何一关后按提示填入相关信息有机会获得再次抽奖资格及参观养乐多工厂机会得奖名单公布在《达人榜》</span>
+            </div>
+            <div class="clear"></div>
+		</div>
+{%/block%}
