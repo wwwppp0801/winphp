@@ -89,9 +89,9 @@ class WinRequest
         setcookie($key, $value);
     }
     
-    public static function getParameter($key)
+    public static function getParameter($key,$default=null)
     {
-        return isset(self::$request[$key])?self::$request[$key]:null;
+        return isset(self::$request[$key])?self::$request[$key]:$default;
     }
     
     public static function setParameter($key, $value)

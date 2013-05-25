@@ -71,6 +71,33 @@ LOCK TABLES `users` WRITE;
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 UNLOCK TABLES;
+
+
+DROP TABLE IF EXISTS `apply`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `apply` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `openid` varchar(32) NOT NULL,
+  `phone` varchar(20) DEFAULT NULL,
+  `email` varchar(100) DEFAULT NULL,
+  `awareness` varchar(20) DEFAULT NULL,
+  `question_url1` varchar(255) DEFAULT NULL,
+  `question_url2` varchar(255) DEFAULT NULL,
+  `question_url3` varchar(255) DEFAULT NULL,
+  `question_title1` varchar(255) DEFAULT NULL,
+  `question_title2` varchar(255) DEFAULT NULL,
+  `question_title3` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `openid_index` (`openid`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+
+LOCK TABLES `apply` WRITE;
+/*!40000 ALTER TABLE `apply` DISABLE KEYS */;
+/*!40000 ALTER TABLE `apply` ENABLE KEYS */;
+UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
