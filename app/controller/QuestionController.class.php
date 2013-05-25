@@ -161,7 +161,7 @@ class QuestionController extends BaseController{
 
     public function resultAction(){
         $step=intval($_SESSION['step']);
-        if(!$step){
+        if(!isset($_SESSION['step'])){
             return array("redirect:/question");
         }
         $results=$_SESSION["results"];
