@@ -6,7 +6,7 @@
                 <input name="realname" value="{%$user.realname|escape%}" type="text" class="input1" /><br />
                 <input name="phone" value="{%$user.phone|escape%}" type="text" class="input1" /><br />
                 <select name="address" class="select1">
-{%foreach ['北京','天津','上海'] as $city%}
+{%foreach ['北京','天津','上海','其他'] as $city%}
                   <option {%if $user.address==$city%}checked="checked"{%/if%} value="{%$city|escape%}">{%$city|escape%}</option>
 {%/foreach%}
                 </select><br />
