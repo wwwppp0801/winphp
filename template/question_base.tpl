@@ -23,7 +23,7 @@ abbr,acronym{border:0;}
 
 body{background:#f9ddb4;margin:0;}
 .dt_main{width:980px;height:700px;margin:0 auto;background:url(/images/img_07.jpg) no-repeat;position:relative;padding-top:20px;}
-.dt_main .time{position:absolute;top:30px;left:15px;background:url(/images/time.png) no-repeat;width:170px;height:96px;line-height:96px;text-align:right;font-family:Arial;color:#ec174f;font-size:60px;}
+.dt_main .time{position:absolute;top:30px;left:15px;background:url(/images/time.png) no-repeat;width:170px;height:96px;line-height:96px;text-align:right;font-family:Arial;color:#ec174f;font-size:50px;}
 .dt_main .search{position:absolute;bottom:30px;width:180px;height:180px;background:url(/images/search.png) no-repeat;}
 .dt_main .center{position:relative;width:650px;height:650px;background:url(/images/center.png) no-repeat;margin:0 auto;padding-top:190px;}
 .dt_main .center .step1{position:absolute;width:200px;height:150px;background:url(/images/step1.png) no-repeat;top:300px;left:-70px;}

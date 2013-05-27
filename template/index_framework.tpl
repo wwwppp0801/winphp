@@ -11,7 +11,7 @@
 <body>
 
 	<div class="main">
-		<div class="banner"><a href="/question/start" title="点击开始"></a></div>
+		<div class="banner"><a target="_blank" href="/question/start" title="点击开始"></a></div>
 		<div class="nav">
             <a href="/index"{%if $executeInfo.methodName=='indexAction'%} class="now"{%/if%}>活动流程</a>
             <a href="/index/prize"{%if $executeInfo.methodName=='prizeAction'%} class="now"{%/if%}>奖项设置</a>
@@ -23,7 +23,7 @@
 {%block name="content"%}
 {%/block%}
 	</div>
-    <div class="copy">本活动由养乐多联合搜搜问问共同推出，活动版权归属养乐多（中国）投资有限公司<br />养乐多（中国）投资有限公司具有对本活动的最终解释权，说明权和修改权<br />免责声明<br />京ICP备10007101</div>
+    <div class="copy">本活动由养乐多联合搜搜问问共同推出，活动版权归属养乐多（中国）投资有限公司<br />养乐多（中国）投资有限公司具有对本活动的最终解释权，说明权和修改权<br /><a href="/index/disclaimer">免责声明</a><br />京ICP备10007101</div>
 {%if $msg%}
 <script>alert('{%$msg|escape:"javascript"%}');</script>
 {%/if%}

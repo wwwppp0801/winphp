@@ -20,6 +20,11 @@ class IndexController extends BaseController{
             'user'=>$_SESSION['user']
         ));
     }
+    public function disclaimerAction(){
+        return array('view'=>"index_disclaimer.tpl",'model'=>array(
+            'user'=>$_SESSION['user']
+        ));
+    }
     public function applyAction(){
         return array('view'=>"index_apply.tpl",'model'=>array(
             'user'=>$_SESSION['user'],

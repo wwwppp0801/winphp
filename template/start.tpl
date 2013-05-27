@@ -47,7 +47,14 @@ body{background:#f9ddb4;margin:0;}
     	<div class="bg_4"></div>
     	<div class="bg_5"></div>
     	<div class="bg_6">
-        	<span class="block1"><marquee onMouseOut="this.start()" onMouseOver="this.stop()" direction="up" scrollamount="3">参加者制作并转发作品参加本次活动，参加者向养乐多陈述并保证其上传的材料及该材料包含的任何部分<br />（1）未侵犯或触犯任何人、公司或实体的任何权利；未包含任何侵犯任何第三方著作权或商标的商标、标识、团体佩饰、地理标志、照片、人物形象或雕像或其他材料；<br />（2）未包含任何迪士尼自行认定为淫乱的、猥亵的、色情的、暴力的、歧视的、不合法的、冒犯性的、胁迫性的、亵渎的、骚扰的、损害名誉的、诽谤的、侵权的或引起反对的或不合法的材料或推广该类活动的材料。<br />参加者进一步向主办方陈述并保证：他/她拥有根据活动规则在活动中制作并转发作品的必要权利、许可和同意；他/她未受限于任何协议或安排，该协议或安排会干扰其参加活动、授予本活动项下的所有权利或与本活动要求的任何其他文件冲突。<br />迪士尼可于任何时候在其认为参加者违反上述条件时自行认定参加者丧失参赛资格并剥夺其参赛资格。</marquee></span>
+        	<span class="block1"><marquee onMouseOut="this.start()" onMouseOver="this.stop()" direction="up" scrollamount="3">
+            1、点击进入"肠识我懂，一站到底"游戏页面，开始答题游戏页面，开始答题<br>
+            2、答题为限时答题形式，分为三个难度等级<br>
+            3、初级：3分钟内答对5道题<br>
+            4、中级：4分钟内答对6道题<br>
+            5、超级：10分钟内答对9道题<br>
+            6、通过任何一关后按提示填入相关信息有机会获得再次抽奖资格及参观养乐多工厂机会得奖名单公布在《达人榜》
+            </marquee></span>
         	<span class="block2"><a href="/question" class="button1" title="开始答题"></a></span>
         	<span class="block3">
                 {%foreach $winners as $winner%}

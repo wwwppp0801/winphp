@@ -13,7 +13,7 @@
             </div>
 			<div class="right">
             	<div class="title"><span class="icon"></span>"肠识我懂 一战到底"问答游戏</div>
-                <span class="list"><span class="num">1、</span>点击<a href="/question/start"><img src="/images/02.jpg"></a>进入"肠识我懂，一站到底"游戏页面，开始答题游戏页面，开始答题</span>
+                <span class="list"><span class="num">1、</span>点击<a target="_blank" href="/question/start"><img src="/images/02.jpg"></a>进入"肠识我懂，一站到底"游戏页面，开始答题游戏页面，开始答题</span>
                 <span class="list"><span class="num">2、</span>答题为限时答题形式，分为三个难度等级</span>
                 <span class="list"><span class="num">3、</span>初级：3分钟内答对5道题</span>
                 <span class="list"><span class="num">4、</span>中级：4分钟内答对6道题</span>

@@ -60,7 +60,7 @@
 {%for $i=4;$i<=3+$step;$i++%}
         	<div class="step{%$i%}"></div>
 {%/for%}
-        	<div class="begin zb_1"></div>
+        	<div class="begin zb_{%$step+2%}"></div>
 <form action="/question/answer">
 {%foreach $questions as $i=>$question%}
             <div class="q"{%if $i!=0%} style="display:none"{%/if%}>
