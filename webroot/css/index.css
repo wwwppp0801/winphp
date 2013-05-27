@@ -46,3 +46,9 @@ body{background:url(/images/00.jpg) repeat-x;}
 .text p{display:block;margin-bottom:20px;line-height:180%;}
 .input1{height:30px;line-height:30px;border:1px solid #ccc;padding:0 4px;width:400px;}
 .button1{border:0px;height:30px;line-height:30px;border:1px solid #ccc;padding:0 4px;width:100px;color:#5196fe;font-weight:bold;}
+
+
+.block{border:1px solid #ccc;height:150px;overflow:hidden;overflow-y:scroll;}
+.block .block_list{height:35px;line-height:35px;}
+.block .block_list:hover{background:#f8f8f8;}
+.block .block_list span{display:inline-block;width:44%;padding-left:5%;}
