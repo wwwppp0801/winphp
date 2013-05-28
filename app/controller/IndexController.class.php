@@ -6,6 +6,8 @@ class IndexController extends BaseController{
     }
 
     public function indexAction(){
+        
+        //return array('text:<html><head><meta property="qc:admins" content="152622617654461700276375" /></head><body>redirect</body></html>');
         return array('view'=>"index.tpl",'model'=>array(
             'user'=>$_SESSION['user']
         ));

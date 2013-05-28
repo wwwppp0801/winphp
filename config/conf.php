@@ -21,8 +21,12 @@ define("LOG_PATH", ROOT_PATH."/log/");
 define("IS_DEBUG", $IS_DEBUG);
 define("VERSION", 1);
 
-define("APPKEY", "98a27c42b5b46837ffa472e41eaf1ff2");
-define("APPID", "100448324");
+//define("APPKEY", "98a27c42b5b46837ffa472e41eaf1ff2");
+//define("APPID", "100448324");
+
+define("APPID", "100454886");
+define("APPKEY", "0f223ec7f81befb5d7e1956a2dfdd5de");
+
 define("DOMAIN_NAME", "yakult.aoxpro.com");
 ini_set("session.save_handler", "memcache");  
 ini_set("session.save_path", "tcp://127.0.0.1:11211");
