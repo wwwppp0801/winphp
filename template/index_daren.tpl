@@ -106,6 +106,17 @@
                 	<div class="block_list"><span>yangleduo1</span><span>保温包1</span></div>
                 	<div class="block_list"><span>yangleduo1</span><span>保温包1</span></div>
                 </div>
+            	<div class="title"><span class="icon"></span> 特别贡献奖获奖名单：</div>
+                <div class="block">
+                	<div class="block_list"><span>yangleduo1</span><span>保温包1</span></div>
+                	<div class="block_list"><span>yangleduo1</span><span>保温包1</span></div>
+                	<div class="block_list"><span>yangleduo1</span><span>保温包1</span></div>
+                	<div class="block_list"><span>yangleduo1</span><span>保温包1</span></div>
+                	<div class="block_list"><span>yangleduo1</span><span>保温包1</span></div>
+                	<div class="block_list"><span>yangleduo1</span><span>保温包1</span></div>
+                	<div class="block_list"><span>yangleduo1</span><span>保温包1</span></div>
+                	<div class="block_list"><span>yangleduo1</span><span>保温包1</span></div>
+                </div>
             </div>
 			<div class="right">
             	<div class="title"><span class="icon"></span> 6月8日三等奖获奖名单：</div>

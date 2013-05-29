@@ -12,6 +12,9 @@ class IndexController extends BaseController{
             'user'=>$_SESSION['user']
         ));
     }
+    public function testAction(){
+        return array('text:<html><head><meta property="qc:admins" content="152622617654461700276375745347" /></head><body>redirect</body></html>');
+    }
     public function prizeAction(){
         return array('view'=>"index_prize.tpl",'model'=>array(
             'user'=>$_SESSION['user']

@@ -19,7 +19,7 @@
                 <span class="list"><input value="{%$awareness|escape%}" name="awareness" type="text" class="input1" /></span>
             </div>
 			<div class="right">
-                <span class="list"><span class="num">4、</span>（必选）请提供您亲自在搜搜问问下面的"肠道健康"标签里面回答过的关于肠道健康相关问题的标题和链接，最少1条，最多3条.</span>
+                <span class="list"><span class="num">4、</span>（必选）请提供您亲自在搜搜问问下面的"健康常识"标签里面回答过的关于肠道健康相关问题的标题和链接，最少1条，最多3条.</span>
                 <span class="list"><span class="num">标题一：</span><input name="question_title1" type="text" class="input1" /></span>
                 <span class="list"><span class="num">链接一：</span><input name="question_url1" type="text" class="input1" /></span>
                 <span class="list"><span class="num">标题二：</span><input name="question_title2" type="text" class="input1" /></span>
