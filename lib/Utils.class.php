@@ -54,6 +54,14 @@ class Utils {
         return $res;
     }
 
+    public static function array2Simple($pArray, $pField){
+        $tRet = array();
+        foreach ($pArray as $index=>$item) {
+            $tRet[] = $item[$pField];
+        }   
+        return $tRet;
+    }
+
     
     public static function memcacheGet($ip, $port, $key) {
         $memcache_obj = memcache_connect($ip, $port);
