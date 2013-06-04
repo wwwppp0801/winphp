@@ -57,9 +57,12 @@ body{background:#f9ddb4;margin:0;}
             </marquee></span>
         	<span class="block2"><a href="/question" class="button1" title="开始答题"></a></span>
         	<span class="block3">
+{%include file="prize_inner.tpl"%}
+{%*
                 {%foreach $winners as $winner%}
             	    <span class="xm">{%$winner.name|escape%}</span><span class="jp">{%$winner.prize|escape%}</span>
                 {%/foreach%}
+*%}
 {%*
             	<span class="xm">养乐多1</span><span class="jp">保温包1</span>
             	<span class="xm">养乐多2</span><span class="jp">保温包2</span>
