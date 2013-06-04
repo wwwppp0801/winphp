@@ -11,7 +11,7 @@ class DB{
         list(self::$dsn,self::$username,self::$password)=array($dsn,$username,$password);
     
     }
-    private static function execute_sql($sql){
+    public static function execute_sql($sql){
         $params=func_get_args();
         if (count($params)>2||is_scalar($params[1])){
             array_shift($params);
