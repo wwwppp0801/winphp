@@ -26,6 +26,8 @@ body{background:url(img/00.jpg) repeat-x;}
 .nav .now{background:url(img/04.jpg) repeat-x;}
 
 .copy{text-align:center;line-height:200%;}
+.copy a{color:#333;text-decoration:none;}
+.copy a:hover{text-decoration:underline;}
 
 .content{border:2px solid #bbd3ec;margin:18px 0;padding:10px;zoom:1;}
 .content .left{float:left;width:427px;padding:10px 20px;border-right:2px solid #ededed;}
@@ -46,3 +48,24 @@ body{background:url(img/00.jpg) repeat-x;}
 .text p{display:block;margin-bottom:20px;line-height:180%;}
 .input1{height:30px;line-height:30px;border:1px solid #ccc;padding:0 4px;width:400px;}
 .button1{border:0px;height:30px;line-height:30px;border:1px solid #ccc;padding:0 4px;width:100px;color:#5196fe;font-weight:bold;}
+
+.block{border:1px solid #ccc;height:150px;overflow:hidden;overflow-y:scroll;}
+.block .block_list{height:35px;line-height:35px;}
+.block .block_list:hover{background:#f8f8f8;}
+.block .block_list span{display:inline-block;width:44%;padding-left:5%;}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
