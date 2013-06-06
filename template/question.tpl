@@ -64,7 +64,7 @@
 <form action="/question/answer">
 {%foreach $questions as $i=>$question%}
             <div class="q"{%if $i!=0%} style="display:none"{%/if%}>
-            	<p class="title">{%$question.title|escape%} {%$question.answer%}</p>
+            	<p class="title">{%$question.title|escape%}</p>
     {%foreach $question.choices as $j=>$choice%}
         {%if trim($choice)%}
                     <a href="javascript:;">{%chr(65+$j)%}：{%$choice|escape%}</a>

@@ -48,7 +48,7 @@ body{background:#f9ddb4;margin:0;}
     	<div class="bg_5"></div>
     	<div class="bg_6">
         	<span class="block1"><marquee onMouseOut="this.start()" onMouseOver="this.stop()" direction="up" scrollamount="3">
-            1、点击进入"肠识我懂，一站到底"游戏页面，开始答题游戏页面，开始答题<br>
+            1、点击进入"肠识我懂，一战到底"游戏页面，开始答题游戏页面，开始答题<br>
             2、答题为限时答题形式，分为三个难度等级<br>
             3、初级：3分钟内答对5道题<br>
             4、中级：4分钟内答对6道题<br>
