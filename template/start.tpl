@@ -1,4 +1,4 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
@@ -36,7 +36,12 @@ body{background:#f9ddb4;margin:0;}
 .main .bg_6 .block3{float:left;display:inline-block;width:251px;height:114px;zoom:1;overflow:auto;margin-top:70px;overflow:hidden;overflow-y:scroll;}
 .main .bg_6 .block3 .xm{float:left;display:inline-block;width:90px;padding-left:50px;height:30px;line-height:30px;border-bottom:1px solid #f0f0f0;}
 .main .bg_6 .block3 .jp{float:left;display:inline-block;width:81px;padding-left:10px;height:30px;line-height:30px;border-bottom:1px solid #f0f0f0;}
-</style></head>
+</style>
+
+<!--[if lt IE 7]>
+    <script type="text/javascript" src="/js/unitpngfix.js"></script>
+<![endif]-->
+</head>
 
 <body>
 
@@ -53,7 +58,7 @@ body{background:#f9ddb4;margin:0;}
             3、初级：3分钟内答对5道题<br>
             4、中级：4分钟内答对6道题<br>
             5、超级：10分钟内答对9道题<br>
-            6、通过任何一关后按提示填入相关信息有机会获得再次抽奖资格及参观养乐多工厂机会得奖名单公布在《达人榜》
+            6、通过任何一关后按提示填入相关信息有机会获得再次抽奖资格及参观养乐多工厂机会。“获奖名单”公布在《达人榜》
             </marquee></span>
         	<span class="block2"><a href="/question" class="button1" title="开始答题"></a></span>
         	<span class="block3">

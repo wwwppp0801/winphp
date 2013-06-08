@@ -6,6 +6,9 @@
 {%block name="title"%}
 {%/block%}
 <link href="/css/index.css" rel="stylesheet" type="text/css" />
+<!--[if lt IE 7]>
+    <script type="text/javascript" src="/js/unitpngfix.js"></script>
+<![endif]-->
 </head>
 
 <body>
