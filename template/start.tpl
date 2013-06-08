@@ -36,12 +36,7 @@ body{background:#f9ddb4;margin:0;}
 .main .bg_6 .block3{float:left;display:inline-block;width:251px;height:114px;zoom:1;overflow:auto;margin-top:70px;overflow:hidden;overflow-y:scroll;}
 .main .bg_6 .block3 .xm{float:left;display:inline-block;width:90px;padding-left:50px;height:30px;line-height:30px;border-bottom:1px solid #f0f0f0;}
 .main .bg_6 .block3 .jp{float:left;display:inline-block;width:81px;padding-left:10px;height:30px;line-height:30px;border-bottom:1px solid #f0f0f0;}
-</style>
-
-<!--[if lt IE 7]>
-    <script type="text/javascript" src="/js/unitpngfix.js"></script>
-<![endif]-->
-</head>
+</style></head>
 
 <body>
 
@@ -53,12 +48,13 @@ body{background:#f9ddb4;margin:0;}
     	<div class="bg_5"></div>
     	<div class="bg_6">
         	<span class="block1"><marquee onMouseOut="this.start()" onMouseOver="this.stop()" direction="up" scrollamount="3">
-            1、点击进入"肠识我懂，一战到底"游戏页面，开始答题游戏页面，开始答题<br>
-            2、答题为限时答题形式，分为三个难度等级<br>
+            1、点击“START”进入"肠识我懂，一战到底"的游戏页面，开始答题  <br>
+            2、答题为限时形式，分成三个难度等级  <br>
             3、初级：3分钟内答对5道题<br>
             4、中级：4分钟内答对6道题<br>
             5、超级：10分钟内答对9道题<br>
-            6、通过任何一关后按提示填入相关信息有机会获得再次抽奖资格及参观养乐多工厂机会。“获奖名单”公布在《达人榜》
+            6、通过任何一关后，请按照提示填入相关信息有机会获得再次抽奖资格及参观养乐多工厂机会 <br>
+  7、“获奖名单”公布在《达人榜》
             </marquee></span>
         	<span class="block2"><a href="/question" class="button1" title="开始答题"></a></span>
         	<span class="block3">

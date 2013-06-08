@@ -120,6 +120,7 @@ divs.each(function(i,div){
             }else{
                 $("form").submit();
             }
+            return false;
         });
     });
 });

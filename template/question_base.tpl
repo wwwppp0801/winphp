@@ -92,10 +92,10 @@ body{background:#f9ddb4;margin:0;}
 .tips10{background:url(/images/yzm.png) no-repeat;width:620px;height:320px;margin:150px auto;}
 .shadow{background:#000;z-index:90;position:absolute;top:0;left:0;display:block;width:100%;height:100%; opacity:0.5;}
 </style>
-
-<!--[if lt IE 7]>
-    <script type="text/javascript" src="/js/unitpngfix.js"></script>
-<![endif]-->
+<script src="/js/DD_belatedPNG_0.0.8a.js"></script>
+<script>
+    DD_belatedPNG.fix('div, ul, img, li, input , a');
+</script>
 </head>
 
 <body>
