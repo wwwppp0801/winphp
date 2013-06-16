@@ -25,7 +25,7 @@ class DB{
             $sth=self::$dbh->prepare($sql);
             $res=$sth->execute($params);
             if($res===false){
-                Soso_Logger::error(var_export(self::$dbh->errorInfo(),true)
+                Soso_Logger::error("sql:$sql;".var_export(self::$dbh->errorInfo(),true)
                     .var_export(self::$dbh->errorCode,true)
                     .var_export($params,true)
                 );

@@ -7,6 +7,12 @@ define('ROOT_PATH', dirname(dirname(__FILE__)));
 require (ROOT_PATH."/config/classpath.php");
 require (ROOT_PATH."/config/conf.php");
 
+if(php_sapi_name()=='cli'){
+    Soso_Logger::setLevel(4);
+    require(ROOT_PATH.'/script/'.$argv[1]);
+    exit();
+}
+
 Soso_Logger::open(LOG_PATH);
 try
 {
