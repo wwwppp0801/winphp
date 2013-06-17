@@ -17,6 +17,12 @@ class Table{
             $this->clear();
         }
     }
+    public function iterator(){
+        list($where_sql,$where_vals)=$this->_where();
+        list($dbh,$sth)=DB::execute_sql("select ".$this->_cols()." ".$this->_computed_cols()." from `{$this->tableName}`".$where_sql.$this->_groupby().$this->_orderby().$this->_limit(),$where_vals);
+        $this->_auto_clear();
+        return $sth;
+    }
     public function clear(){
         $this->cols=array();
         $this->computed_cols=array();

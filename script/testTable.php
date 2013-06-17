@@ -20,11 +20,20 @@ $rows=$table->addWhere('id',5854,">")->addWhere("id",1,"<=",'or')->orderby('id',
 assert("count(\$rows) === 2");
 assert("\$rows[1]['id'] == 1");
 
+foreach($table->addWhere("id",10,"<")->orderby("id")->iterator() as $i=>$row){
+    //var_dump($i,$row['id']);
+}
+assert("\$row['id'] === '9'");
+assert("\$i == 8");
+
+$table->iterator();
 $rows=$table->setCols(array("city"))->addComputedCol('count(*)','c')->groupby('city')->orderby("city")->find();
 assert("count(\$rows) === 72");
 assert("count(\$rows[0]) === 2");
 assert("\$rows[71]['city'] === '黄山'");
 assert("\$rows[71]['c'] == 4");
+
+
 
 
 $table=new Table("fav_site");
