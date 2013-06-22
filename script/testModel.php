@@ -42,4 +42,10 @@ foreach($b->addWhere("id",10,"<")->find() as $model){
     var_dump($model->mId);
 }
 
+
+
+$objs=$b->addWhere('id',5854,">")->addWhere("id",1,"<=",'or')->orderby('id','desc')->find();
+assert("count(\$objs) === 2");
+assert("\$objs[1]->mId== 1");
+
 var_dump(memory_get_peak_usage(true)/1000);

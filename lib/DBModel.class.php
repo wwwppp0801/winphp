@@ -99,6 +99,25 @@ abstract class DBModel{
         call_user_func_array(array($table,"addWhere"),func_get_args());
         return $this;
     }
+    public function orderBy(){
+        $table=$this->getTable();
+        call_user_func_array(array($table,"orderBy"),func_get_args());
+        return $this;
+    }
+    public function limit(){
+        $table=$this->getTable();
+        call_user_func_array(array($table,"limit"),func_get_args());
+        return $this;
+    }
+    public function addComputedCol(){
+        $table=$this->getTable();
+        call_user_func_array(array($table,"addComputedCol"),func_get_args());
+        return $this;
+    }
+    public function count(){
+        $table=$this->getTable();
+        return call_user_func_array(array($table,"count"),func_get_args());
+    }
     public function find(){
         $datas= $this->getTable()->find();
         $class_name=get_class($this);
