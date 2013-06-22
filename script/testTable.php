@@ -4,7 +4,7 @@ DB::init("mysql:host=localhost;dbname=inav_proj;port:3306",'root','');
 $table=new Table("bargain");
 $row=$table->limit(2,2)->select();
 assert("\$row['id'] === '3'");
-
+var_dump(var_export(array_keys($row),true));
 $row=$table->addWhere('id',100)->select();
 assert("\$row['id'] === '100'");
 $rows=$table->addWhere('id',100,">")->limit(3)->find();

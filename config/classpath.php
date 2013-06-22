@@ -23,6 +23,7 @@ function __autoload($classname)
         "Utils"=>"lib/Utils.class.php",
         "DB"=>"lib/DB.class.php",
         "Table"=>"lib/Table.class.php",
+        "DBModel"=>"lib/DBModel.class.php",
         "IPUtils"=>"lib/IPUtils.class.php",
         "Soso_Logger"=>"lib/Logger.class.php",
         'Memcache_Pool'=>"lib/Memcache_Pool.class.php",

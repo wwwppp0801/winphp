@@ -35,18 +35,24 @@ class DBModelIterator implements Iterator{
     }
     
 }
-class DBModel{
+abstract class DBModel{
     protected $_table;
     protected $_data;
-    public function __construct($data){
+    public function __construct($data=array()){
         $this->_data=$data;
     }
     public function setData($data){
         $this->_data=$data;
     }
+    public function getData(){
+        return $this->_data;
+    }
+    protected function getTableName(){
+        return strtolower(get_class($this));
+    }
     protected function getTable(){
         if(!$this->_table){
-            $this->_table=new Table(get_class($this));
+            $this->_table=new Table($this->getTableName());
         }
         return $this->_table;
     }
@@ -101,7 +107,7 @@ class DBModel{
     
     
     public function __set($key,$value){
-        $key = self::extractKey($key);
+        $key = $this->extractKey($key);
         if ($key !== false) {
             $this->_data[$key] = $value;
             return $value;
@@ -112,7 +118,7 @@ class DBModel{
     }
 
     public function __get($key){
-        $key = self::extractKey($key);
+        $key = $this->extractKey($key);
         if ($key !== false) {
             return isset($this->_data[$key]) ? $this->_data[$key] : null;
         }
@@ -121,11 +127,13 @@ class DBModel{
         return null;
     }
     
-	protected static function extractKey($key){
+	protected function extractKey($key){
         if ($key[0] == 'm') {
-            $key = preg_replace('/([A-Z])/', '_${1}', Utils_Util::lcfirst(substr($key, 1)));
+            $key=substr($key,1);
+            $key=strtolower($key[0]).substr($key, 1);
+            $key = preg_replace('/([A-Z])/', '_${1}', $key);
             $key = strtolower($key);
-            if (in_array($key, self::$FIELD_LIST)) {
+            if (in_array($key, $this->getFieldList())) {
                 return $key;
             }
         }
@@ -134,7 +142,7 @@ class DBModel{
 	}
 	
 	public function __isset($key){
-        $key = self::extractKey($key);
+        $key = $this->extractKey($key);
         if ($key !== false) {
             return isset($this->_data[$key]);
         }
@@ -142,9 +150,10 @@ class DBModel{
 	}
 	
 	public function __unset($key){
-        $key = self::extractKey($key);
+        $key = $this->extractKey($key);
         if ($key !== false) {
             unset($this->_data[$key]);
         }
 	}
+    abstract public function getFieldList();
 }
