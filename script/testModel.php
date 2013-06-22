@@ -28,3 +28,6 @@ $b=new Bargain();
 $b->mId=1;
 $b->select();
 var_dump($b->mImage);
+foreach($b->addWhere("id",10,"<")->iterator() as $model){
+    var_dump($model->mId);
+}

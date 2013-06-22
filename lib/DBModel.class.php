@@ -1,39 +1,48 @@
 <?php
 class DBModelIterator implements Iterator{
-    //真tmd费劲，其实就为了改写下current
-    public function __construct(Traversable $traversable,$modelClass){
-        while(!$traversable instanceof Iterator){
-            $traversable=$traversable->getIterator();
-        }
+    private $stmt;
+    private $cursor = -1;
+    private $valid = true;
+    private $modelClass;
+
+    function __construct ($stmt,$modelClass)    {
+        $this->stmt = $stmt;
         $this->modelClass=$modelClass;
-        $this->iterator=$traversable;
-    }
-    function rewind() {
-        return $this->iterator->rewind();
     }
 
-    function current() {
-        $data=$this->iterator->current();
-        if($this->obj){
-            $this->obj->setData=$data;
-        }else{
-            $this->obj=new $this->modelClass($data);
-        }
+    function current(){   
         return $this->obj;
     }
 
-    function key() {
-        return $this->iterator->key();
+    function next() {   
+        $this->cursor++;
+        $data= $this->stmt->fetch (PDO::FETCH_ASSOC);
+        if (empty ($data)){
+            $this->valid = false;
+        }
+        if($this->obj){
+            $this->obj->setData($data);
+        }else{
+            $this->obj=new $this->modelClass($data);
+        }
     }
 
-    function next() {
-        return $this->iterator->next();
+    function key()  {
+        return $this->cursor;
     }
 
-    function valid() {
-        return $this->iterator->valid();
+    function valid()    {
+        return $this->valid;
     }
-    
+
+    function rewind()   {
+        if($this->cursor==-1){
+            $this->cursor = 0;
+        }else{
+            throw new Exception("pdo iterator can not be rewind!");
+        }
+    }
+
 }
 abstract class DBModel{
     protected $_table;
@@ -78,7 +87,8 @@ abstract class DBModel{
     }
     public function addWhere(){
         $table=$this->getTable();
-        return call_user_func_array($table,func_get_args());
+        call_user_func_array(array($table,"addWhere"),func_get_args());
+        return $this;
     }
     public function find(){
         $datas= $this->getTable()->find();
