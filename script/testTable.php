@@ -1,7 +1,7 @@
 <?php
 assert_options(ASSERT_ACTIVE, 1);
 DB::init("mysql:host=localhost;dbname=inav_proj;port:3306",'root','');
-$table=new Table("bargain");
+$table=new DBTable("bargain");
 $row=$table->limit(2,2)->select();
 assert("\$row['id'] === '3'");
 var_dump(var_export(array_keys($row),true));
@@ -36,7 +36,7 @@ assert("\$rows[71]['c'] == 4");
 
 
 
-$table=new Table("fav_site");
+$table=new DBTable("fav_site");
 $id=$table->insert(array("qq"=>'12031389','url'=>'http://www.wangp.org','name'=>'博客1'));
 $row=$table->addWhere('id',$id)->select();
 assert("\$id>0");

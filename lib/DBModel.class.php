@@ -67,7 +67,7 @@ abstract class DBModel{
     }
     protected function getTable(){
         if(!$this->_table){
-            $this->_table=new Table($this->getTableName());
+            $this->_table=new DBTable($this->getTableName());
         }
         return $this->_table;
     }

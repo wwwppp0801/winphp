@@ -1,5 +1,5 @@
 <?php
-class Table{
+class DBTable{
     private $tableName;
     private $cols=array();
     private $wheres=array();
