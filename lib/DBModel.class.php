@@ -8,6 +8,7 @@ class DBModelIterator implements Iterator{
     function __construct ($stmt,$modelClass)    {
         $this->stmt = $stmt;
         $this->modelClass=$modelClass;
+        $this->next();
     }
 
     function current(){   
@@ -36,9 +37,7 @@ class DBModelIterator implements Iterator{
     }
 
     function rewind()   {
-        if($this->cursor==-1){
-            $this->cursor = 0;
-        }else{
+        if($this->cursor!=0){
             throw new Exception("pdo iterator can not be rewind!");
         }
     }
