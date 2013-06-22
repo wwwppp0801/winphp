@@ -2,26 +2,25 @@
 assert_options(ASSERT_ACTIVE, 1);
 DB::init("mysql:host=localhost;dbname=inav_proj;port:3306",'root','');
 class Bargain extends DBModel{
-    public static $FIELD_LIST=array (
-        0 => 'id',
-        1 => 'title',
-        2 => 'image',
-        3 => 'price',
-        4 => 'value',
-        5 => 'rebate',
-        6 => 'bought',
-        7 => 'source',
-        8 => 'url',
-        9 => 'address',
-        10 => 'endtime',
-        11 => 'fanli',
-        12 => 'type',
-        13 => 'city',
-        14 => 'all_count',
-    );
-
     public function getFieldList(){
-        return self::$FIELD_LIST;
+        static $FIELD_LIST=array (
+            array('name'=>'id',         'type'=>"int",'key'=>true,'defalut'=>null,'null'=>false,),
+            array('name'=>'title',      'type'=>"string",'defalut'=>null,'null'=>false,),
+            array('name'=>'image',      'type'=>"string",'defalut'=>null,'null'=>false,),
+            array('name'=>'price',      'type'=>"string",'defalut'=>null,'null'=>false,),
+            array('name'=>'value',      'type'=>"string",'defalut'=>null,'null'=>false,),
+            array('name'=>'rebate',     'type'=>"float",'defalut'=>null,'null'=>false,),
+            array('name'=>'bought',     'type'=>"int",'defalut'=>null,'null'=>false,),
+            array('name'=>'source',     'type'=>"string",'defalut'=>null,'null'=>false,),
+            array('name'=>'url',        'type'=>"string",'defalut'=>null,'null'=>false,),
+            array('name'=>'address',    'type'=>"string",'defalut'=>null,'null'=>false,),
+            array('name'=>'endtime',    'type'=>"int",'defalut'=>null,'null'=>false,),
+            array('name'=>'fanli',      'type'=>"string",'defalut'=>null,'null'=>false,),
+            array('name'=>'type',       'type'=>"int",'defalut'=>null,'null'=>false,),
+            array('name'=>'city',       'type'=>"string",'defalut'=>null,'null'=>false,),
+            array('name'=>'all_count',  'type'=>"int",'defalut'=>null,'null'=>false,),
+        );
+        return $FIELD_LIST;
     }
 }
 $b=new Bargain();
@@ -29,5 +28,8 @@ $b->mId=1;
 $b->select();
 var_dump($b->mImage);
 foreach($b->addWhere("id",10,"<")->iterator() as $model){
+    var_dump($model->mId);
+}
+foreach($b->addWhere("id",10,"<")->find() as $model){
     var_dump($model->mId);
 }

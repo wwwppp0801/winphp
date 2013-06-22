@@ -92,20 +92,33 @@ abstract class DBModel{
     }
     public function find(){
         $datas= $this->getTable()->find();
-        return array_map(function($data){
-            return new self($data);
+        $class_name=get_class($this);
+        return array_map(function($data)use($class_name){
+            return new $class_name($data);
         },$datas);
     }
     public function iterator(){
         $iterator=$this->getTable()->iterator();
         return new DBModelIterator($iterator,get_class($this));
     }
+    private $_foreign_keys;
+    public function getForeignKeys(){
+        $keys=$this->_foreign_keys;
+        if(!$keys){
+            $keys=array();
+            foreach($this->getFieldList()as $f){
+                if($f['foreign']){
+                    $keys[$f['name']]=$f['foreign'];
+                }
+            }
+        }
+        return $keys;
+    }
     public function __call($name,$args){
         $name="{$name}_id";
-        if(isset(self::$foreign_keys[$name])){
+        if($foreign_name=$this->getForeignKeys()[$name]){
             if($this->_data[$name]){
-                
-            $foreign=new self::$foreign_keys[$name]();
+            $foreign=new $foreign_name();
             $foreign->mId=$this->_data[$name];
             $foreign->select();
             return $foreign;
@@ -143,8 +156,10 @@ abstract class DBModel{
             $key=strtolower($key[0]).substr($key, 1);
             $key = preg_replace('/([A-Z])/', '_${1}', $key);
             $key = strtolower($key);
-            if (in_array($key, $this->getFieldList())) {
-                return $key;
+            foreach($this->getFieldList() as $f){
+                if($f['name']==$key){
+                    return $key;
+                }
             }
         }
 		
