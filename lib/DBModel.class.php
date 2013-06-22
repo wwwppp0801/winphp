@@ -49,6 +49,13 @@ abstract class DBModel{
     public function __construct($data=array()){
         $this->_data=$data;
     }
+    public function clear(){
+        $this->_data=array();
+        if($this->_table){
+            $this->_table->clear();
+        }
+        return $this;
+    }
     public function setData($data){
         $this->_data=$data;
     }
@@ -66,7 +73,7 @@ abstract class DBModel{
     }
     public function save(){
         $table=$this->getTable();
-        if($this->_data['id']){
+        if($this->mId){
             return $table->addWhere("id",$this->mId)->update($this->_data);
         }else{
             $id=$table->insert($this->_data);
@@ -77,7 +84,10 @@ abstract class DBModel{
     }
     public function select(){
         $table=$this->getTable();
-        $data=$table->addWhere('id',$this->mId)->select();
+        if($this->mId){
+            $table->addWhere('id',$this->mId);
+        }
+        $data=$table->select();
         if($data){
             $this->_data=$data;
             return $this;

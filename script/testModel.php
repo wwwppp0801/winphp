@@ -26,6 +26,14 @@ class Bargain extends DBModel{
 $b=new Bargain();
 $b->mId=1;
 $b->select();
+var_dump($b->getData());
+$b->mImage="aaaaaaaaaaaaaaaaa";
+$b->save();
+var_dump($b->mImage);
+$b->clear();
+var_dump($b->mImage);
+$b->mId=1;
+$b->select();
 var_dump($b->mImage);
 foreach($b->addWhere("id",10,"<")->iterator() as $model){
     var_dump($model->mId);
@@ -33,3 +41,5 @@ foreach($b->addWhere("id",10,"<")->iterator() as $model){
 foreach($b->addWhere("id",10,"<")->find() as $model){
     var_dump($model->mId);
 }
+
+var_dump(memory_get_peak_usage(true)/1000);
