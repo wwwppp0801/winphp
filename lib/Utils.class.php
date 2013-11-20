@@ -1,40 +1,61 @@
-<?php 
+<?php
 class Utils {
-    
+
+    public static function get_default_back_url(){
+        if(isset($_SERVER['HTTP_REFERER'])){
+            $ref_url=$_SERVER['HTTP_REFERER'];
+        }elseif(isset($_SERVER['PHP_SELF'])){
+            $ref_url=$_SERVER['PHP_SELF'];
+        }else{
+            $ref_url='/';
+        }
+        return $ref_url;
+    }
+
     public static function toUTF8($str) {
         return mb_convert_encoding($str, 'UTF-8', 'GBK');
     }
-	
+
     public static function toGBK($str) {
         return mb_convert_encoding($str, 'GBK', 'UTF-8');
     }
-    
+
+
+    public static function getDistance($lng1,$lat1,$lng2,$lat2)//æ ¹æ®ç»çº¬åº¦è®¡ç®—è·ç¦»
+    {
+        //å°†è§’åº¦è½¬ä¸ºç‹åº¦
+        $radLat1=deg2rad($lat1);
+        $radLat2=deg2rad($lat2);
+        $radLng1=deg2rad($lng1);
+        $radLng2=deg2rad($lng2);
+        $a=$radLat1-$radLat2;//ä¸¤çº¬åº¦ä¹‹å·®,çº¬åº¦<90
+        $b=$radLng1-$radLng2;//ä¸¤ç»åº¦ä¹‹å·®çº¬åº¦<180
+        $s=2*asin(sqrt(pow(sin($a/2),2)+cos($radLat1)*cos($radLat2)*pow(sin($b/2),2)))*6378.137;
+        return $s;
+    }
+
     public static function curlGet($url, $timeout = 3, $headerAry = '') {
-        //var_dump($url);
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, $url);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
         curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);
         curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, $timeout);
         curl_setopt($ch, CURLOPT_TIMEOUT, $timeout);
-        //outputÊ±ºöÂÔhttpÏìÓ¦Í·
+		//outputæ—¶å¿½ç•¥httpå“åº”å¤´
         curl_setopt($ch, CURLOPT_HEADER, false);
-        //ÉèÖÃhttpÇëÇóµÄÍ·²¿ĞÅÏ¢ Ã¿ĞĞÊÇÊı×éÖĞµÄÒ»Ïî
-        //µ±urlÖĞÓÃip·ÃÎÊÊ±£¬ÔÊĞíÓÃhostÖ¸¶¨¾ßÌåÓòÃû
+		//è®¾ç½®httpè¯·æ±‚çš„å¤´éƒ¨ä¿¡æ¯ æ¯è¡Œæ˜¯æ•°ç»„ä¸­çš„ä¸€é¡¹
+        //å½“urlä¸­ç”¨ipè®¿é—®æ—¶ï¼Œå…è®¸ç”¨hostæŒ‡å®šå…·ä½“åŸŸå
         if ($headerAry != '') {
             curl_setopt($ch, CURLOPT_HTTPHEADER, $headerAry);
         }
-        
+
         $res = curl_exec($ch);
-        
+
         return $res;
     }
-    
+
     public static function curlPost($url, $data, $timeout = 3, $headerAry = '') {
         $ch = curl_init();
-        //var_dump($url);
-        //var_dump($data);
-        //var_dump($headerAry);
         curl_setopt($ch, CURLOPT_URL, $url);
         curl_setopt($ch, CURLOPT_POST, true);
         curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
@@ -42,10 +63,8 @@ class Utils {
         curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
         curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, $timeout);
         curl_setopt($ch, CURLOPT_TIMEOUT, $timeout);
-        //outputÊ±ºöÂÔhttpÏìÓ¦Í·
+
         curl_setopt($ch, CURLOPT_HEADER, false);
-        //ÉèÖÃhttpÇëÇóµÄÍ·²¿ĞÅÏ¢ Ã¿ĞĞÊÇÊı×éÖĞµÄÒ»Ïî
-        //µ±urlÖĞÓÃip·ÃÎÊÊ±£¬ÔÊĞíÓÃhostÖ¸¶¨¾ßÌåÓòÃû
         if ($headerAry != '') {
             curl_setopt($ch, CURLOPT_HTTPHEADER, $headerAry);
         }
@@ -58,28 +77,28 @@ class Utils {
         $tRet = array();
         foreach ($pArray as $index=>$item) {
             $tRet[] = $item[$pField];
-        }   
+        }
         return $tRet;
     }
 
-    
+
     public static function memcacheGet($ip, $port, $key) {
         $memcache_obj = memcache_connect($ip, $port);
         if ($memcache_obj === false) {
-            Soso_Logger::error("memcache_connect error. $ip:$port:$key\n");
+            Logger::error("memcache_connect error. $ip:$port:$key\n");
             return false;
         }
-        
+
         $res = memcache_get($memcache_obj, $key);
         if (false === $res) {
-            Soso_Logger::error("memcache_get error. $ip:$port:$key\n");
+            Logger::error("memcache_get error. $ip:$port:$key\n");
             memcache_close($memcache_obj);
             return false;
         }
         memcache_close($memcache_obj);
         return $res;
     }
-    
+
     public static function getClientIP() {
         if ($_SERVER["HTTP_X_FORWARDED_FOR"]) {
             $ip = $_SERVER["HTTP_X_FORWARDED_FOR"];
@@ -101,4 +120,83 @@ class Utils {
         return $ip;
     }
 
+    /**
+	 * è·å¾—ä»Šæ—¥é›¶æ—¶çš„æ—¶é—´æˆ³
+	 */
+	public static function getTodayTime() {
+		$today = date ( 'Y-m-d' );
+		list($y, $m, $d) = explode('-', $today);
+		return mktime(0, 0, 0, $m, $d, $y);
+	}
+
+	/**
+	 * Y-m-d H:i:s å½¢å¼çš„å­—ä¸²è½¬ä¸ºunixæ—¶é—´æˆ³
+	 * @param string $timeStr
+	 */
+	public static function string2time($timeStr){
+		$timeStr = trim($timeStr);
+		list($date, $time) = explode(' ', $timeStr);
+
+		list($y, $m, $d) = explode('-', $date);
+		list($h, $i, $s) = explode(':', $time);
+
+		return mktime($h, $i, $s, $m, $d, $y);
+	}
+
+	/**
+	 * @param string $pUrl é‡å®šå‘ç›®æ ‡åœ°å€
+	 * @param integer $delay å»¶è¿Ÿæ—¶é—´
+	 * @return boolean
+	 * @param delay
+	 *
+	 * é‡å®šå‘URL
+	 */
+	public static function redirect($pUrl='/',$delay=0)	{
+		if (headers_sent($file,$line)) {
+			echo "<meta http-equiv=\"refresh\" content=\"{$delay};URL={$pUrl}\" />";
+			exit;
+		}
+		if ($delay > 0) {
+			header("Refresh:{$delay}; url={$pUrl}");
+			exit;
+		}
+
+		header("HTTP/1.1 302 Found");
+		header("Location:{$pUrl}");
+	}
+
+	public static function exportToCsv($csv_data, $filename = 'sample.csv') {
+		$csv_terminated = "\n";
+		$csv_separator = ",";
+		$csv_enclosed = '"';
+		$csv_escaped = "\\";
+
+		$insert = '';
+
+		$out = '';
+		foreach ($csv_data as $row) {
+			$insert = '';
+			$fields_cnt = count($row);
+			$tmp_str = '';
+			foreach ($row as $v) {
+				$tmp_str .= $csv_enclosed . str_replace($csv_enclosed, $csv_escaped . $csv_enclosed, $v) . $csv_enclosed . $csv_separator;
+			}
+
+
+			$tmp_str = substr($tmp_str, 0, -1);
+			$insert .= $tmp_str;
+
+			$out .= $insert;
+			$out .= $csv_terminated;
+		}
+
+
+		header("Cache-Control: must-revalidate, post-check=0, pre-check=0");
+		header("Content-Length: " . strlen($out));
+		header("Content-type: text/x-csv");
+		header("Content-Disposition:filename=$filename");
+
+		echo $out;
+		die();
+	}
 }

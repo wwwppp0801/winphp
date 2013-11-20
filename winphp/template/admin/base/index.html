@@ -1,0 +1,181 @@
+{%extends file="admin/framework.tpl"%}
+{%block name="head" append%}
+	<link href="/winphp/metronic/media/css/DT_bootstrap.css" rel="stylesheet" type="text/css"/>
+{%/block%}
+{%block name="content"%}
+
+                <div class="row-fluid">
+                    <div class="span12">
+                        <!-- BEGIN EXAMPLE TABLE PORTLET-->
+                        <div class="portlet box light-grey">
+                            <div class="portlet-title">
+                                <div class="caption"><i class="icon-globe"></i>{%$executeInfo.controllerName%}</div>
+{%*
+                                <div class="tools">
+                                    <a href="javascript:;" class="collapse"></a>
+                                    <a href="#portlet-config" data-toggle="modal" class="config"></a>
+                                    <a href="javascript:;" class="reload"></a>
+                                    <a href="javascript:;" class="remove"></a>
+                                </div>
+*%}
+                            </div>
+                            <div class="portlet-body">
+                                <div class="clearfix">
+                                    <div class="btn-group">
+                                        <a href="?action=read" id="sample_editable_1_new" class="btn green">
+                                        新建 <i class="icon-plus"></i>
+                                        </a>
+                                    </div>
+{%*
+                                    <div class="btn-group pull-right">
+                                        <button class="btn dropdown-toggle" data-toggle="dropdown">Tools <i class="icon-angle-down"></i>
+                                        </button>
+                                        <ul class="dropdown-menu pull-right">
+                                            <li><a href="#">Print</a></li>
+                                            <li><a href="#">Save as PDF</a></li>
+                                            <li><a href="#">Export to Excel</a></li>
+                                        </ul>
+                                    </div>
+*%}
+
+                                </div>
+
+                                <div id="sample_1_wrapper" class="dataTables_wrapper form-inline" role="grid">
+                                    <div class="row-fluid">
+                                        <div class="span6">
+                                            <div id="sample_1_length" class="dataTables_length">
+                                                <label>
+                                                    <select size="1" name="sample_1_length" aria-controls="sample_1" class="m-wrap small">
+                                                        <option value="5" selected="selected">
+                                                        5</option>
+                                                        <option value="15">
+                                                        15</option>
+                                                        <option value="20">
+                                                        20</option>
+                                                        <option value="-1">
+                                                        All</option>
+                                                    </select>
+                                                    records per page</label>
+                                            </div>
+                                        </div>
+                                        <div class="span6">
+                                            <div class="dataTables_filter" id="sample_1_filter">
+                                                <label>
+                                                    <form style="margin:0;" name="search">
+                                                        <input type="hidden" name="action" value="search">
+                                                        搜索: <input name="search" type="text" aria-controls="sample_1" class="m-wrap medium">
+                                                    </form>
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+<table class="table table-striped table-bordered table-hover dataTable" id="sample_1" aria-describedby="sample_1_info">
+
+    <thead>
+        <tr role="row">
+            <th>&nbsp;</th>
+            {%foreach from=$pageAdmin->list_display item=list_item%}
+            <th>
+            {%if is_string($list_item)%}
+                {%$list_item%}
+            {%elseif isset($list_item['label'])%}
+                {%$list_item.label%}
+            {%else%}
+                {%strval($list_item)%}
+            {%/if%}
+            </th>
+            {%/foreach%}
+            <th>操作</th>
+        </tr>
+    </thead>
+
+
+    <tbody>
+        {%foreach from=$modelDataList item=modelData%}
+        <tr class="gradeX {%cycle values="odd,even"%}">
+            <td><input type="checkbox" name="__item" /></td>
+            {%foreach from=$pageAdmin->list_display item=list_item%}
+            <td>
+
+                {%if is_array($list_item)&&isset($list_item.label)%}
+                    {%$list_item=$list_item.field%}
+                {%/if%}
+                
+                {%if is_string($list_item) %}
+                    {%$modelData->getData($list_item)%}
+                {%elseif is_callable($list_item)%}
+                    {%call_user_func($list_item,$modelData)%}
+                {%else%}
+                    {%strval($list_item)%}
+                {%/if%}
+                
+                
+            </td>
+            {%/foreach%}
+            <td>
+                <a href="?action=read&id={%$modelData->mId%}">编辑</a>
+                <a confirm="你确定要删除么？" href="?action=delete&id={%$modelData->mId%}">删除</a>
+                {%foreach from=$pageAdmin->single_actions item=action%}
+                <a href="{%$action.action%}">{%$action.label%}</a>
+                {%/foreach%}
+            </td>
+        </tr>
+        {%/foreach%}
+    </tbody>
+</table>
+<div class="row-fluid">
+    <div class="span6">
+        <div class="dataTables_info" id="sample_1_info">
+            Showing {%$_startIndex+1%} to {%$_startIndex+count($modelDataList)%} of {%$_allCount%} entries</div>
+    </div>
+    <div class="span6">
+        <div class="dataTables_paginate paging_bootstrap pagination">
+            {%$_pageAll=ceil($_allCount/$_pageSize)%}
+            {%if $_pageAll > 1%} 
+                <ul>
+                    {%if $_page>0%}
+                        <li>
+                            <a href="{%build_url page=$_page-1%}">
+                                ← <span class="hidden-480">
+                            </a>
+                        </li>
+                    {%/if%}
+                    {%foreach range(0,$_pageAll-1) as $page%}
+                        <li{%if $_page==$page%} class="active"{%/if%}><a href="{%build_url page=$page%}">{%$page+1%}</a></li>
+                    {%/foreach%}
+
+                    {%if $_page<$_pageAll-1%}
+                        <li>
+                            <a href="{%build_url page=$_page+1%}">
+                                <span class="hidden-480">
+                                    Next</span> → 
+                            </a>
+                        </li>
+                    {%/if%}
+                </ul>
+            {%/if%}
+        </div>
+    </div>
+
+    <ul>
+        {%foreach from=$pageAdmin->multi_actions item=action%}
+        <li><a href="{%$action.action%}">{%$action.label%}</a></li>
+        {%/foreach%}
+    </ul>
+</div>
+
+
+                            </div>
+
+                        </div>
+
+                        <!-- END EXAMPLE TABLE PORTLET-->
+
+                    </div>
+
+                </div>
+
+
+</div>
+{%*include file="admin/base/top_msg.html"*%}
+{%/block%}

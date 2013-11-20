@@ -11,11 +11,11 @@ class DBModelIterator implements Iterator{
         $this->next();
     }
 
-    function current(){   
+    function current(){
         return $this->obj;
     }
 
-    function next() {   
+    function next() {
         $this->cursor++;
         $data= $this->stmt->fetch (PDO::FETCH_ASSOC);
         if (empty ($data)){
@@ -49,6 +49,9 @@ abstract class DBModel{
     public function __construct($data=array()){
         $this->_data=$data;
     }
+    public function setAutoClear($auto_clear=true){
+        $this->getTable()->setAutoClear($auto_clear);
+    }
     public function clear(){
         $this->_data=array();
         if($this->_table){
@@ -57,13 +60,25 @@ abstract class DBModel{
         return $this;
     }
     public function setData($data){
-        $this->_data=$data;
+        $tmpData=array();
+        foreach($this->getFieldList() as $field){
+            if(isset($data[$field['name']])){
+                $tmpData[$field['name']]=$data[$field['name']];
+            }
+        }
+        $this->_data=$tmpData;
     }
-    public function getData(){
+
+    public function getData($field = null){
+        if(!is_null($field)){
+            return $this->_data[$field];
+        }
         return $this->_data;
     }
+
     protected function getTableName(){
-        return strtolower(get_class($this));
+        $tableName = preg_replace('/(.)([A-Z])/', '${1}_${2}',get_class($this));
+        return strtolower($tableName);
     }
     protected function getTable(){
         if(!$this->_table){
@@ -94,6 +109,14 @@ abstract class DBModel{
         }
         return false;
     }
+    public function delete(){
+        $table=$this->getTable();
+        if($this->mId){
+            $table->addWhere("id",$this->mId);
+        }
+        return $table->delete();
+        //return false;
+    }
     public function addWhere(){
         $table=$this->getTable();
         call_user_func_array(array($table,"addWhere"),func_get_args());
@@ -102,6 +125,16 @@ abstract class DBModel{
     public function orderBy(){
         $table=$this->getTable();
         call_user_func_array(array($table,"orderBy"),func_get_args());
+        return $this;
+    }
+    public function groupBy(){
+        $table=$this->getTable();
+        call_user_func_array(array($table,"groupBy"),func_get_args());
+        return $this;
+    }
+    public function setCols(){
+        $table=$this->getTable();
+        call_user_func_array(array($table,"setCols"),func_get_args());
         return $this;
     }
     public function limit(){
@@ -144,7 +177,8 @@ abstract class DBModel{
     }
     public function __call($name,$args){
         $name="{$name}_id";
-        if($foreign_name=$this->getForeignKeys()[$name]){
+        $foreign_keys=$this->getForeignKeys();
+        if($foreign_name=$foreign_keys[$name]){
             if($this->_data[$name]){
             $foreign=new $foreign_name();
             $foreign->mId=$this->_data[$name];
@@ -155,8 +189,8 @@ abstract class DBModel{
         $trace = debug_backtrace();
         trigger_error('Undefined property via __call(): '.$key.' in '.$trace[0]['file'].' on line '.$trace[0]['line'], E_USER_ERROR);
     }
-    
-    
+
+
     public function __set($key,$value){
         $key = $this->extractKey($key);
         if ($key !== false) {
@@ -177,7 +211,7 @@ abstract class DBModel{
         trigger_error('Undefined property via __get(): '.$key.' in '.$trace[0]['file'].' on line '.$trace[0]['line'], E_USER_ERROR);
         return null;
     }
-    
+
 	protected function extractKey($key){
         if ($key[0] == 'm') {
             $key=substr($key,1);
@@ -190,10 +224,10 @@ abstract class DBModel{
                 }
             }
         }
-		
+
         return false;
 	}
-	
+
 	public function __isset($key){
         $key = $this->extractKey($key);
         if ($key !== false) {
@@ -201,7 +235,7 @@ abstract class DBModel{
         }
         return false;
 	}
-	
+
 	public function __unset($key){
         $key = $this->extractKey($key);
         if ($key !== false) {

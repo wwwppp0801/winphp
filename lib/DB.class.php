@@ -4,6 +4,7 @@ class DB{
     private static $username;
     private static $password;
     private static $dbh;
+    private static $lastQuery;
     public static function init($dsn,$username,$password){
         //$this->user = 'root'; 
         //$this->pass = ''; 
@@ -12,12 +13,14 @@ class DB{
     
     }
     public static function execute_sql($sql){
+        Logger::debug($sql);
         $params=func_get_args();
         if (count($params)>2||is_scalar($params[1])){
             array_shift($params);
         }else{
             $params=$params[1];
         }
+        self::$lastQuery=array($sql,$params);
         try{
             if(!self::$dbh){
                 self::$dbh = new PDO(self::$dsn,self::$username,self::$password); 
@@ -25,16 +28,29 @@ class DB{
             $sth=self::$dbh->prepare($sql);
             $res=$sth->execute($params);
             if($res===false){
-                Soso_Logger::error("sql:$sql;".var_export(self::$dbh->errorInfo(),true)
+                Logger::error("sql:$sql;".var_export(self::$dbh->errorInfo(),true)
                     .var_export(self::$dbh->errorCode,true)
                     .var_export($params,true)
                 );
             }
         }catch(Exception $e){
-            throw new SystemException("exec sql error, ".self::$dsn." '$sql'");
+            throw new SystemException("exec sql error, ".self::$dsn." '".self::getLastQuery()."'");
         }
         
         return array(self::$dbh,$sth);
+    }
+    public static function getLastQuery(){
+        $params=self::$lastQuery[1];
+        $i=0;
+        return preg_replace_callback('/\?/',function($matches)use($params,&$i){
+            if(is_string($params[$i])){
+                $ret="'{$params[$i]}'";
+            }else{
+                $ret=$params[$i];
+            }
+            $i++;
+            return $ret;
+        },self::$lastQuery[0]);
     }
 
     public static function query($sql){

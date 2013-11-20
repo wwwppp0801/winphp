@@ -1,0 +1,139 @@
+{%extends file="admin/framework.tpl"%}
+
+{%block name="head" append%}
+	<link rel="stylesheet" type="text/css" href="/winphp/metronic/media/css/datepicker.css" />
+	<link rel="stylesheet" type="text/css" href="/winphp/metronic/media/css/timepicker.css" />
+	<link rel="stylesheet" type="text/css" href="/winphp/metronic/media/css/daterangepicker.css" />
+	<link rel="stylesheet" type="text/css" href="/winphp/metronic/media/css/datetimepicker.css" />
+{%/block%}
+{%block name="content"%}
+<div class="container-fluid">
+    <!-- BEGIN PAGE HEADER-->   
+    <div class="row-fluid">
+        <div class="span12">
+            <h3 class="page-title">
+                {%$executeInfo.controllerName|escape%}
+            </h3>
+            <ul class="breadcrumb">
+                <li>
+                <i class="icon-home"></i>
+                <a href="/">首页</a> 
+                <span class="icon-angle-right"></span>
+                </li>
+                <li>
+                <a href="/{%$executeInfo.controllerName|escape%}">{%$executeInfo.controllerName|escape%}列表</a>
+                <span class="icon-angle-right"></span>
+                </li>
+                <li><a href="javascript:;">{%$executeInfo.controllerName|escape%}编辑</a></li>
+            </ul>
+        </div>
+    </div>
+    <!-- END PAGE HEADER-->
+    <!-- BEGIN PAGE CONTENT-->
+    <div class="row-fluid">
+        <div class="span12">
+            <!-- BEGIN SAMPLE FORM PORTLET-->   
+            <div class="portlet box blue">
+                <div class="portlet-title">
+                    <div class="caption">
+                        <i class="icon-reorder"></i>
+                        <span class="hidden-480">{%$executeInfo.controllerName|escape%}</span>
+                    </div>
+                    <div class="tools">
+                        <a href="javascript:;" class="collapse"></a>
+                        <a href="#portlet-config" data-toggle="modal" class="config"></a>
+                        <a href="javascript:;" class="reload"></a>
+                        <a href="javascript:;" class="remove"></a>
+                    </div>
+                </div>
+                <div class="portlet-body form">
+                    <!-- BEGIN FORM-->
+                    <form action="{%$pageAdmin->getUrl()%}" action="/SystemUserAdmin" method="post" class="form-horizontal">
+                        {%if $__is_new%}
+                        <input type=hidden name="action" value="create">
+                        {%else%}
+                        <input type=hidden name="action" value="update">
+                        <input type=hidden name="id" value="{%$modelData->mId%}">
+                        {%/if%}
+                        <input type=hidden name="__success_url" value="{%$__success_url%}">
+
+                        {%$form->to_html("div",'control-group')%}
+
+                        <div class="form-actions">
+                            <button type="submit" class="btn blue"><i class="icon-ok"></i> Save</button>
+                            <button type="button" class="btn">Cancel</button>
+                        </div>
+                    </form>
+                    <!-- END FORM-->  
+                    <div class="inline_forms">
+                        {%foreach from=$inlines item=inline key=inlineIndex%}
+                        {%foreach from=$inline.modelDataList item=inlineModelData%}
+                        <div class="inline_form">
+                            <form class='formWrap' method='post' action="{%$pageAdmin->getUrl()%}">
+                                <input type='hidden' name='action' value='update'>
+                                <input type='hidden' name='__inline_admin_index' value='{%$inlineIndex%}'>
+                                <input type='hidden' name='id' value='{%$inlineModelData->mId%}'>
+                                <input type='hidden' name='{%$inlineAdmin->foreignKeyName%}' value='{%$modelData->mId%}'>
+                                {%$inlineAdmin->form->bind($inlineModelData->getData())%}
+                                {%$inlineAdmin->form->to_html('div' , 'item')%}
+                                <input type="submit" value="提交">
+                            </form>
+
+                            <form class='formWrap' method='post' action="{%$pageAdmin->getUrl()%}">
+                                <input type='hidden' name='action' value='delete'>
+                                <input type='hidden' name='__inline_admin_index' value='{%$inlineIndex%}'>
+                                <input type='hidden' name='id' value='{$inlineModelData['id']}'>
+                                <input type='hidden' name='".$inlineAdmin->foreignKeyName."' value='{$modelData['id']}'>
+                                <input type="submit" value="提交">
+                            </form>
+                        </div>
+
+                        {%/foreach%}
+                        <div class="inline_form">
+                            <form class='formWrap' method="post" action="{%$pageAdmin->getUrl()%}">
+                                <input type=hidden name="__inline_admin_index" value="{%$inlineIndex%}">
+                                <input type=hidden name="action" value="create">
+                                <input type=hidden name="{%$inline.admin->foreignKeyName%}" value="{%$modelData->mId%}">
+                                {%$inline.admin->form->clear()%}
+                                {%$inline.admin->form->to_html("div",'item')%}
+                                <input type="submit" value="提交">
+                            </form>
+                        </div>
+                        {%/foreach%}
+                    </div>
+                </div>
+            </div>
+            <!-- END SAMPLE FORM PORTLET-->
+        </div>
+    </div>
+    <!-- END PAGE CONTENT-->         
+</div>
+
+{%/block%}
+{%block name="footjs" append%}
+<script type="text/javascript" src="/winphp/metronic/media/js/bootstrap-datepicker.js"></script>
+<script type="text/javascript" src="/winphp/metronic/media/js/bootstrap-datetimepicker.js"></script>
+<script>
+(function(){
+    var controlTypes=['datetimepicker','datepicker'];
+    for (var i=0;i<controlTypes.length;i++){
+        (function(controlType){
+            $('.'+controlType).each(function(i,elem){
+                var dt_picker=$(elem);
+                var input=dt_picker.clone().attr({"type":"text","name":''}).insertAfter(dt_picker);
+                input[controlType]({
+                    rtl : App.isRTL()
+                });
+                input.data(controlType).update(new Date(dt_picker.val()*1000));
+                console.debug(dt_picker.parents("form"));
+                dt_picker.parents("form").submit(function(e){
+                    var d=input.data(controlType).getDate();
+                    dt_picker.val(parseInt(d.getTime()/1000));
+                });
+            });
+        })(controlTypes[i]);
+    }
+
+})();
+</script>
+{%/block%}

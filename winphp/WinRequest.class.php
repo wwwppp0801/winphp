@@ -3,6 +3,7 @@ WinRequest::init();
 class WinRequest
 {
     private static $request;
+    private static $view;
     private static $attributes = array();
     private static $model = array();
     
@@ -107,5 +108,15 @@ class WinRequest
     public static function getAttribute($key)
     {
         return self::$attributes[$key];
+    }
+    
+    public static function setView($view)
+    {
+        self::$view = $view;
+    }
+    
+    public static function getView()
+    {
+        return self::$view;
     }
 }

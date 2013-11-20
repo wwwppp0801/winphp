@@ -1,0 +1,11 @@
+
+<script>
+$('a').click(function(){
+        if($(this).attr("confirm")){
+            if(!confirm($(this).attr("confirm"))){
+                return false;
+            }
+        }
+        });
+</script>
+{%include file="admin/base/html_foot.html"%}

@@ -1,16 +1,16 @@
-<?php 
+<?php
 class DefaultView
 {
     private $templateFile;
     private $local;
     private $data;
-    
+
     public function DefaultView($view, $model)
     {
         $this->data = $model;
         $this->templateFile = $view;
     }
-    
+
     public function render()
     {
         if (strstr($this->templateFile, "redirect:"))
@@ -19,7 +19,7 @@ class DefaultView
             header("Location:".$url);
             return "";
         }
-        else if (strstr($this->templateFile, "json:"))
+        else if (strstr($this->templateFile, "jsonp:"))
         {
             $parameter = explode(':', $this->templateFile);
             $num = count($parameter);
@@ -27,7 +27,7 @@ class DefaultView
             if ($num == 2)
             {
                 $checkList = 'soso.com|qq.com';
-                $callback = $parameter[1];                
+                $callback = $parameter[1];
             }
             //example json:soso.com|qq.com:callback
             else if ($num == 3)
@@ -57,7 +57,7 @@ class DefaultView
             }
 
             $callback = preg_replace("/[^a-zA-Z0-9_]/", "", $callback);
-            
+
             return $callback."(".json_encode($this->data).");";
         }
         else if (strstr($this->templateFile, "text:"))
@@ -65,26 +65,30 @@ class DefaultView
             $text = substr($this->templateFile, strlen("text:"));
             return $text;
         }
-        else
+        else if (strstr($this->templateFile, "json:")){
+			$json = substr($this->templateFile, strlen("json:"));
+            return $json;
+        }
+		else
         {
             return $this->getRenderOutput();
         }
     }
-   
+
     private function getRenderOutput()
     {
         $template = DefaultViewSetting::getTemplate();
-        if (!file_exists(DefaultViewSetting::getRootDir().$this->templateFile))
+        DefaultViewSetting::setTemplateSetting($template);
+        if (!$template->templateExists($this->templateFile))
         {
             throw new SystemException("no this template:".$this->templateFile);
         }
-        DefaultViewSetting::setTemplateSetting($template);
 		//var_dump($this->data);
         $template->assign($this->data);
 
         return $template->fetch($this->templateFile);
     }
-    
+
 }
 
 

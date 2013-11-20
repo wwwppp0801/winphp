@@ -1,4 +1,4 @@
-<?php 
+<?php
 if(!defined('ROOT_PATH')){
     define("ROOT_PATH", dirname(dirname(__FILE__)));
 }
@@ -20,13 +20,6 @@ function __autoload($classname)
         "DefaultView"=>"winphp/base/DefaultView.class.php",
         "DefaultViewSetting"=>"config/DefaultViewSetting.class.php",
 
-        "Utils"=>"lib/Utils.class.php",
-        "DB"=>"lib/DB.class.php",
-        "DBTable"=>"lib/DBTable.class.php",
-        "DBModel"=>"lib/DBModel.class.php",
-        "IPUtils"=>"lib/IPUtils.class.php",
-        "Soso_Logger"=>"lib/Logger.class.php",
-        'Memcache_Pool'=>"lib/Memcache_Pool.class.php",
     );
     $classpath['Smarty']="lib/Smarty/Smarty.class.php";
     $file = @$classpath[$classname];
@@ -51,25 +44,32 @@ function __autoload($classname)
                 include_once ($classFile);
             }
         }
-        else if (preg_match("/(Model|Manager)$/", $classname))
-        {
-            $path = preg_replace('/([a-z])([A-Z])/', '$1/$2', $classname);
-            $path = explode("/", $path);
-            $path = array_map("strtolower", $path);
-            array_pop($path);
-            $path = implode("/", $path);
-            $classFile = ROOT_PATH."/app/model/$path/$classname.class.php";
-			if (file_exists($classFile))
-            {
-                include_once ($classFile);
-            }
-        }
         else if (preg_match("/Interceptor/", $classname))
         {
             $classFile = ROOT_PATH."/app/interceptor/$classname.class.php";
             if (file_exists($classFile))
             {
                 include_once ($classFile);
+            }
+        }
+        else
+        {
+            $path = explode("_",$classname);
+            $path = array_map("strtolower", $path);
+            $classname=array_pop($path);
+            $path = implode("/", $path);
+            
+            
+            $classFile = ROOT_PATH."/app/$path/$classname.class.php";
+			if (file_exists($classFile))
+            {
+                include_once ($classFile);
+            }else{
+                $classFile = ROOT_PATH."/lib/$path/$classname.class.php";
+                if (file_exists($classFile))
+                {
+                    include_once ($classFile);
+                }
             }
         }
     }

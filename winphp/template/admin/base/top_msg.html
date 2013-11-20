@@ -1,0 +1,19 @@
+{%if $msg%}
+<div id="user_msg" class="sucTip">{%$msg%}</div>
+<script>
+(function(){
+window.onload=function(){
+    setTimeout(function(){
+            document.getElementById("user_msg").style.display='none';
+            },3000);
+};
+function delCookie(name, path, domain){
+   document.cookie = name + "=" +
+       ((path) ? "; path=" + path :( "; path="+location.pathname.replace(/[^/]*$/,''))) +
+       ((domain) ? "; domain=" + domain : "") +
+       ";expires=Fri, 02-Jan-1970 00:00:00 GMT";
+}
+delCookie('msg');
+})();
+</script>
+{%/if%}

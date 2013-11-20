@@ -1,4 +1,22 @@
 <?php
+$table=new DBTable("message");
+$id=$table->insert(array (
+    'FromUserName' => 'gh_18dbd63feb51',
+    'MsgType' => 'text',
+    'Content' => 'default content',
+    'CreateTime' => '1375694602',
+    'status'=>0,
+));
+var_dump($id);
+$table->addWhere("id",$id)->update(array(
+    "status"=>array("`status`+1",DBTable::NO_ESCAPE),
+    'Content'=>'test content',
+));
+var_dump($table->addWhere("id",$id)->select());
+exit();
+
+
+
 assert_options(ASSERT_ACTIVE, 1);
 DB::init("mysql:host=localhost;dbname=inav_proj;port:3306",'root','');
 $table=new DBTable("bargain");

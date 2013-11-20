@@ -12,6 +12,10 @@ class DBTable{
         $this->tableName=$tableName;
         $this->auto_clear=$auto_clear;
     }
+
+    public function setAutoClear($auto_clear=true){
+        $this->auto_clear=$auto_clear;
+    }
     private function _auto_clear(){
         if($this->auto_clear){
             $this->clear();
@@ -55,13 +59,13 @@ class DBTable{
         return $this;
     }
     public function addWhere($col,$value,$sign='=',$logic='and',$escapeValue=true){
-        $this->wheres[]=array($col,$value,$sign,$logic);
+        $this->wheres[]=array($col,$value,$sign,$logic,$escapeValue);
         return $this;
     }
     public function count(){
         list($where_sql,$where_vals)=$this->_where();
-        $results=DB::queryForCount("select count(*) from `{$this->tableName}`".$this->where_sql.$this->_groupby(),
-            $this->where_vals
+        $results=DB::queryForCount("select count(*) from `{$this->tableName}`".$where_sql.$this->_groupby(),
+            $where_vals
         );
         $this->_auto_clear();
         return $results;
@@ -111,9 +115,15 @@ class DBTable{
         }
         return " limit {$this->limits[0]},{$this->limits[1]} ";
     }
+    const NO_ESCAPE=1;
     public function update($values,$force=false){
-        $cols=implode(",",array_map(function($value){
-            return "`$value`= ?";
+        $cols=implode(",",array_map(function($key)use(&$values){
+            if(is_array($values[$key])&&$values[$key][1]==self::NO_ESCAPE){
+                $s="`$key`= {$values[$key][0]}";
+                unset($values[$key]);
+                return $s;
+            }
+            return "`$key`= ?";
         },array_keys($values)));
         //$this->setCols(array_keys($values));
 
@@ -132,7 +142,7 @@ class DBTable{
             return;
         }
         list($where_sql,$where_vals)=$this->_where();
-        $results=DB::delete("delete from `{$this->tableName}` ". $this->where_sql,$this->where_vals);
+        $results=DB::delete("delete from `{$this->tableName}` ". $where_sql,$where_vals);
         $this->_auto_clear();
         return $results;
     }
@@ -149,9 +159,22 @@ class DBTable{
             }
             
             $sql.= " `{$where[0]}` {$where[2]}";
-            if($wheres[4]){
-                $values[]=$where[1];
-                $sql.=" ? ";
+            if($where[4]){
+                if(is_array($where[1])){
+                    // where in 条件时可以绑定数组
+                    $sql.=" (";
+                    foreach($where[1] as $j=>$tmp){
+                        $values[]=$tmp;
+                        if($j!=0){
+                            $sql.=",";
+                        }
+                        $sql.="?";
+                    }
+                    $sql.=") ";
+                }else{
+                    $values[]=$where[1];
+                    $sql.=" ? ";
+                }
             }else{
                 $sql.=" {$where[1]} ";
             }
@@ -163,7 +186,7 @@ class DBTable{
             return "";
         }
         $sql='';
-        foreach($this->orderBys as $orderby){
+        foreach($this->orderBys as $i=>$orderby){
             if($i!=0){
                 $sql.=" , ";
             }

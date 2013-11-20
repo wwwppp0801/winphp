@@ -1,5 +1,5 @@
 <?php 
-class Soso_Logger {
+class Logger {
     //log¼¶±ð 1:error 2:info 3:debug 4:print out
     private static $_level = 1;
     private static $_fp;

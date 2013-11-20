@@ -1,4 +1,4 @@
-<?php 
+<?php
 class UrlMapper
 {
     private $url;
@@ -10,12 +10,12 @@ class UrlMapper
         $tokens = array_filter(explode('/', $this->url));
 
         $this->controller=$this->getController($tokens);
-        if($tokens[0] && method_exists($this->controller,$tokens[0]."Action")){
+        if(isset($tokens[0]) && method_exists($this->controller,$tokens[0]."Action")){
             $this->method=array($this->controller,$tokens[0]."Action");
             array_shift($tokens);
         }else{
             $this->action=$this->getAction($tokens);
-            if($tokens[0] && method_exists($this->action,$tokens[0])){
+            if(isset($tokens[0]) && method_exists($this->action,$tokens[0])){
                 $this->method=array($this->action,$tokens[0]);
                 array_shift($tokens);
             }else if(!$this->action && method_exists($this->controller,"indexAction")){
@@ -36,7 +36,7 @@ class UrlMapper
         }
 
     }
-    
+
     public function getController(&$tokens=null)
     {
         if ($this->controller)
@@ -79,7 +79,7 @@ class UrlMapper
         {
             return $this->action;
         }
-        
+
         if(count($tokens)==0){
             $tokens=array('index');
         }
@@ -112,6 +112,6 @@ class UrlMapper
         }
         throw new SystemException("no method:".implode($tokens,"/"));
     }
-    
+
 }
 

@@ -21,6 +21,11 @@ class BaseController
         return $this->interceptors;
     }
 
+    public function getUrl(){
+        $url=preg_replace("/Controller$/","",get_class($this));
+        return "/$url";
+    }
+
     
     public function process()
     {
@@ -44,6 +49,7 @@ class BaseController
             }
             list($view, $model) = $this->getViewAndModel(call_user_func($method));
             WinRequest::mergeModel($model);
+            WinRequest::setView($view);
             for($i=count($interceptors)-1;$i>=0;$i--)
             {
                 $interceptor=$interceptors[$i];

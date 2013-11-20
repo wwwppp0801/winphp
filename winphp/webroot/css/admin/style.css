@@ -1,0 +1,470 @@
+@charset "utf-8";
+/* reset */
+body, div, dl, dt, dd, ul, ol, li, h1, h2, h3, h4, h5, h6, pre, form, fieldset, input, textarea, p, blockquote, th, td {
+	margin: 0;
+	padding: 0;
+}
+table {
+	border-collapse: collapse;
+	border-spacing: 0;
+}
+img {
+	border: 0;
+}
+address, caption, cite, code, dfn, em, strong, th {
+	font-style: normal;
+}
+ol, ul {
+	list-style: none;
+}
+body {
+	font: 12px "微软雅黑";
+	background: #fff;
+	color: #333;
+}
+.clearfix:after {
+    content: ".";
+    display: block;
+    height: 0;
+    clear: both;
+    visibility: hidden;
+}
+.clearfix {
+	zoom: 1;
+}
+a {
+	color: #06c;
+	text-decoration: none;
+}
+a:hover {
+	text-decoration: underline;
+}
+
+#container {
+	width: 960px;
+	margin: 0 auto;
+	border: 1px solid #d7d7d7;
+	background: url(../images/border.gif) repeat-y 160px 0;
+}
+
+/* begin header */
+#header {
+	height: 35px;
+	padding: 15px 20px 0;
+	background: #eefaff;
+	border-bottom: 1px solid #d7d7d7;
+}
+h1 {
+	font-size: 16px;
+	float: left;
+}
+.userInfo {
+	float: right;
+}
+.userInfo .line {
+	color: #c9c9c9;
+	margin: 0 8px;
+}
+/* end header */
+
+/* begin sidebar */
+#sidebar {
+	width: 140px;
+	padding: 0 10px;
+	float: left;
+	overflow: hidden;
+}
+#sidebar .box {
+	padding: 20px 0 10px 20px;
+	border-top: 1px dashed #e5e5e5;
+	margin-top: -1px;
+}
+#sidebar h2 {
+	font-size: 12px;
+	margin-bottom: 10px;
+}
+#sidebar .nav {
+	padding-bottom: 10px;
+}
+#sidebar .nav a {
+	display: inline-block;
+	padding: 5px 10px;
+}
+#sidebar .nav a:hover, #sidebar .nav a.current {
+	background: #e4e4e4;
+	color: #666;
+	text-decoration: none;
+}
+/* end sidebar */
+
+/* begin content */
+#content {
+	width: 720px;
+	padding: 30px 50px 30px 30px;
+	float: right;
+}
+#content2 {
+	width: 800px;
+	padding-bottom: 30px;
+	float: right;
+}
+.topbar {
+	height: 34px;
+	padding: 8px 0 0 8px;
+	background: #ffffe1;
+	border-bottom: 1px dashed #d7d7d7;
+}
+.topbar .inputBox, .topbar .button1 {
+	vertical-align: middle;
+}
+.topbar .inputBox {
+	width: 230px;
+	color: #999;
+}
+.topbar .button1 {
+	margin-left: 10px;
+}
+.topbar .title {
+	font-weight: bold;
+}
+.topbar2 {
+	overflow: hidden;
+	zoom: 1;
+	padding-bottom: 10px;
+	border-bottom: 1px dashed #e5e5e5;
+	margin-bottom: 20px;
+}
+.topbar2 h2 {
+	float: left;
+	font-size: 14px;
+}
+.topbar2 .return {
+	float: right;
+}
+.data, .data2 {
+	width: 100%;
+}
+.data th, .data2 th {
+	height: 27px;
+	background: #f2f2f2;
+	font-weight: normal;
+	color: #666;
+	padding: 0 10px;
+    white-space: nowrap;
+}
+.data th {
+	text-align: left;
+}
+.data td {
+	padding: 7px 10px;
+	border-bottom: 1px dashed #e5e5e5;
+}
+.data2 td {
+	padding: 7px 10px;
+	border: 1px solid #e4e4e4;
+	text-align: center;
+}
+.odd td {
+	background: #fff;
+}
+.even td {
+	background: #f2f5f9;
+}
+.data2 .line {
+	color: #c9c9c9;
+	margin: 0 8px;
+}
+.formWrap .item {
+	padding-bottom: 5px;
+}
+.formWrap label {
+	display: inline-block;
+	width: 110px;
+}
+.formWrap select.msgType, .formWrap select.condition {
+	width: 180px;
+}
+.formWrap .num {
+	font-family: Arial, Helvetica, sans-serif;
+}
+.formWrap input.title, .formWrap input.link {
+	width: 400px;
+}
+.formWrap .counter {
+	width: 520px;
+	text-align: right;
+}
+.formWrap textarea {
+	width: 400px;
+	height: 100px;
+}
+.formWrap .imgSize {
+	margin: 3px 0 0 112px;
+}
+.formWrap .date {
+	width: 140px;
+}
+.fsrq, .channelWrap {
+	overflow: hidden;
+	zoom: 1;
+}
+.fsrq label, .channelWrap label {
+	float: left;
+}
+.fsrq .qqPackage, .channelList, .item .qqPackage {
+	margin-left: 110px;
+	zoom: 1;
+}
+.qqPackage p, .channelList p {
+	margin-bottom: 10px;
+}
+.qqPackage .button1 {
+	margin-left: 10px;
+}
+.qqPackage select {
+	width: 240px;
+}
+.channelList span {
+	display: inline-block;
+	width: 120px;
+}
+.channelList input {
+	margin: 0 3px 0 0;
+}
+.channelList .disabled {
+	color: #999;
+}
+.formWrap .btnSubmit {
+	padding: 6px 30px;
+	font-size: 14px;
+	margin-left: 110px;
+}
+.quota .detail {
+	display: inline;
+	margin-left: 20px;
+	position: relative;
+	zoom: 1;
+}
+.quota .detail a {
+	position: relative;
+	z-index: 9;
+}
+.quota .data {
+	width: 210px;
+	padding: 40px 10px 0;
+	background: #fff;
+	border: 1px solid #c9c9c9;
+	position: absolute;
+	left: -10px;
+	top: -10px;
+	z-index: 3;
+}
+.quota .data p {
+	margin-bottom: 20px;
+}
+.quota .data .title {
+	display: inline-block;
+	width: 80px;
+}
+.quota .data .line {
+	color: #c9c9c9;
+	margin: 0 10px;
+}
+.formWrap .errorTip {
+	color: #f00;
+	margin: 3px 0 0 115px;
+}
+.preview {
+	width: 550px;
+	padding: 10px 0 0 20px;
+	border: 1px solid #ffe6c3;
+	margin-top: 50px;
+	overflow: hidden;
+}
+.preview .title {
+	float: left;
+	font-weight: bold;
+}
+.preview .steps {
+	margin-left: 130px;
+	padding-left: 35px;
+	background: url(../images/bg_steps.png) no-repeat;
+	zoom: 1;
+}
+.preview .steps p {
+	height: 28px;
+	margin-bottom: 22px;
+}
+.preview .button1 {
+	margin-left: 10px;
+}
+.preview .inputBox {
+	color: #999;
+}
+.feedback textarea {
+	margin-bottom: 10px;
+}
+.feedback .button1 {
+	margin-right: 10px;
+}
+/* end content */
+
+/* common style */
+.inputBox, textarea {	
+	padding: 3px;
+	border: 1px solid #bbb;
+	background: #fff;
+	font: 12px "微软雅黑";
+}
+.inputBox {
+	height: 16px;
+	line-height: 16px;
+}
+textarea {
+	resize: none;
+}
+.inputBox:focus, textarea:focus {
+	border: 1px solid #efa100;
+	outline: 2px solid #ffdc97;
+}
+select {
+	border: 1px solid #bbb;
+	background: #fff;
+	font: 12px "微软雅黑";
+}
+select:focus {
+	outline: none;
+}
+.button1 {	
+	display: inline-block;
+	background: #005eac;
+	color: #fff;
+	border-width: 1px;
+	border-style: solid;
+	border-color: #B8D4E8 #124680 #124680 #B8D4E8;
+	padding: 4px 15px;
+	cursor: pointer;
+}
+a.button1:hover {
+	text-decoration: none;
+}
+.red {
+	color: #f00;
+}
+.green {
+	color: #390;
+}
+.grey {
+	color: #999;
+}
+.pageBox {
+	margin-top: 20px;
+	text-align: center;
+}
+.pageBox select {
+	margin: 0 10px;
+}
+.pageBox .counter {
+	margin-left: 20px;
+}
+.pageBox .counter em {
+	color: #f85d00;
+	margin-left: 5px;
+}
+.pageBox select, .pageBox a, .pageBox span {
+	vertical-align: middle;
+}
+.sucTip, .faiTip {
+	width: 200px;
+	height: 28px;
+	line-height: 28px;
+	text-align: center;
+	position: absolute;
+	left: 50%;
+	top: 23px;
+	margin-left: -80px;
+	color: #fff;
+	z-index: 99;
+}
+.sucTip {
+	background: #390;
+}
+.faiTip {
+	background: #f00;
+}
+
+/* begin infoTable */
+.infoTable {
+	width: 85%;
+}
+.infoTable th {
+	font-weight: normal;
+	text-align: left;
+	width: 80px;
+	padding-right: 10px;
+	vertical-align: top;
+    white-space: nowrap;
+}
+.infoTable th, .infoTable td {
+	padding-bottom: 10px;
+}
+/* end infoTable */
+
+
+/*ac style @moon*/
+.ac_results { padding: 0px; border: 1px solid #d7e9d2; background-color: white; overflow: hidden; z-index: 100000; color: #666; }
+.ac_results ul { width: auto; list-style: none; padding: 0; margin: 0; border: none; }
+.ac_results li { margin: 0px; padding: 2px 5px; cursor: default; display: block; text-align: left; /* if width will be 100% horizontal scrollbar will apear  	 when scroll mode will be used 	*/ /*width: 100%;*/ font-family: Tahoma; font-size: 12px; /* it is very important, if line-height not setted or setted  	 in relative units scroll will be broken in firefox 	*/ line-height: 16px; overflow: hidden; }
+.ac_results li strong { color: #f60; }
+.ac_results li i { font-size: 6pt; font-style: normal; color: #ccc; }
+input.ac_loading { background: white url('../images/loading.gif') 98% center no-repeat; }
+textarea.ac_loading { background: white url('../images/loading.gif') 98% 95% no-repeat; }
+.ac_odd { background-color: #fff; }
+.ac_over { background-color: #e8f8ed; color: #000; }
+
+#content{position:relative;}
+#public_notice{position:absolute;border:1px solid;padding:10px;right:0;width:220px;}
+#public_notice ul{list-style:disc;margin-left:20px}
+#public_notice ul li {padding-top:10px}
+
+
+.filter2 ul{width:360px;float:left}
+.filter2 li{width:180px;float:left}
+
+
+
+.filter a:hover, .filter a.current {
+background: 
+#E4E4E4;
+color: 
+#666;
+    text-decoration: none;
+}
+.filter a {
+display: inline-block;
+padding: 5px 10px;
+}
+.filter li {
+    display:inline;
+}
+
+input.wide{
+    width:500px;
+}
+
+.formWrap h3{
+    height:30px;
+    line-height:30px;
+    padding-left:30px;
+    background-color:#e4e4e4
+}
+
+.tv_play_edit{
+    border:1px solid;
+    margin-top:10px;
+    padding:8px;
+}
+.tv_play_edit h3{margin-bottom:10px}
+
+.inline_forms {padding-left:20px}
+.inline_form {margin-top:10px;border:1px solid;}
