@@ -13,11 +13,19 @@ class Utils {
     }
 
     public static function toUTF8($str) {
-        return mb_convert_encoding($str, 'UTF-8', 'GBK');
+        if(is_array($str)){
+            return array_map('Utils::toUTF8',$str);
+        }else{
+            return mb_convert_encoding($str, 'UTF-8', 'GBK');
+        }
     }
 
     public static function toGBK($str) {
-        return mb_convert_encoding($str, 'GBK', 'UTF-8');
+        if(is_array($str)){
+            return array_map('Utils::toGBK',$str);
+        }else{
+            return mb_convert_encoding($str, 'GBK', 'UTF-8');
+        }
     }
 
 
@@ -35,6 +43,10 @@ class Utils {
     }
 
     public static function curlGet($url, $timeout = 3, $headerAry = '') {
+        if(is_array($timeout)){
+            $headerAry=$timeout;
+            $timeout=3;
+        }
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, $url);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
@@ -73,10 +85,14 @@ class Utils {
         return $res;
     }
 
-    public static function array2Simple($pArray, $pField){
+    public static function array2Simple($pArray, $pField=null){
         $tRet = array();
         foreach ($pArray as $index=>$item) {
-            $tRet[] = $item[$pField];
+            if($pField==null){
+                $tRet[]=current($item);
+            }else{
+                $tRet[] = $item[$pField];
+            }
         }
         return $tRet;
     }
@@ -166,6 +182,7 @@ class Utils {
 	}
 
 	public static function exportToCsv($csv_data, $filename = 'sample.csv') {
+        $csv_data=Utils::toGBK($csv_data);
 		$csv_terminated = "\n";
 		$csv_separator = ",";
 		$csv_enclosed = '"';

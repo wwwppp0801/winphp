@@ -1,6 +1,6 @@
 <?php
 
-class Form_TextAreaField extends Form_Field{
+class Form_FileField extends Form_Field{
     public function __construct($config){
         parent::__construct($config);
     }
@@ -10,7 +10,8 @@ class Form_TextAreaField extends Form_Field{
         $html="<div class='control-group'>";
         $html.= "<label class='control-label'>".htmlspecialchars($this->label)."</label>".
             "<div class='controls'>".
-            "<textarea class='$class span6' name='{$this->name}'>{$this->value}</textarea>";
+            "<input class='$class span6' type='text' name='{$this->name}'  value='".htmlspecialchars($this->value)."'>".
+            '<a class="open_upload btn" href="javascript:;" class="button">上传</a>';
         if($this->error){
             $html.="<span class='help-inline'>".$this->error."</span>";
         }
@@ -19,3 +20,4 @@ class Form_TextAreaField extends Form_Field{
         return $html;
     }
 }
+

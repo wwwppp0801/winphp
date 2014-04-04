@@ -6,37 +6,36 @@ class DB{
     private static $dbh;
     private static $lastQuery;
     public static function init($dsn,$username,$password){
-        //$this->user = 'root'; 
-        //$this->pass = ''; 
-        //$dns = $this->engine.':dbname='.$this->database.";host=".$this->host; 
+        //$this->user = 'root';
+        //$this->pass = '';
+        //$dns = $this->engine.':dbname='.$this->database.";host=".$this->host;
         list(self::$dsn,self::$username,self::$password)=array($dsn,$username,$password);
-    
+
     }
     public static function execute_sql($sql){
         Logger::debug($sql);
         $params=func_get_args();
-        if (count($params)>2||is_scalar($params[1])){
-            array_shift($params);
-        }else{
-            $params=$params[1];
+        array_shift($params);
+        if(isset($params[0]) &&count($params)==1 && is_array($params[0])){
+            $params=$params[0];
         }
         self::$lastQuery=array($sql,$params);
         try{
             if(!self::$dbh){
-                self::$dbh = new PDO(self::$dsn,self::$username,self::$password); 
+                self::$dbh = new PDO(self::$dsn,self::$username,self::$password);
             }
             $sth=self::$dbh->prepare($sql);
             $res=$sth->execute($params);
             if($res===false){
                 Logger::error("sql:$sql;".var_export(self::$dbh->errorInfo(),true)
-                    .var_export(self::$dbh->errorCode,true)
+                    .var_export(self::$dbh->errorCode(),true)
                     .var_export($params,true)
                 );
             }
         }catch(Exception $e){
             throw new SystemException("exec sql error, ".self::$dsn." '".self::getLastQuery()."'");
         }
-        
+
         return array(self::$dbh,$sth);
     }
     public static function getLastQuery(){
@@ -59,8 +58,13 @@ class DB{
     }
     public static function queryForCount($sql){
         list($dbh,$sth)=call_user_func_array('DB::execute_sql',func_get_args());
-        return current($sth->fetch( PDO::FETCH_ASSOC ));
+        $res = $sth->fetch( PDO::FETCH_ASSOC );
+        if ($res){
+        	return current($res);
+        }
+        return 0;
     }
+
     public static function queryForOne($sql){
         list($dbh,$sth)=call_user_func_array('DB::execute_sql',func_get_args());
         return $sth->fetch( PDO::FETCH_ASSOC );

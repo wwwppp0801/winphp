@@ -3,12 +3,15 @@ abstract class Page_Admin_Base extends BaseController{
     const PAGE_SIZE=10;
     
     private $_assigned=array();
-    private function assign($k,$v){
+    protected function assign($k,$v){
         $this->_assigned[$k]=$v;
     }
     private $_templateName;
-    private function display($templateName){
+    protected function display($templateName){
         $this->_templateName=$templateName;
+    }
+    public function __title(){
+        return get_class($this);
     }
     
     public function indexAction() {
@@ -46,6 +49,7 @@ abstract class Page_Admin_Base extends BaseController{
 
     public function _index(){
         $model=$this->model;
+        $model->setAutoClear(false);
         $page=$this->_GET('page',0);
         $model->limit($page*self::PAGE_SIZE,self::PAGE_SIZE);
         if($this->list_filter){
@@ -71,7 +75,7 @@ abstract class Page_Admin_Base extends BaseController{
         $this->assign("_pageSize",self::PAGE_SIZE);
         $this->assign("_startIndex",$page*self::PAGE_SIZE);
         
-        $model->clear();
+        $model->setAutoClear(true);
         $this->assign("_allCount",$model->count());
 
         //$this->assign("pagination",$model->mPagination);

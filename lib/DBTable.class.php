@@ -157,6 +157,10 @@ class DBTable{
             if($i!=0){
                 $sql.=" {$where[3]} ";
             }
+            if($where[1]===null&$where[2]=='='){
+                $sql.=" isnull(`{$where[0]}`) ";
+                continue;
+            }
             
             $sql.= " `{$where[0]}` {$where[2]}";
             if($where[4]){

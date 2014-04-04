@@ -40,13 +40,21 @@ abstract class Form_Field{
             $this->error="field '{$this->name}' is required.";
             return false;
         }
-
-        if($this->validator && $this->validator->validate($this->value,$values)===false ){
-            $this->error=$this->validator->error;
-            return false;
+        $this->value=$values[$this->name];
+        if($this->validator){
+            if(is_callable(array($this->validator,"validate")) && $this->validator->validate($values)===false ){
+                $this->error=$this->validator->error;
+                return false;
+            }
+            if(is_callable($this->validator)){
+                $ret=call_user_func($this->validator,$values);
+                if($ret!==true){
+                    $this->error=$ret;
+                    return false;
+                }
+            }
         }
         
-        $this->value=$values[$this->name];
         
         return true;
     }

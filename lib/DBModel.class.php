@@ -67,6 +67,7 @@ abstract class DBModel{
             }
         }
         $this->_data=$tmpData;
+        return $this;
     }
 
     public function getData($field = null){
@@ -114,7 +115,8 @@ abstract class DBModel{
         if($this->mId){
             $table->addWhere("id",$this->mId);
         }
-        return $table->delete();
+        //return $table->delete();
+        return call_user_func_array(array($table,"delete"),func_get_args());
         //return false;
     }
     public function addWhere(){
@@ -158,6 +160,9 @@ abstract class DBModel{
             return new $class_name($data);
         },$datas);
     }
+    public function insert($data){
+        return $this->getTable()->insert($data);
+    }
     public function iterator(){
         $iterator=$this->getTable()->iterator();
         return new DBModelIterator($iterator,get_class($this));
@@ -187,7 +192,7 @@ abstract class DBModel{
             }
         }
         $trace = debug_backtrace();
-        trigger_error('Undefined property via __call(): '.$key.' in '.$trace[0]['file'].' on line '.$trace[0]['line'], E_USER_ERROR);
+        trigger_error('Undefined property via __call(): '.$name.' in '.$trace[0]['file'].' on line '.$trace[0]['line'], E_USER_ERROR);
     }
 
 
