@@ -26,7 +26,7 @@ class DefaultView
             //example json:callback
             if ($num == 2)
             {
-                $checkList = 'soso.com|qq.com';
+                $checkList = '';
                 $callback = $parameter[1];
             }
             //example json:soso.com|qq.com:callback
@@ -66,8 +66,8 @@ class DefaultView
             return $text;
         }
         else if (strstr($this->templateFile, "json:")){
-			$json = substr($this->templateFile, strlen("json:"));
-            return $json;
+			//$json = substr($this->templateFile, strlen("json:"));
+            return json_encode($this->data);
         }
 		else
         {
