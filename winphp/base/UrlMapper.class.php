@@ -50,8 +50,10 @@ class UrlMapper
 
         for($i=count($tokens);$i>0;$i--){
             $ctokens=array_slice($tokens,0,$i);
+            
+            $urlPrefix=implode(array_slice($ctokens,0,count($ctokens)-1),"/");
             $classFile = ROOT_PATH."/app/controller/"
-                .implode(array_slice($ctokens,0,count($ctokens)-1),"/")
+                .$urlPrefix."/"
                 .ucfirst("{$ctokens[count($ctokens)-1]}Controller.class.php");
             if (file_exists($classFile)){
                 require_once($classFile);
@@ -59,7 +61,7 @@ class UrlMapper
                 if (class_exists($controllerClass))
                 {
                     $this->controller=new $controllerClass();
-
+                    $this->controller->setUrlPrefix($urlPrefix);
                     $this->actionPath=implode($ctokens,'/');
                     $tokens=array_slice($tokens,$i);
                     return $this->controller;

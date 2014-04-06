@@ -20,10 +20,17 @@ class BaseController
     {
         return $this->interceptors;
     }
+    private $_url_prefix;
+    public function setUrlPrefix($prefix){
+        $this->_url_prefix=$prefix;
+    }
+    public function getUrlPrefix(){
+        return $this->_url_prefix?"/".$this->_url_prefix:"";
+    }
 
     public function getUrl(){
         $url=preg_replace("/Controller$/","",get_class($this));
-        return "/$url";
+        return $this->getUrlPrefix()."/$url";
     }
 
     
