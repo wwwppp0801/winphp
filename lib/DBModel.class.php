@@ -232,6 +232,12 @@ abstract class DBModel{
 
         return false;
 	}
+    public static function zipKey($key){
+        $key=preg_replace_callback('/_([a-z])/', function($matches){
+            return strtoupper($matches[1]);
+        }, $key);
+        return "m".ucfirst($key);
+    }
 
 	public function __isset($key){
         $key = $this->extractKey($key);

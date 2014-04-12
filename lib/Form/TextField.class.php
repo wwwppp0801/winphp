@@ -10,7 +10,7 @@ class Form_TextField extends Form_Field{
         $html="<div class='control-group'>";
         $html.= "<label class='control-label'>".htmlspecialchars($this->label)."</label>".
             "<div class='controls'>".
-            "<input class='$class span6' type='text' name='{$this->name}'  value='".htmlspecialchars($this->value)."'>";
+            "<input class='$class span6' ".($this->config['readonly']?'readonly':"")." type='text' name='{$this->name}'  value='".htmlspecialchars($this->value)."'>";
         if($this->error){
             $html.="<span class='help-inline'>".$this->error."</span>";
         }

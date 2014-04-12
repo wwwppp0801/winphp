@@ -6,6 +6,7 @@ abstract class Form_Field{
     protected $required;
     protected $error;
     protected $config;
+    protected $is_set=false;
 
     public function __construct($config){
         $this->config=$config;
@@ -35,12 +36,21 @@ abstract class Form_Field{
         }
     }
     public abstract function to_html();
+    public function foot_js(){
+        return "";
+    }
+    public function head_css(){
+        return "";
+    }
     public function validate(&$values){
         if($this->required && strlen($values[$this->name])==0){
             $this->error="field '{$this->name}' is required.";
             return false;
         }
-        $this->value=$values[$this->name];
+        if(isset($values[$this->name])){
+            $this->is_set=true;
+            $this->value=$values[$this->name];
+        }
         if($this->validator){
             if(is_callable(array($this->validator,"validate")) && $this->validator->validate($values)===false ){
                 $this->error=$this->validator->error;
@@ -57,6 +67,9 @@ abstract class Form_Field{
         
         
         return true;
+    }
+    public function is_set(){
+        return $this->is_set;
     }
     public function clear(){
         if(isset($config['default'])){

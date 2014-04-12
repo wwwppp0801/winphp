@@ -4,8 +4,6 @@ class Utils {
     public static function get_default_back_url(){
         if(isset($_SERVER['HTTP_REFERER'])){
             $ref_url=$_SERVER['HTTP_REFERER'];
-        }elseif(isset($_SERVER['PHP_SELF'])){
-            $ref_url=$_SERVER['PHP_SELF'];
         }else{
             $ref_url='/';
         }

@@ -44,6 +44,7 @@ class BaseController
 							'methodName'=>$method[1],
 							'actionName'=>preg_replace("/[A-Z][a-z]+$/","",get_class($method[0])));
 		WinRequest::mergeModel(array('executeInfo'=>$executeInfo));
+		WinRequest::mergeModel(array('__controller'=>$this));
 		WinRequest::mergeModel(array('version'=>VERSION));
 		WinRequest::mergeModel(array('isDebug'=>IS_DEBUG));
 		

@@ -1,10 +1,17 @@
 {%extends file="admin/framework.tpl"%}
 
 {%block name="head" append%}
-	<link rel="stylesheet" type="text/css" href="/winphp/metronic/media/css/datepicker.css" />
-	<link rel="stylesheet" type="text/css" href="/winphp/metronic/media/css/timepicker.css" />
-	<link rel="stylesheet" type="text/css" href="/winphp/metronic/media/css/daterangepicker.css" />
-	<link rel="stylesheet" type="text/css" href="/winphp/metronic/media/css/datetimepicker.css" />
+    {%$allForms=[]%}
+    {%$allForms[]=$form%}
+    {%foreach $inlines as $inline%}
+        {%$allForms[]=$inline.admin->form%}
+    {%/foreach%}
+    
+    {%$css_code=Form::getHeadCSS($allForms)%}
+    {%include file="string:{%$css_code%}"%}
+    <style>
+        .inline_form{padding:10px;}
+    </style>
 {%/block%}
 {%block name="content"%}
 <div class="container-fluid">
@@ -17,11 +24,11 @@
             <ul class="breadcrumb">
                 <li>
                 <i class="icon-home"></i>
-                <a href="/">首页</a> 
+                <a href="{%$__controller->getUrlPrefix()%}">首页</a> 
                 <span class="icon-angle-right"></span>
                 </li>
                 <li>
-                <a href="/{%$executeInfo.controllerName|escape%}">{%$executeInfo.controllerName|escape%}列表</a>
+                <a href="{%$__controller->getUrlPrefix()%}/{%$executeInfo.controllerName|escape%}">{%$executeInfo.controllerName|escape%}列表</a>
                 <span class="icon-angle-right"></span>
                 </li>
                 <li><a href="javascript:;">{%$executeInfo.controllerName|escape%}编辑</a></li>
@@ -46,9 +53,9 @@
                         <a href="javascript:;" class="remove"></a>
                     </div>
                 </div>
-                <div class="portlet-body form">
+                <div class="portlet-body">
                     <!-- BEGIN FORM-->
-                    <form action="{%$pageAdmin->getUrl()%}" action="/SystemUserAdmin" method="post" class="form-horizontal">
+                    <form name="main" action="{%$pageAdmin->getUrl()%}" method="post" class="form-horizontal">
                         {%if $__is_new%}
                         <input type=hidden name="action" value="create">
                         {%else%}
@@ -56,7 +63,7 @@
                         <input type=hidden name="id" value="{%$modelData->mId%}">
                         {%/if%}
                         <input type=hidden name="__success_url" value="{%$__success_url%}">
-
+                        
                         {%$form->to_html("div",'control-group')%}
 
                         <div class="form-actions">
@@ -69,28 +76,30 @@
                         {%foreach from=$inlines item=inline key=inlineIndex%}
                         {%foreach from=$inline.modelDataList item=inlineModelData%}
                         <div class="inline_form">
-                            <form class='formWrap' method='post' action="{%$pageAdmin->getUrl()%}">
+                            <form class='formWrap form-horizontal' method='post' action="{%$pageAdmin->getUrl()%}">
                                 <input type='hidden' name='action' value='update'>
                                 <input type='hidden' name='__inline_admin_index' value='{%$inlineIndex%}'>
                                 <input type='hidden' name='id' value='{%$inlineModelData->mId%}'>
-                                <input type='hidden' name='{%$inlineAdmin->foreignKeyName%}' value='{%$modelData->mId%}'>
-                                {%$inlineAdmin->form->bind($inlineModelData->getData())%}
-                                {%$inlineAdmin->form->to_html('div' , 'item')%}
+                                <input type='hidden' name='{%$inline.admin->foreignKeyName%}' value='{%$modelData->mId%}'>
+                                {%capture%}
+                                {%$inline.admin->form->bind($inlineModelData->getData())%}
+                                {%/capture%}
+                                {%$inline.admin->form->to_html('div','item')%}
                                 <input type="submit" value="提交">
                             </form>
 
-                            <form class='formWrap' method='post' action="{%$pageAdmin->getUrl()%}">
+                            <form class='formWrap form-horizontal' style="position:absolute" method='post' action="{%$pageAdmin->getUrl()%}">
                                 <input type='hidden' name='action' value='delete'>
                                 <input type='hidden' name='__inline_admin_index' value='{%$inlineIndex%}'>
-                                <input type='hidden' name='id' value='{$inlineModelData['id']}'>
-                                <input type='hidden' name='".$inlineAdmin->foreignKeyName."' value='{$modelData['id']}'>
-                                <input type="submit" value="提交">
+                                <input type='hidden' name='id' value='{%$inlineModelData->mId%}'>
+                                <input type='hidden' name='{%$inline.admin->foreignKeyName%}' value='{%$modelData->mId%}'>
+                                <input type="submit" value="删除" style="margin:-85px 0 0 100px">
                             </form>
                         </div>
 
                         {%/foreach%}
                         <div class="inline_form">
-                            <form class='formWrap' method="post" action="{%$pageAdmin->getUrl()%}">
+                            <form class='formWrap form-horizontal' method="post" action="{%$pageAdmin->getUrl()%}">
                                 <input type=hidden name="__inline_admin_index" value="{%$inlineIndex%}">
                                 <input type=hidden name="action" value="create">
                                 <input type=hidden name="{%$inline.admin->foreignKeyName%}" value="{%$modelData->mId%}">
@@ -108,32 +117,15 @@
     </div>
     <!-- END PAGE CONTENT-->         
 </div>
+        
+ 
+<div id="popup" style="display:none">
+    <span class="button b-close clearfix"><span>X</span></span>
+    <div class="content"></div>
+</div>
 
 {%/block%}
 {%block name="footjs" append%}
-<script type="text/javascript" src="/winphp/metronic/media/js/bootstrap-datepicker.js"></script>
-<script type="text/javascript" src="/winphp/metronic/media/js/bootstrap-datetimepicker.js"></script>
-<script>
-(function(){
-    var controlTypes=['datetimepicker','datepicker'];
-    for (var i=0;i<controlTypes.length;i++){
-        (function(controlType){
-            $('.'+controlType).each(function(i,elem){
-                var dt_picker=$(elem);
-                var input=dt_picker.clone().attr({"type":"text","name":''}).insertAfter(dt_picker);
-                input[controlType]({
-                    rtl : App.isRTL()
-                });
-                input.data(controlType).update(new Date(dt_picker.val()*1000));
-                console.debug(dt_picker.parents("form"));
-                dt_picker.parents("form").submit(function(e){
-                    var d=input.data(controlType).getDate();
-                    dt_picker.val(parseInt(d.getTime()/1000));
-                });
-            });
-        })(controlTypes[i]);
-    }
-
-})();
-</script>
+{%$js_code=Form::getFootJS($allForms)%}
+{%include file="string:{%$js_code%}"%}
 {%/block%}

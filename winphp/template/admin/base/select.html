@@ -1,0 +1,43 @@
+{%extends file="admin/framework.tpl"%}
+{%block name="body"%}
+<div class="row-fluid">
+    <div class="span12">
+        <!-- BEGIN EXAMPLE TABLE PORTLET-->
+        <div class="portlet box light-grey">
+            <div class="portlet-title">
+                <div class="caption"><i class="icon-globe"></i>{%$executeInfo.controllerName%}</div>
+            </div>
+            <div class="portlet-body">
+                <div class="clearfix">
+                    <div class="btn-group">
+                        <a target="_blank" href="?action=read" id="sample_editable_1_new" class="btn green">
+                            新建 <i class="icon-plus"></i>
+                        </a>
+                        <a style="margin-left:20px;" href="javascript:;" onclick="location.reload();return false;" class="btn green">
+                            刷新 
+                        </a>
+                    </div>
+                </div>
+
+                {%include file="admin/base/_list.html" inline%}
+            </div>
+            <!-- END EXAMPLE TABLE PORTLET-->
+        </div>
+    </div>
+</div>
+{%/block%}
+{%block name="footjs" append%}
+<script>
+    (function(){
+        var itemDatas={%json_encode(array_map(create_function('$item','return $item->getData();'),$modelDataList))%};
+        $("tbody>tr").dblclick(function(){
+            var index=$(this).index();
+            parent.window.choosemodel('{%$executeInfo.controllerName%}','{%$smarty.get.field%}',itemDatas[index]['id']);
+            parent.window.choosemodelPopup.close();
+        });
+        $("form[name='search']").submit(function(){
+            $(this).find('[name="action"]').val('select_search');
+        });
+    })();
+</script>
+{%/block%}

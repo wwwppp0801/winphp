@@ -21,10 +21,10 @@ abstract class Page_Admin_Base extends BaseController{
             unset($_REQUEST['__inline_admin_index']);
             $inlineAdmin=$this->inline_admin[$__inline_admin_index];
             $foreignKey=$this->_REQUEST($inlineAdmin->foreignKeyName);
-            $_REQUEST['__success_url']=get_class($this).".php?action=read&id=$foreignKey";
+            $_REQUEST['__success_url']=preg_replace("/Controller$/","",get_class($this))."?action=read&id=$foreignKey";
             $inlineAdmin->setForeignKey($foreignKey);
-            $inlineAdmin->indexAction();
-            return;
+            return $inlineAdmin->indexAction();
+            //return;
         }
         $this->assign('pageAdmin',$this);
         $tAction =$this->_REQUEST('action',$tAction);
@@ -36,14 +36,26 @@ abstract class Page_Admin_Base extends BaseController{
         }   
         return array('text:error param');
     }
-
-    public function search(){
+    public function select(){
+        $this->_index();
+        $this->display("admin/base/select.html");
+    }
+    public function select_search(){
+        $this->_search();
+        $this->_index();
+        $this->display("admin/base/select.html");
+    }
+    public function _search(){
         $model=$this->model;
         $search=$this->_GET('search');
         $this->assign("search",$search);
         foreach($this->search_fields as $field){
             $model->addWhere($field,"%$search%",'like','or');
         }
+    }
+
+    public function search(){
+        $this->_search();
         $this->index();
     }
 
@@ -80,6 +92,7 @@ abstract class Page_Admin_Base extends BaseController{
 
         //$this->assign("pagination",$model->mPagination);
     }
+    
     public function index(){
         $this->_index();
         $this->display("admin/base/index.html");
@@ -221,7 +234,8 @@ abstract class Page_Admin_Base extends BaseController{
         if(!$ref_url){
             $ref_url=Utils::get_default_back_url();
         }
-        Utils::redirect($ref_url);
+        $this->display("redirect:".$ref_url);
+        //Utils::redirect($ref_url);
     }
     
 }

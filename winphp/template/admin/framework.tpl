@@ -42,6 +42,7 @@ Purchase: http://themeforest.net/item/metronic-responsive-admin-dashboard-templa
 <!-- END HEAD -->
 <!-- BEGIN BODY -->
 <body class="page-header-fixed">
+{%block name="body"%}
 	<!-- BEGIN HEADER -->
 	<div class="header navbar navbar-inverse navbar-fixed-top">
 		<!-- BEGIN TOP NAVIGATION BAR -->
@@ -75,7 +76,7 @@ Purchase: http://themeforest.net/item/metronic-responsive-admin-dashboard-templa
 							<li class="divider"></li>
 							<li><a href="extra_lock.html"><i class="icon-lock"></i> Lock Screen</a></li>
                             -->
-							<li><a href="/index/logout"><i class="icon-key"></i> Log Out</a></li>
+							<li><a href="{%$__controller->getUrlPrefix()%}/index/logout"><i class="icon-key"></i> Log Out</a></li>
 						</ul>
 					</li>
 					<!-- END USER LOGIN DROPDOWN -->
@@ -110,6 +111,7 @@ Purchase: http://themeforest.net/item/metronic-responsive-admin-dashboard-templa
 			</span>
 		</div>
 	</div>
+{%/block%}
 	<!-- END FOOTER -->
 	<!-- BEGIN JAVASCRIPTS(Load javascripts at bottom, this will reduce page load time) -->
 	<!-- BEGIN CORE PLUGINS -->

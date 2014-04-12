@@ -22,4 +22,35 @@ class Form_DatetimeField extends Form_Field{
         $html.='</div>';
         return $html;
     }
+    public function head_css(){
+        $css=<<<EOF
+	<link rel="stylesheet" type="text/css" href="/winphp/metronic/media/css/datetimepicker.css" />
+EOF;
+        return $css;
+    }
+    public function foot_js(){
+        $js=<<<EOF
+<script type="text/javascript" src="/winphp/metronic/media/js/bootstrap-datetimepicker.js"></script>
+<script>
+(function(){
+    (function(controlType){
+        $('.'+controlType).each(function(i,elem){
+            var dt_picker=$(elem);
+            var input=dt_picker.clone().attr({"type":"text","name":''}).insertAfter(dt_picker);
+            input[controlType]({
+                rtl : App.isRTL()
+            });
+            input.data(controlType).update(new Date(dt_picker.val()*1000));
+            //console.debug(dt_picker.parents("form"));
+            dt_picker.parents("form").submit(function(e){
+                var d=input.data(controlType).getDate();
+                dt_picker.val(parseInt(d.getTime()/1000));
+            });
+        });
+    })('datetimepicker');
+})();
+</script>
+EOF;
+        return $js;
+    }
 }

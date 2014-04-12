@@ -9,7 +9,9 @@ class Form_PasswordField extends Form_Field{
         $html="<div class='control-group'>";
         $html.= "<label class='control-label'>".htmlspecialchars($this->label)."</label>".
             "<div class='controls'>".
-            "<input class='$class span6' type='password' name='{$this->name}'>";
+            "<input class='$class span5' disabled='disabled' type='password' name='{$this->name}'>".
+            "<input class='span1 enable_input' type='button' value='修改'>"
+            ;
         if($this->error){
             $html.="<span class='help-inline'>".$this->error."</span>";
         }
@@ -23,6 +25,21 @@ class Form_PasswordField extends Form_Field{
             $this->value=$values[$this->name]=md5($values[$this->name]);
         }
         return $ret;
+    }
+    public function foot_js(){
+        $js=<<<EOF
+<script>
+(function(){
+{%if \$__is_new%}
+    $('.enable_input').prev("input").removeAttr("disabled");
+{%/if%}
+    $('.enable_input').click(function(){
+        $(this).prev("input").removeAttr("disabled");
+    });
+})();
+</script>
+EOF;
+        return $js;
     }
 }
 

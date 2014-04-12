@@ -6,6 +6,31 @@ class Form{
     private $is_validate=null;
     private $errors=array();
 
+    public static function getFootJS($forms){
+        $fields=[];
+        foreach($forms as $form){
+            foreach($form->fields as $field){
+                $fields[get_class($field)]=$field;
+            }
+        }
+        $js=implode("\n",array_map(function($field){
+            return $field->foot_js();
+        },$fields));
+        return $js;
+    }
+    public static function getHeadCSS($forms){
+        $fields=[];
+        foreach($forms as $form){
+            foreach($form->fields as $field){
+                $fields[get_class($field)]=$field;
+            }
+        }
+        $css=implode("\n",array_map(function($field){
+            return $field->head_css();
+        },$fields));
+        return $css;
+    }
+
     public function __construct($fields=array()){
         $this->fields=array();
         foreach($fields as $field){
@@ -47,7 +72,7 @@ class Form{
         foreach($this->fields as $field){
             if($field->validate($this->raw_values)===false){
                 $this->errors[$field->name()]=$field->error();
-            }else{
+            }else if($field->is_set()){
                 $this->values[$field->name()]=$field->value();
             }
         }
@@ -57,7 +82,7 @@ class Form{
         return $this->is_validate;
     }
     public function getConfig(){
-        return $this->config;
+        return $this->fields;
     }
     public function is_validate(){
         return $this->is_validate;
