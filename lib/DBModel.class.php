@@ -69,12 +69,33 @@ abstract class DBModel{
         $this->_data=$tmpData;
         return $this;
     }
+    public function setDataMerge($data){
+        $tmpData=array();
+        foreach($this->getFieldList() as $field){
+            if(isset($data[$field['name']])){
+                $tmpData[$field['name']]=$data[$field['name']];
+            }
+        }
+        $this->_data=array_merge($this->_data,$tmpData);
+        return $this;
+    }
 
     public function getData($field = null){
         if(!is_null($field)){
-            return $this->_data[$field];
+            return $this->__get(self::zipKey($field));
         }
-        return $this->_data;
+        $data=$this->_data;
+        foreach($this->getFieldList() as $f){
+            if(
+                isset($data[$f['name']])
+                && !is_null($data[$f['name']])
+            ){
+                if($f['type']=='int'){
+                    $data[$f['name']]=intval($data[$f['name']]);
+                }
+            }
+        }
+        return $data;
     }
 
     protected function getTableName(){
@@ -197,8 +218,9 @@ abstract class DBModel{
 
 
     public function __set($key,$value){
-        $key = $this->extractKey($key);
-        if ($key !== false) {
+        $field = $this->extractKey($key);
+        if ($field !== false) {
+            $key=$field['name'];
             $this->_data[$key] = $value;
             return $value;
         }
@@ -208,9 +230,14 @@ abstract class DBModel{
     }
 
     public function __get($key){
-        $key = $this->extractKey($key);
-        if ($key !== false) {
-            return isset($this->_data[$key]) ? $this->_data[$key] : null;
+        $field = $this->extractKey($key);
+        if ($field !== false) {
+            $key=$field['name'];
+            $value=isset($this->_data[$key]) ? $this->_data[$key] : null;
+            if(!is_null($value)){
+                
+            }
+            return $value;
         }
         $trace = debug_backtrace();
         trigger_error('Undefined property via __get(): '.$key.' in '.$trace[0]['file'].' on line '.$trace[0]['line'], E_USER_ERROR);
@@ -225,7 +252,8 @@ abstract class DBModel{
             $key = strtolower($key);
             foreach($this->getFieldList() as $f){
                 if($f['name']==$key){
-                    return $key;
+                    //return $key;
+                    return $f;
                 }
             }
         }
@@ -240,16 +268,18 @@ abstract class DBModel{
     }
 
 	public function __isset($key){
-        $key = $this->extractKey($key);
-        if ($key !== false) {
+        $field = $this->extractKey($key);
+        if ($field !== false) {
+            $key=$field['name'];
             return isset($this->_data[$key]);
         }
         return false;
 	}
 
 	public function __unset($key){
-        $key = $this->extractKey($key);
-        if ($key !== false) {
+        $field = $this->extractKey($key);
+        if ($field !== false) {
+            $key=$field['name'];
             unset($this->_data[$key]);
         }
 	}

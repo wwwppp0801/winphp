@@ -58,7 +58,7 @@ class DBTable{
         $this->computed_cols[]=array($col,$alias);
         return $this;
     }
-    public function addWhere($col,$value,$sign='=',$logic='and',$escapeValue=true){
+    public function addWhere($col,$value,$sign='=',$logic='and',$escapeValue=self::ESCAPE){
         $this->wheres[]=array($col,$value,$sign,$logic,$escapeValue);
         return $this;
     }
@@ -115,10 +115,11 @@ class DBTable{
         }
         return " limit {$this->limits[0]},{$this->limits[1]} ";
     }
-    const NO_ESCAPE=1;
+    const NO_ESCAPE=false;
+    const ESCAPE=true;
     public function update($values,$force=false){
         $cols=implode(",",array_map(function($key)use(&$values){
-            if(is_array($values[$key])&&$values[$key][1]==self::NO_ESCAPE){
+            if(is_array($values[$key])&&$values[$key][1]===self::NO_ESCAPE){
                 $s="`$key`= {$values[$key][0]}";
                 unset($values[$key]);
                 return $s;
@@ -163,7 +164,7 @@ class DBTable{
             }
             
             $sql.= " `{$where[0]}` {$where[2]}";
-            if($where[4]){
+            if($where[4]===self::ESCAPE){
                 if(is_array($where[1])){
                     // where in 条件时可以绑定数组
                     $sql.=" (";

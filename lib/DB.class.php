@@ -12,6 +12,24 @@ class DB{
         list(self::$dsn,self::$username,self::$password)=array($dsn,$username,$password);
 
     }
+    public static function beginTransaction(){
+        Logger::debug('beginTransaction');
+        self::getDBH()->beginTransaction();
+    }
+    public static function commit(){
+        Logger::debug('commitTransaction');
+        self::getDBH()->commit();
+    }
+    public static function rollBack(){
+        Logger::debug('rollbackTransaction');
+        self::getDBH()->rollBack();
+    }
+    private static function getDBH(){
+        if(!self::$dbh){
+            self::$dbh = new PDO(self::$dsn,self::$username,self::$password);
+        }
+        return self::$dbh;
+    }
     public static function execute_sql($sql){
         Logger::debug($sql);
         $params=func_get_args();
@@ -21,14 +39,12 @@ class DB{
         }
         self::$lastQuery=array($sql,$params);
         try{
-            if(!self::$dbh){
-                self::$dbh = new PDO(self::$dsn,self::$username,self::$password);
-            }
-            $sth=self::$dbh->prepare($sql);
+            $dbh=self::getDBH();
+            $sth=$dbh->prepare($sql);
             $res=$sth->execute($params);
             if($res===false){
-                Logger::error("sql:$sql;".var_export(self::$dbh->errorInfo(),true)
-                    .var_export(self::$dbh->errorCode(),true)
+                Logger::error("sql:$sql;".var_export($dbh->errorInfo(),true)
+                    .var_export($dbh->errorCode(),true)
                     .var_export($params,true)
                 );
             }
