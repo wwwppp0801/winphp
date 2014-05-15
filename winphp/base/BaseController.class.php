@@ -67,7 +67,21 @@ class BaseController
         catch(ModelAndViewException $e)
         {
             list($view, $model) = $this->getViewAndModel( $e->getModelAndView());
-            WinRequest::setModel($model);
+            WinRequest::mergeModel($model);
+            for($i=count($interceptors)-1;$i>=0;$i--)
+            {
+                $interceptor=$interceptors[$i];
+                $interceptor->failAction();
+            }
+        }
+        catch(Exception $e)
+        {
+            for($i=count($interceptors)-1;$i>=0;$i--)
+            {
+                $interceptor=$interceptors[$i];
+                $interceptor->failAction();
+            }
+            throw $e;
         }
         
         $viewObj = new $this->viewClass($view, WinRequest::getModel());

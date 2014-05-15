@@ -12,8 +12,14 @@ class WinRequest
         self::$request = $_GET + $_POST;
     }
     
-    public static function getModel()
+    public static function getModel($key=null)
     {
+        if(!is_null($key)){
+            if(isset(self::$model[$key])){
+                return self::$model[$key];
+            }
+            return null;
+        }
         return self::$model;
     }
     

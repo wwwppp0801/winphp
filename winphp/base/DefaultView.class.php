@@ -65,9 +65,12 @@ class DefaultView
             $text = substr($this->templateFile, strlen("text:"));
             return $text;
         }
-        else if (strstr($this->templateFile, "json:")){
+        else if ($suffix=strstr($this->templateFile, "json:")){
 			//$json = substr($this->templateFile, strlen("json:"));
-            return json_encode($this->data);
+            if(!$suffix){
+                $suffix="json";
+            }
+            return json_encode($this->data['json']);
         }
 		else
         {

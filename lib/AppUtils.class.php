@@ -1,7 +1,7 @@
 <?php
 class AppUtils{
     public static function returnValue($data,$errorNo=null){
-        return ["rst" => $data, "errno"=>$errorNo, "err"=>Error::str($errorNo), "timestamp"=>intval(microtime(true)*1000)];  
+        return ["json"=>["rst" => $data, "errno"=>$errorNo, "err"=>Error::str($errorNo), "timestamp"=>intval(microtime(true))]];  
     }
     public static function POST($paramName,$defaultValue=null,$errorCode=0){
         if(!isset($_POST[$paramName])){

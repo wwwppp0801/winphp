@@ -25,4 +25,3 @@
             parent::__construct($message, $errorCode);
         }
 	}
-?>
