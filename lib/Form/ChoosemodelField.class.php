@@ -39,9 +39,12 @@ EOF;
     }
     public function foot_js(){
         $js=<<<EOF
-<script src="/winphp/js/jquery.bpopup-0.9.4.min.js"></script>
 <script>
-(function(){
+use("popup",function(){
+    if(window.__init_choosemodel_field){
+        return;
+    }
+    window.__init_choosemodel_field=true;
     $(".choosemodel").click(function(){
         var model=$(this).attr("model");
         var field=$(this).attr("name");
@@ -56,7 +59,7 @@ EOF;
     window.choosemodel=function(model,field,id){
         $(document.forms.main).find('[name="'+field+'"]').val(id);
     };
-})();
+});
 </script>
 EOF;
         return $js;

@@ -3,7 +3,8 @@ class Page_Admin_InlineBase extends Page_Admin_Base{
     public $foreignKeyName;
     public function setForeignKey($id){
         //var_dump(DBModel::zipKey($this->foreignKeyName));
-        $this->model->__set(DBModel::zipKey($this->foreignKeyName),$id);
+        //$this->model->__set(DBModel::zipKey($this->foreignKeyName),$id);
+        $this->model->addWhere($this->foreignKeyName,$id);
         $this->foreignKey=$id;
         $this->_initForm();
     }

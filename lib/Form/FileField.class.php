@@ -31,9 +31,8 @@ EOF;
     }
     public function foot_js(){
         $js=<<<EOF
-<script src="/winphp/ckfinder/ckfinder.js"></script>
 <script>
-(function(){
+use("ckfinder",function(){
     var finder = new CKFinder();
     finder.basePath = '/upload/';
     var current_upload;
@@ -46,7 +45,7 @@ EOF;
         finder.popup();
         return false;
     });
-})();
+});
 </script>
 EOF;
         return $js;

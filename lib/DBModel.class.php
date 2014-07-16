@@ -145,6 +145,11 @@ abstract class DBModel{
         call_user_func_array(array($table,"addWhere"),func_get_args());
         return $this;
     }
+    public function addWhereRaw(){
+        $table=$this->getTable();
+        call_user_func_array(array($table,"addWhereRaw"),func_get_args());
+        return $this;
+    }
     public function orderBy(){
         $table=$this->getTable();
         call_user_func_array(array($table,"orderBy"),func_get_args());
@@ -181,6 +186,27 @@ abstract class DBModel{
             return new $class_name($data);
         },$datas);
     }
+    public function findMap($fieldName='id'){
+        $field=null;
+        foreach($this->getFieldList() as $f){
+            if($f['name']==$fieldName){
+                //return $key;
+                $field=$f;
+            }
+        }
+        if(!$field){
+            throw new Exception("no field : $fieldName");
+        }
+        $objs=$this->find();
+        
+        $map=[];
+        foreach($objs as $obj){
+            if($obj){
+                $map[$obj->getData($fieldName)]=$obj;
+            }
+        }
+        return $map;
+    }
     public function insert($data){
         return $this->getTable()->insert($data);
     }
@@ -193,7 +219,7 @@ abstract class DBModel{
         $keys=$this->_foreign_keys;
         if(!$keys){
             $keys=array();
-            foreach($this->getFieldList()as $f){
+            foreach($this->getFieldList() as $f){
                 if($f['foreign']){
                     $keys[$f['name']]=$f['foreign'];
                 }

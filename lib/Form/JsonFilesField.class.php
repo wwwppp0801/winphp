@@ -10,7 +10,13 @@ class Form_JsonFilesField extends Form_Field{
         $arr=json_decode($this->value(),true);
         $arr=$arr?$arr:[];
         $links=array_map(function($a){
-            return "<li><a target='_blank' href='".$a."'>".htmlspecialchars($a)."</a><button type='button' class='close' aria-hidden='true'>&times;</button></li>";
+            $fi = pathinfo($a);
+            if(in_array(strtolower($fi['extension']), ['png','jpg','gif','bmp','jpeg'])) {
+                $a = '<li><a target="_blank" href="'.$a.'">'.'<img width="320px" src="'.htmlspecialchars($a).'"></img></a>';
+            } else {
+                $a = "<li><a target='_blank' href='".$a."'>".htmlspecialchars($a)."</a>";
+            }
+            return $a."<button type='button' class='close' aria-hidden='true'>&times;</button></li>";
         },$arr);
         $links=implode("\n",$links);
         $links=$links?"<ul>$links</ul>":"";
@@ -41,9 +47,8 @@ EOF;
     
     public function foot_js(){
         $js=<<<EOF
-<script src="/winphp/ckfinder/ckfinder.js"></script>
 <script>
-(function(){
+use('ckfinder',function(){
     var finder = new CKFinder();
     finder.basePath = '/upload/';
     var upload_btn;
@@ -76,7 +81,7 @@ EOF;
         });
         input.val(JSON.stringify(links));
     }
-})();
+});
 </script>
 EOF;
         return $js;

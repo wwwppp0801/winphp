@@ -8,19 +8,24 @@ class Form_DatetimeField extends Form_Field{
     public function to_html(){
         $class=$this->config['class'];
         $html="<div class='control-group'>";
+        $value=$this->value?htmlspecialchars($this->value):time();
         $html.= "<label class='control-label'>".htmlspecialchars($this->label)."</label>".
-            "<div class='controls'>".
-//                                            '<div class="input-append date date-picker" data-date="12-02-2012" data-date-format="dd-mm-yyyy" data-date-viewmode="years">'.
-                                                '<input size="16" name='.$this->name.'  type="hidden" value="'.($this->value?htmlspecialchars($this->value):time()).'" readonly class="m-wrap m-ctrl-medium datetimepicker">';
-//                                                '<span class="add-on"><i class="icon-calendar"></i></span>'.
-//                                            '</div>';
-            //"<input class='date-input $class' type='hidden' name='{$this->name}'  value='".htmlspecialchars($this->value)."'>";
+            "<div class='controls'>".(isset($this->config['readonly']) && $this->config['readonly']
+            ? '<input size="16" type="text" value="'.date('Y-m-d H:i:s', $value).'" readonly><input size="16" name='.$this->name.'  type="hidden" value="'.$value.'">'
+            : '<input size="16" name='.$this->name.'  type="hidden" value="'.$value.'" readonly class="m-wrap m-ctrl-medium datetimepicker">'); 
         if($this->error){
             $html.="<span class='help-inline'>".$this->error."</span>";
         }
         $html.='</div>';
         $html.='</div>';
         return $html;
+    }
+
+    public function value(){
+        if($this->config['auto_update']){
+            return time();
+        }
+        return $this->value;
     }
     public function head_css(){
         $css=<<<EOF

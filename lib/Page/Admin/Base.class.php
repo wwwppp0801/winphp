@@ -3,8 +3,14 @@ abstract class Page_Admin_Base extends BaseController{
     const PAGE_SIZE=10;
     
     private $_assigned=array();
-    protected function assign($k,$v){
-        $this->_assigned[$k]=$v;
+    protected function assign($k,$v=null){
+        if(!is_null($v)){
+            $this->_assigned[$k]=$v;
+        }
+        if(!isset($this->_assigned[$k])){
+            return null;
+        }
+        return $this->_assigned[$k];
     }
     private $_templateName;
     protected function display($templateName){
@@ -29,11 +35,12 @@ abstract class Page_Admin_Base extends BaseController{
         $this->assign('pageAdmin',$this);
         $tAction =$this->_REQUEST('action',$tAction);
         
-        $tForbiddenMethod = array("indexAction", "__construct","__destruct");
-        if ($tAction != null && !in_array($tAction, $tForbiddenMethod) && method_exists($this, $tAction)) {
+        $allowMethods = array("select", "select_search","search",'index','create','update','read','delete');
+
+        if ($tAction != null && $tAction[0]!='_' && in_array($tAction, $allowMethods) && method_exists($this, $tAction)) {
             $this->$tAction();
             return array($this->_templateName,$this->_assigned);
-        }   
+        }
         return array('text:error param');
     }
     public function select(){

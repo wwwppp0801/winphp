@@ -18,7 +18,12 @@ class Form_ChoiceField extends Form_Field{
             $value=$choice[0];
             $display=isset($choice[1])?$choice[1]:$value;
             $checked=($value==$this->value)?"checked='checked'":"";
-            $html.="<label class='radio'><div class='radio'><span><input type='radio' $checked name='{$this->name}' value='".htmlspecialchars($value)."'></span></div>$display</label>";
+            if(isset($this->config['readonly']) 
+                && $this->config['readonly']) {
+                $html.=$checked ? '<input size="16" type="text" value="'.$display.'" readonly /><input size="16" name='.$this->name.' type="hidden" value="'.htmlspecialchars($value).'" readonly />' : '';
+            } else {
+                $html.="<label class='radio'><div class='radio'><span><input type='radio' $checked name='{$this->name}' value='".htmlspecialchars($value)."'></span></div>$display</label>";
+            }
         }
         if($this->error){
             $html.="<span class='error'>".$this->error."</span>";

@@ -62,6 +62,10 @@ class DBTable{
         $this->wheres[]=array($col,$value,$sign,$logic,$escapeValue);
         return $this;
     }
+    public function addWhereRaw($where){
+        $this->wheres[]=$where;
+        return $this;
+    }
     public function count(){
         list($where_sql,$where_vals)=$this->_where();
         $results=DB::queryForCount("select count(*) from `{$this->tableName}`".$where_sql.$this->_groupby(),
@@ -155,6 +159,10 @@ class DBTable{
         $sql="";
         $values=array();
         foreach($this->wheres as $i=>$where){
+            if(is_string($where)){
+                $sql.=$where;
+                continue;
+            }
             if($i!=0){
                 $sql.=" {$where[3]} ";
             }
@@ -200,7 +208,13 @@ class DBTable{
         return " order by $sql ";
     }
     public function groupBy($col){
-        $this->groupBys[]=$col;
+        if(is_string($col)){
+            $this->groupBys[]=$col;
+        }
+        if(is_array($col)){
+            $this->groupBys=array_merge($this->groupBys,$col);
+        }
+
         return $this;
     }
     private function _groupby(){
@@ -208,7 +222,7 @@ class DBTable{
             return "";
         }
         $sql='';
-        foreach($this->groupBys as $groupBy){
+        foreach($this->groupBys as $i=> $groupBy){
             if($i!=0){
                 $sql.=" , ";
             }
