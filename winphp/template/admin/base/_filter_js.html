@@ -1,0 +1,11 @@
+<script>
+    (function(){
+        $("form[name='__filter']").submit(function(){
+            location.href=location.pathname+"?__filter="+encodeURIComponent($(this).serialize());
+            return false;
+        });
+        $("body").delegate("[confirm]",'click',function(){
+            return confirm($(this).attr("confirm"));
+        });
+    })();
+</script>
