@@ -39,10 +39,16 @@ class BaseController
         $mapper = WinRequest::getAttribute("mapper");
 		
         $method = $mapper->getMethod();
+
+        // 通过action判断权限
+        $tAction = 'index';
+        $tAction =$this->_REQUEST('action',$tAction);
         
         $executeInfo = array('controllerName'=>preg_replace("/[A-Z][a-z]+$/","",get_class($mapper->getController())), 
 							'methodName'=>$method[1],
-							'actionName'=>preg_replace("/[A-Z][a-z]+$/","",get_class($method[0])));
+                            'actionName'=>preg_replace("/[A-Z][a-z]+$/","",get_class($method[0])),
+                            'requestActionName'=>$tAction);
+
 		WinRequest::mergeModel(array('executeInfo'=>$executeInfo));
 		WinRequest::mergeModel(array('__controller'=>$this));
 		WinRequest::mergeModel(array('version'=>VERSION));
@@ -86,6 +92,11 @@ class BaseController
         
         $viewObj = new $this->viewClass($view, WinRequest::getModel());
         return $viewObj->render();
+    }
+
+    protected function _REQUEST($name, $default = null)
+    {   
+        return isset($_REQUEST[$name]) ? trim($_REQUEST[$name]) : $default;
     }
     
     private function getViewAndModel($modelAndView){

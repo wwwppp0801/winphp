@@ -1,8 +1,20 @@
 <div id="sample_1_wrapper" class="dataTables_wrapper form-inline" role="grid">
+    {%if $pageAdmin->list_filter%}
+    <form name='__filter'>
+        {%foreach $pageAdmin->list_filter as $filter%}
+                {%$filter->toHtml()%}
+        {%/foreach%}
+        {%if $smarty.get.field%}
+        <input name="field" value="{%$smarty.get.field|escape%}" type="hidden">
+        {%/if%}
+        <button type="submit" class="btn blue"><i class="icon-ok"></i>筛选</button>
+    </form>
+    {%/if%}
+    {%if $pageAdmin->search_fields%}
     <div class="row-fluid">
         <div class="span6">
-            <div id="sample_1_length" class="dataTables_length">
-                <label>
+            <!--div id="sample_1_length" class="dataTables_length">
+                <label>每页显示
                     <select size="1" name="sample_1_length" aria-controls="sample_1" class="m-wrap small">
                         <option value="5" selected="selected">
                         5</option>
@@ -13,8 +25,8 @@
                         <option value="-1">
                         All</option>
                     </select>
-                    records per page</label>
-            </div>
+                    条结果</label>
+            </div-->
         </div>
         <div class="span6">
             <div class="dataTables_filter" id="sample_1_filter">
@@ -22,11 +34,16 @@
                     <form style="margin:0;" name="search">
                         <input type="hidden" name="action" value="search">
                         搜索: <input name="search" value="{%$smarty.get.search|escape%}" type="text" aria-controls="sample_1" class="m-wrap medium">
+                        {%if $smarty.get.field%}
+                        <input name="field" value="{%$smarty.get.field|escape%}" type="hidden">
+                        {%/if%}
+                        <button type="submit" class="btn blue"><i class="icon-ok"></i>提交</button>
                     </form>
                 </label>
             </div>
         </div>
     </div>
+    {%/if%}
     <table class="table table-striped table-bordered table-hover dataTable" id="sample_1" aria-describedby="sample_1_info">
 
         <thead>
@@ -62,7 +79,7 @@
                     {%if is_string($list_item) %}
                     {%$modelData->getData($list_item)%}
                     {%elseif is_callable($list_item)%}
-                    {%call_user_func($list_item,$modelData)%}
+                    {%call_user_func($list_item,$modelData,$pageAdmin)%}
                     {%else%}
                     {%strval($list_item)%}
                     {%/if%}
@@ -74,7 +91,15 @@
                     <a href="?action=read&id={%$modelData->mId%}">编辑</a>
                     <a confirm="你确定要删除么？" href="?action=delete&id={%$modelData->mId%}">删除</a>
                     {%foreach from=$pageAdmin->single_actions item=action%}
-                    <a href="{%$action.action%}">{%$action.label%}</a>
+                    <a href="{%strip%}
+                        {%if is_string($action.action)%}
+                        {%$action.action%}
+                        {%elseif is_callable($action.action)%}
+                        {%call_user_func($action.action,$modelData,$pageAdmin)%}
+                        {%else%}
+                        {%strval($action.action)%}
+                        {%/if%}
+                        {%/strip%}">{%$action.label%}</a>
                     {%/foreach%}
                 </td>
             </tr>
@@ -84,7 +109,7 @@
     <div class="row-fluid">
         <div class="span6">
             <div class="dataTables_info" id="sample_1_info">
-                Showing {%$_startIndex+1%} to {%$_startIndex+count($modelDataList)%} of {%$_allCount%} entries</div>
+                 本页显示第 {%$_startIndex+1%} 到 {%$_startIndex+count($modelDataList)%} 结果，共 {%$_allCount%} 结果</div>
         </div>
         <div class="span6">
             <div class="dataTables_paginate paging_bootstrap pagination">
@@ -94,7 +119,7 @@
                     {%if $_page>0%}
                     <li>
                     <a href="{%build_url page=$_page-1%}">
-                        ← <span class="hidden-480">
+                        ← <span class="hidden-480">上一页
                         </a>
                         </li>
                         {%/if%}
@@ -106,7 +131,7 @@
                         <li>
                         <a href="{%build_url page=$_page+1%}">
                             <span class="hidden-480">
-                                Next</span> → 
+                                下一页</span> → 
                         </a>
                         </li>
                         {%/if%}
@@ -124,3 +149,5 @@
 
 
     </div>
+
+

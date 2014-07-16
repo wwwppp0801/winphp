@@ -67,8 +67,8 @@
                         {%$form->to_html("div",'control-group')%}
 
                         <div class="form-actions">
-                            <button type="submit" class="btn blue"><i class="icon-ok"></i> Save</button>
-                            <button type="button" class="btn">Cancel</button>
+                            <button type="submit" class="btn blue"><i class="icon-ok"></i>保存</button>
+                            <!--button type="button" class="btn">返回</button-->
                         </div>
                     </form>
                     <!-- END FORM-->  
@@ -126,6 +126,37 @@
 
 {%/block%}
 {%block name="footjs" append%}
+<script>
+(function(){
+    var __libs={
+        popup:"/winphp/js/jquery.bpopup-0.9.4.min.js",
+        ckfinder:"/winphp/ckfinder/ckfinder.js"
+    };
+    var defers={};
+    window.use=function(lib,callback){
+        if(__libs.hasOwnProperty(lib)){
+            var defer;
+            if(defers.hasOwnProperty(lib)){
+                defer=defers[lib];
+            }else{
+                defer=defers[lib]=$.ajax({
+                    type:'get',
+                    crossDomain:true,
+                    url:__libs[lib],
+                    cache:true,
+                    dataType:'script'
+                });
+            }
+            if(callback){
+                defer.done(function(){
+                    callback();
+                });
+            }
+            return defer;
+        }
+    };
+})();
+</script>
 {%$js_code=Form::getFootJS($allForms)%}
 {%include file="string:{%$js_code%}"%}
 {%/block%}
