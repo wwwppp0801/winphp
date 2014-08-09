@@ -1,4 +1,7 @@
 <?php 
+ini_set('session.gc_maxlifetime', 2592000*3);
+ini_set('session.cookie_lifetime', 2592000*3);
+
 global $IS_DEBUG;
 if (file_exists(ROOT_PATH.'/DEBUG'))
 {
@@ -16,21 +19,26 @@ else
 date_default_timezone_set('Asia/Shanghai');
 
 
-DB::init("mysql:host=localhost;dbname=wx_platform;port:3306",'root','');
+#DB::init("mysql:host=127.0.0.1;dbname=aimeizhuyi;port:3306",'root','');
+#DB::init("mysql:host=127.0.0.1;dbname=aimeizhuyi;port:3306",'root','');
+DB::init("mysql:host=localhost;dbname=aimeizhuyi;port:3306",'root','');
+DB::execute_sql("set names utf8");
 if(php_sapi_name()!='cli'){
 //    ini_set("session.save_handler", "memcache");  
 //    ini_set("session.save_path", "tcp://127.0.0.1:11211");
     session_start();
 }
 define("LOG_PATH", ROOT_PATH."/log/");
+define("PUBLIC_IMAGE_BASE", ROOT_PATH."/webroot/public_upload/");
+define("PUBLIC_IMAGE_URI", "/public_upload/");
+define("PRIVATE_IMAGE_BASE", ROOT_PATH."/private_upload/");
 define("IS_DEBUG", $IS_DEBUG);
 define("VERSION", 1);
 
-//define("APPKEY", "98a27c42b5b46837ffa472e41eaf1ff2");
-//define("APPID", "100448324");
-
-define("APPID", "100454886");
-define("APPKEY", "0f223ec7f81befb5d7e1956a2dfdd5de");
-
-define("DOMAIN_NAME", "wx.wangp.org");
+define("DOMAIN_NAME", $_SERVER['HTTP_HOST']);
 define("BASE_URL","http://".DOMAIN_NAME);
+
+
+define("SMTP_HOST","smtp.exmail.qq.com");
+define("SMTP_USERNAME", '');                 // SMTP username
+define("SMTP_PASSWORD", '');                 // SMTP username
