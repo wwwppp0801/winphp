@@ -46,6 +46,7 @@ class DBModelIterator implements Iterator{
 abstract class DBModel{
     protected $_table;
     protected $_data;
+    use EventEmitter;
     public function __construct($data=array()){
         $this->_data=$data;
     }
@@ -111,10 +112,16 @@ abstract class DBModel{
     public function save(){
         $table=$this->getTable();
         if($this->mId){
-            return $table->addWhere("id",$this->mId)->update($this->_data);
+            if($this->trigger("before_update",[$this])!==false){
+                $ret=$table->addWhere("id",$this->mId)->update($this->_data);
+                $this->trigger("after_update",[$this,$ret]);
+            }
+            return $ret;
         }else{
+            $this->trigger("before_insert",[$this]);
             $id=$table->insert($this->_data);
             $this->mId=$id;
+            $this->trigger("after_insert",[$this]);
             return !!$id;
         }
         return false;
@@ -137,7 +144,11 @@ abstract class DBModel{
             $table->addWhere("id",$this->mId);
         }
         //return $table->delete();
-        return call_user_func_array(array($table,"delete"),func_get_args());
+        if($this->trigger("before_delete",[$this])!==false){
+            $ret=call_user_func_array(array($table,"delete"),func_get_args());
+            $this->trigger("after_delete",[$this]);
+        }
+        return $ret;
         //return false;
     }
     public function addWhere(){

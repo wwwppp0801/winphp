@@ -1,5 +1,17 @@
 <script>
     (function(){
+        if($(".datetimepicker")[0]){
+            $("head").append('<link rel="stylesheet" type="text/css" href="/winphp/metronic/media/css/datetimepicker.css" />');
+            $.ajax({
+                cache:true,
+                url:"/winphp/metronic/media/js/bootstrap-datetimepicker.js",
+                success:function(){
+                    $(".datetimepicker").datetimepicker({
+                        rtl : App.isRTL()
+                    });
+                }
+            })
+        }
         $("form[name='__filter']").submit(function(){
             location.href=location.pathname+"?__filter="+encodeURIComponent($(this).serialize());
             return false;

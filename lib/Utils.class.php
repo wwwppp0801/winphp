@@ -179,6 +179,14 @@ class Utils {
 		header("HTTP/1.1 302 Found");
 		header("Location:{$pUrl}");
 	}
+    
+    public static function delTree($dir) { 
+        $files = array_diff(scandir($dir), array('.','..')); 
+        foreach ($files as $file) { 
+            (is_dir("$dir/$file")) ? self::delTree("$dir/$file") : unlink("$dir/$file"); 
+        } 
+        return rmdir($dir); 
+    } 
 
 	public static function exportToCsv($csv_data, $filename = 'sample.csv') {
         $csv_data=Utils::toGBK($csv_data);

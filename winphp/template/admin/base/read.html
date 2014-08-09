@@ -8,7 +8,7 @@
     {%/foreach%}
     
     {%$css_code=Form::getHeadCSS($allForms)%}
-    {%include file="string:{%$css_code%}"%}
+    {%eval var=$css_code%}
     <style>
         .inline_form{padding:10px;}
     </style>
@@ -158,5 +158,5 @@
 })();
 </script>
 {%$js_code=Form::getFootJS($allForms)%}
-{%include file="string:{%$js_code%}"%}
+{%eval var=$js_code%}
 {%/block%}

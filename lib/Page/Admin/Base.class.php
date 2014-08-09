@@ -167,7 +167,6 @@ abstract class Page_Admin_Base extends BaseController{
         }
         $this->assign("__is_new",false);
         
-        $this->model;
         $modelData=$this->model->addWhere('id',$requestData['id'])->select();
         $this->assign("modelData",$modelData);
         
