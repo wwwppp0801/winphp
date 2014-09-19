@@ -5,7 +5,7 @@ class Form_HiddenField extends Form_Field{
         parent::__construct($config);
     }
 
-    public function to_html(){
+    public function to_html($is_new){
         $html="<input type='hidden' name='{$this->name}'  value='".htmlspecialchars($this->value)."'>";
         return $html;
     }

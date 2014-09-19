@@ -13,7 +13,7 @@ Purchase: http://themeforest.net/item/metronic-responsive-admin-dashboard-templa
 <head>
 	<meta charset="utf-8" />
     {%block name="title"%}
-	<title>Metronic | Admin Dashboard Template</title>
+	<title>淘世界运营平台</title>
     {%/block%}
 	<meta content="width=device-width, initial-scale=1.0" name="viewport" />
 	<meta content="" name="description" />
@@ -49,8 +49,8 @@ Purchase: http://themeforest.net/item/metronic-responsive-admin-dashboard-templa
 		<div class="navbar-inner">
 			<div class="container-fluid">
 				<!-- BEGIN LOGO -->
-				<a class="brand" href="index.html">
-				<img src="" alt="logo"/>
+				<a class="brand" href="index">
+				<img src="/winphp/metronic/media/image/tsj_logo.png" width="26" alt="logo"/>
 				</a>
 				<!-- END LOGO -->
 				<!-- BEGIN RESPONSIVE MENU TOGGLER -->
@@ -77,7 +77,7 @@ Purchase: http://themeforest.net/item/metronic-responsive-admin-dashboard-templa
 							<li><a href="extra_lock.html"><i class="icon-lock"></i> Lock Screen</a></li>
                             -->
                             {%block name='right_top_nav'%}
-                            <li><a href="{%$__controller->getUrlPrefix()%}/index/logout"><i class="icon-key"></i> Log Out</a></li>
+                            <li><a href="{%$__controller->getUrlPrefix()%}/index/logout"><i class="icon-key"></i>退出登录</a></li>
                             {%/block%}
 						</ul>
 					</li>
@@ -106,7 +106,7 @@ Purchase: http://themeforest.net/item/metronic-responsive-admin-dashboard-templa
 	<!-- BEGIN FOOTER -->
 	<div class="footer">
 		<div class="footer-inner">
-			2013 &copy; Metronic by keenthemes.
+			&copy; 2013 &nbsp; 爱美主义 
 		</div>
 		<div class="footer-tools">
 			<span class="go-top">

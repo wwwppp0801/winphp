@@ -1,5 +1,5 @@
 <?php
-class Page_Admin_InlineBase extends Page_Admin_Base{
+trait Page_Admin_InlineBase{
     public $foreignKeyName;
     public function setForeignKey($id){
         //var_dump(DBModel::zipKey($this->foreignKeyName));
@@ -10,6 +10,20 @@ class Page_Admin_InlineBase extends Page_Admin_Base{
     }
     public function setForeignKeyName($foreignKeyName){
         $this->foreignKeyName=$foreignKeyName;
+    }
+    private $relationship="multi";//single or multi
+    public function setRelationship($relationship){
+        $this->relationship=$relationship;
+    }
+    public function getRelationship(){
+        return $this->relationship;
+    }
+    public $couldCreate=true;
+    public function setCouldCreate($couldCreate){
+        $this->couldCreate=$couldCreate;
+    }
+    public function couldCreate(){
+        return $this->couldCreate;
     }
     private function _initForm(){
         $foreignKeyName=$this->foreignKeyName;

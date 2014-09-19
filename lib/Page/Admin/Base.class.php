@@ -27,7 +27,7 @@ abstract class Page_Admin_Base extends BaseController{
             unset($_REQUEST['__inline_admin_index']);
             $inlineAdmin=$this->inline_admin[$__inline_admin_index];
             $foreignKey=$this->_REQUEST($inlineAdmin->foreignKeyName);
-            $_REQUEST['__success_url']=preg_replace("/Controller$/","",get_class($this))."?action=read&id=$foreignKey";
+            $_REQUEST['__success_url']=preg_replace("/Controller$/","",get_class($this))."?action=read&id=$foreignKey#inline_{$__inline_admin_index}_".$this->_REQUEST("id","");
             $inlineAdmin->setForeignKey($foreignKey);
             return $inlineAdmin->indexAction();
             //return;

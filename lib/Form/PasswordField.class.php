@@ -4,7 +4,7 @@ class Form_PasswordField extends Form_Field{
         parent::__construct($config);
     }
 
-    public function to_html(){
+    public function to_html($is_new){
         $class=$this->config['class'];
         $html="<div class='control-group'>";
         $html.= "<label class='control-label'>".htmlspecialchars($this->label)."</label>".

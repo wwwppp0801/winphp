@@ -13,7 +13,11 @@ class Page_Admin_TextFilter extends Page_Admin_IFilter{
                 if($this->fusion){
                     $model->addWhere($paramName,"%{$params[$paramName]}%",'like');
                 }else{
-                    $model->addWhere($paramName,$params[$paramName]);
+                    if($this->in) {
+                        $model->addWhere($paramName,explode(',',$params[$paramName]),'IN');
+                    } else {
+                        $model->addWhere($paramName,$params[$paramName]);
+                    }
                 }
             }
         }

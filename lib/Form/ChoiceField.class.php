@@ -10,7 +10,7 @@ class Form_ChoiceField extends Form_Field{
         $this->choices=$config['choices'];
     }
 
-    public function to_html(){
+    public function to_html($is_new){
         $html="<div class='control-group'>";
         $html.= "<label class='control-label'>".htmlspecialchars($this->label)."</label>";
         $html.="<div class='controls'>";

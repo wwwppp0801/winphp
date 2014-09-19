@@ -5,7 +5,7 @@ class Form_DatetimeField extends Form_Field{
         parent::__construct($config);
     }
 
-    public function to_html(){
+    public function to_html($is_new){
         $class=$this->config['class'];
         $html="<div class='control-group'>";
         $value=$this->value?htmlspecialchars($this->value):time();

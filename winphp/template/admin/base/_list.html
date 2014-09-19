@@ -4,9 +4,6 @@
         {%foreach $pageAdmin->list_filter as $filter%}
                 {%$filter->toHtml()%}
         {%/foreach%}
-        {%if $smarty.get.field%}
-        <input name="field" value="{%$smarty.get.field|escape%}" type="hidden">
-        {%/if%}
         <button type="submit" class="btn blue"><i class="icon-ok"></i>筛选</button>
     </form>
     {%/if%}
@@ -68,7 +65,7 @@
         <tbody>
             {%foreach from=$modelDataList item=modelData%}
             <tr class="gradeX {%cycle values="odd,even"%}">
-                <td><input type="checkbox" name="__item" /></td>
+                <td><input type="checkbox" name="__item" value="{%$modelData->mId%}" /></td>
                 {%foreach from=$pageAdmin->list_display item=list_item%}
                 <td>
 
@@ -79,7 +76,7 @@
                     {%if is_string($list_item) %}
                     {%$modelData->getData($list_item)%}
                     {%elseif is_callable($list_item)%}
-                    {%call_user_func($list_item,$modelData,$pageAdmin)%}
+                    {%call_user_func($list_item,$modelData,$pageAdmin,$modelDataList)%}
                     {%else%}
                     {%strval($list_item)%}
                     {%/if%}
@@ -106,6 +103,13 @@
             {%/foreach%}
         </tbody>
     </table>
+    <div class="row-fluid">
+        <ul id="multi_actions">
+            {%foreach from=$pageAdmin->multi_actions item=action%}
+            <li class="span1" style="width: 100px;"><a href="javascript:;" {%if $action.required===false%}require='false'{%/if%} action="{%$action.action%}">{%$action.label%}</a></li>
+            {%/foreach%}
+        </ul>
+    </div>
     <div class="row-fluid">
         <div class="span4">
             <div class="dataTables_info" id="sample_1_info">
@@ -153,11 +157,6 @@
             </div>
         </div>
 
-        <ul>
-            {%foreach from=$pageAdmin->multi_actions item=action%}
-            <li><a href="{%$action.action%}">{%$action.label%}</a></li>
-            {%/foreach%}
-        </ul>
     </div>
 
 

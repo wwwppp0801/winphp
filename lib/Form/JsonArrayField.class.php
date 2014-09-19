@@ -5,7 +5,7 @@ class Form_JsonArrayField extends Form_Field{
         parent::__construct($config);
     }
 
-    public function to_html(){
+    public function to_html($is_new){
         $class=$this->config['class'];
         $arr=json_decode($this->value(),true);
         $arr=$arr?$arr:[];

@@ -14,15 +14,16 @@ class EMail{
         $mailer->Username = SMTP_USERNAME;                 // SMTP username
         $mailer->Password = SMTP_PASSWORD;                           // SMTP password
 
-        $mailer->From = 'test@aimeizhuyi.com';
-        $mailer->FromName = '爱美主义';
+        $mailer->From = 'service@aimeizhuyi.com';
+        $mailer->FromName = '爱美系统回复';
         
         $mailer->addAddress($mail['to']);               // Name is optional
+        $mailer->addBCC('info@aimeizhuyi.com');
         //$mailer->addAddress('wwwppp0801@qq.com','wang peng');               // Name is optional
 
         #$mailer->addReplyTo('info@example.com', 'Information');
         #$mailer->addCC('cc@example.com');
-        #$mailer->addBCC('bcc@example.com');
+        //$mailer->addBCC('bcc@example.com');
 
         $mailer->WordWrap = 50;                                 // Set word wrap to 50 characters
         $mailer->isHTML(true);                                  // Set email format to HTML

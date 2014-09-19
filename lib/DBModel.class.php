@@ -221,6 +221,9 @@ abstract class DBModel{
     public function insert($data){
         return $this->getTable()->insert($data);
     }
+    public function update($data){
+        return $this->getTable()->update($data);
+    }
     public function iterator(){
         $iterator=$this->getTable()->iterator();
         return new DBModelIterator($iterator,get_class($this));

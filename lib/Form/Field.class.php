@@ -35,7 +35,7 @@ abstract class Form_Field{
             $this->validator=$config['validator'];
         }
     }
-    public abstract function to_html();
+    public abstract function to_html($is_new);
     public function foot_js(){
         return "";
     }

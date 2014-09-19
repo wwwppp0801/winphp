@@ -142,13 +142,13 @@ $config['AccessControl'][] = Array(
 
 		'folderView' => true,
 		'folderCreate' => true,
-		'folderRename' => true,
-		'folderDelete' => true,
+		'folderRename' => false,
+		'folderDelete' => false,
 
 		'fileView' => true,
 		'fileUpload' => true,
-		'fileRename' => true,
-		'fileDelete' => true);
+		'fileRename' => false,
+		'fileDelete' => false);
 
 /*
 For example, if you want to restrict the upload, rename or delete of files in

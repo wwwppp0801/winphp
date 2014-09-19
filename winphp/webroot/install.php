@@ -2,8 +2,10 @@
 define('ROOT_PATH', dirname(dirname(dirname(__FILE__))));
 require (ROOT_PATH."/config/classpath.php");
 require (ROOT_PATH."/config/conf.php");
-$tables=DBTool::showTables();
-
+$tables=array_slice($argv,1);
+if(!$tables){
+    $tables=DBTool::showTables();
+}
 $modelTemplate = DefaultViewSetting::getTemplateWithSettings();
 foreach ($tables as $table){
     $fields=DBTool::descTable($table);

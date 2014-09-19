@@ -45,12 +45,12 @@ class DefaultView
             $preg = '/^http:\/\/[^\/?;]*\.('.$checkList.')(\/|$)/';
             $data = parse_url($_SERVER['HTTP_REFERER']);
             $check = "{$data['scheme']}://{$data['host']}";
-
+/*
             if(!empty($_SERVER['HTTP_REFERER']) && !preg_match($preg, $check))
             {
                 throw new SystemException("forbidden");
             }
-
+*/
             if (!strlen($callback))
             {
                 $callback = WinRequest::getParameter('callback');
@@ -58,7 +58,7 @@ class DefaultView
 
             $callback = preg_replace("/[^a-zA-Z0-9_]/", "", $callback);
 
-            return $callback."(".json_encode($this->data).");";
+            return $callback."(".json_encode($this->data['json']).");";
         }
         else if (strstr($this->templateFile, "text:"))
         {

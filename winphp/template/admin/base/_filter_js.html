@@ -13,7 +13,8 @@
             })
         }
         $("form[name='__filter']").submit(function(){
-            location.href=location.pathname+"?__filter="+encodeURIComponent($(this).serialize());
+            //action 和field两个参数是为了支持choosemodel
+            location.href=location.pathname+"?__filter="+encodeURIComponent($(this).serialize()){%if $smarty.get.action%}+"&action={%$smarty.get.action|escape:url%}"{%/if%}{%if $smarty.get.field%}+"&field={%$smarty.get.field|escape:url%}"{%/if%};
             return false;
         });
         $("body").delegate("[confirm]",'click',function(){

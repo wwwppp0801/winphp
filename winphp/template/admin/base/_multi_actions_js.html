@@ -1,0 +1,17 @@
+<script>
+    (function(){
+        $("#multi_actions").delegate("a","mousedown",function(){
+            var ids=$(".checker .checked input").map(function(){
+                return $(this).val();
+            });
+            if(!ids||ids.length==0 && $(this).attr("require")!='false'){
+                alert("未选中");
+                return false;
+            }
+            ids=Array.prototype.slice.call(ids,0);
+            var action=$(this).attr("action");
+            $(this).attr("href",action.replace("__ids_json__",JSON.stringify(ids)).replace("__ids__",ids.join(",")));
+        });
+    })();
+</script>
+

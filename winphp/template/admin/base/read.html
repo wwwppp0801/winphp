@@ -64,7 +64,7 @@
                         {%/if%}
                         <input type=hidden name="__success_url" value="{%$__success_url%}">
                         
-                        {%$form->to_html("div",'control-group')%}
+                        {%$form->to_html($__is_new)%}
 
                         <div class="form-actions">
                             <button type="submit" class="btn blue"><i class="icon-ok"></i>保存</button>
@@ -74,8 +74,12 @@
                     <!-- END FORM-->  
                     <div class="inline_forms">
                         {%foreach from=$inlines item=inline key=inlineIndex%}
+                        {%if $inline.admin->getRelationship()=='single'%}
+                            {%$inline.modelDataList=array_slice($inline.modelDataList,0,1)%}
+                        {%/if%}
                         {%foreach from=$inline.modelDataList item=inlineModelData%}
                         <div class="inline_form">
+                            <a name="inline_{%$inlineIndex%}_{%$inlineModelData->mId%}"></a>
                             <form class='formWrap form-horizontal' method='post' action="{%$pageAdmin->getUrl()%}">
                                 <input type='hidden' name='action' value='update'>
                                 <input type='hidden' name='__inline_admin_index' value='{%$inlineIndex%}'>
@@ -98,7 +102,9 @@
                         </div>
 
                         {%/foreach%}
+                        {%if ($inline.admin->getRelationship()=='multi'||!$inline.modelDataList) && $inline.admin->couldCreate()%}
                         <div class="inline_form">
+                            <a name="inline_{%$inlineIndex%}_"></a>
                             <form class='formWrap form-horizontal' method="post" action="{%$pageAdmin->getUrl()%}">
                                 <input type=hidden name="__inline_admin_index" value="{%$inlineIndex%}">
                                 <input type=hidden name="action" value="create">
@@ -108,6 +114,7 @@
                                 <input type="submit" value="提交">
                             </form>
                         </div>
+                        {%/if%}
                         {%/foreach%}
                     </div>
                 </div>
@@ -129,6 +136,10 @@
 <script>
 (function(){
     var __libs={
+        ckeditor:"/winphp/ckeditor/ckeditor.js",
+        "ckeditor.jquery":"/winphp/ckeditor/adapters/jquery.js",
+        jquery_form:"/winphp/js/jquery.form.js",
+        suggest:"/winphp/js/jquery.smartbox.js",
         popup:"/winphp/js/jquery.bpopup-0.9.4.min.js",
         ckfinder:"/winphp/ckfinder/ckfinder.js"
     };
@@ -155,6 +166,15 @@
             return defer;
         }
     };
+    $(window).load(function(){
+        var hash=location.hash.replace(/^\#/,"");
+        if(hash){
+            try{
+                window.scrollTo(0,$("a[name='"+hash+"']").offset().top);
+            }catch(e){
+            }
+        }
+    });
 })();
 </script>
 {%$js_code=Form::getFootJS($allForms)%}

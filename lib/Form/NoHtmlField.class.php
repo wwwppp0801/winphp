@@ -5,7 +5,7 @@ class Form_NoHtmlField extends Form_Field{
         parent::__construct($config);
     }
 
-    public function to_html(){
+    public function to_html($is_new){
         return "";
     }
 }
