@@ -44,7 +44,7 @@ abstract class Form_Field{
     }
     public function validate(&$values){
         if($this->required && strlen($values[$this->name])==0){
-            $this->error="field '{$this->name}' is required.";
+            $this->error="字段不能为空.";
             return false;
         }
         if(isset($values[$this->name])){

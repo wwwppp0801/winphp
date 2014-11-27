@@ -21,5 +21,15 @@ class ImageMagick{
             return false;
         }
     }
+    public static function size($file){
+        $webroot=ROOT_PATH."/webroot/";
+        if(file_exists($webroot.$file)){
+            $size=getimagesize($webroot.$file);
+            if($size && isset($size[0]) && isset($size[1])){
+                return ['width'=>$size[0],'height'=>$size[1]];
+            }
+        }
+        return ['width'=>0,'height'=>0];
+    }
 
 }

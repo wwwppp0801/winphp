@@ -24,7 +24,7 @@ class Form_SimpleJsonFilesField extends Form_Field{
         $html.= "<label class='control-label'>".htmlspecialchars($this->label)."</label>".
             "<div class='controls'>".
             $links.
-            '<iframe src="/winphp/simple_json_files_upload.html" height="40" class="span6" scrolling="yes" frameborder="0"></iframe>'.
+            '<iframe height="40" class="span6" scrolling="yes" frameborder="0"></iframe>'.
             "<input type='hidden' name='{$this->name}'  value='".$this->value."'>";
         if($this->error){
             $html.="<span class='help-inline'>".$this->error."</span>";
@@ -59,25 +59,28 @@ EOF;
         var container;
         $(".simple_json_files").find("iframe").each(function(i,e){
             var iframe=$(this);
-            iframe.contents().find("form").submit(function(e){
-                e.stopPropagation();
-                e.preventDefault();
-                container=iframe.parents(".simple_json_files");
-                $(this).ajaxSubmit({
-                    dataType:"json",
-                    success:function(data){
-                        if(data.errno!=0){
-                            alert("上传失败");
+            iframe.load(function(){
+                iframe.contents().find("form").submit(function(e){
+                    e.stopPropagation();
+                    e.preventDefault();
+                    container=iframe.parents(".simple_json_files");
+                    $(this).ajaxSubmit({
+                        dataType:"json",
+                        success:function(data){
+                            if(data.errno!=0){
+                                alert("上传失败");
+                            }
+                            var _imgs=data.rst;
+                            for(var i=0;i<_imgs.length;i++){
+                                container.find("ul").append("<li><a target='_blank' href='"+_imgs[i]+"'>"+_imgs[i]+"</a><button type='button' class='close' aria-hidden='true'>&times;</button></li>");
+                            }
+                            update_input_value();
                         }
-                        var _imgs=data.rst;
-                        for(var i=0;i<_imgs.length;i++){
-                            container.find("ul").append("<li><a target='_blank' href='"+_imgs[i]+"'>"+_imgs[i]+"</a><button type='button' class='close' aria-hidden='true'>&times;</button></li>");
-                        }
-                        update_input_value();
-                    }
+                    });
+                    return false;
                 });
-                return false;
             });
+            iframe.attr("src","/winphp/simple_json_files_upload.html?"+Math.random());
         });
 
 

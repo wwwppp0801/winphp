@@ -95,6 +95,17 @@ class Utils {
         }
         return $tRet;
     }
+    public static function array2map($pArray, $pField=null){
+        $tRet = array();
+        foreach ($pArray as $index=>$item) {
+            if($pField==null){
+                $tRet[current($item)]=$item;
+            }else{
+                $tRet[$item[$pField]]=$item;
+            }
+        }
+        return $tRet;
+    }
 
 
     public static function memcacheGet($ip, $port, $key) {

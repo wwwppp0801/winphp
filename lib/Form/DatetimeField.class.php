@@ -12,7 +12,7 @@ class Form_DatetimeField extends Form_Field{
         $html.= "<label class='control-label'>".htmlspecialchars($this->label)."</label>".
             "<div class='controls'>".(isset($this->config['readonly']) && $this->config['readonly']
             ? '<input size="16" type="text" value="'.date('Y-m-d H:i:s', $value).'" readonly><input size="16" name='.$this->name.'  type="hidden" value="'.$value.'">'
-            : '<input size="16" name='.$this->name.'  type="hidden" value="'.$value.'" readonly class="m-wrap m-ctrl-medium datetimepicker">'); 
+            : '<input size="16" name='.$this->name.' type="hidden" value="'.$value.'" class="m-wrap m-ctrl-medium datetimepicker">'); 
         if($this->error){
             $html.="<span class='help-inline'>".$this->error."</span>";
         }
@@ -43,6 +43,7 @@ EOF;
             var dt_picker=$(elem);
             var input=dt_picker.clone().attr({"type":"text","name":''}).insertAfter(dt_picker);
             input[controlType]({
+                format:'yyyy-mm-dd hh:ii:ss',
                 rtl : App.isRTL()
             });
             input.data(controlType).update(new Date(dt_picker.val()*1000));

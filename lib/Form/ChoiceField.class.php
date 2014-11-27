@@ -17,7 +17,7 @@ class Form_ChoiceField extends Form_Field{
         foreach($this->choices as $choice){
             $value=$choice[0];
             $display=isset($choice[1])?$choice[1]:$value;
-            $checked=($value==$this->value)?"checked='checked'":"";
+            $checked=($value==$this->value||$value==$this->config['default'])?"checked='checked'":"";
             if(isset($this->config['readonly']) 
                 && $this->config['readonly']) {
                 $html.=$checked ? '<input size="16" type="text" value="'.$display.'" readonly /><input size="16" name='.$this->name.' type="hidden" value="'.htmlspecialchars($value).'" readonly />' : '';

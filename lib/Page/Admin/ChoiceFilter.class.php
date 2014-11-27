@@ -4,8 +4,10 @@ class Page_Admin_ChoiceFilter extends Page_Admin_IFilter{
     public function setFilter(DBModel $model){
         parse_str($_GET['__filter'],$params);
         $reqVal=$params[$this->getParamName()];
-        if($reqVal){
+        if(count($reqVal)==1&&($reqVal[0]==='0'||$reqVal[0])){
             $model->addWhere($this->getParamName(),$reqVal);
+        } elseif(count($reqVal)>1) {
+            $model->addWhere($this->getParamName(),$reqVal,'in');
         }
     }
 

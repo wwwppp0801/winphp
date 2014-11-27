@@ -12,7 +12,7 @@ class Form_SimpleFileField extends Form_Field{
             "<div class='controls'>".
             "<input class='$class span6' type='text' name='{$this->name}'  value='".htmlspecialchars($this->value)."'>";
         $html.='</div>';
-        $html.='<div class="controls"><iframe src="/winphp/simple_json_files_upload.html" height="40" class="span6" scrolling="yes" frameborder="0"></iframe></div>';
+        $html.='<div class="controls"><iframe height="40" class="span6" scrolling="yes" frameborder="0"></iframe></div>';
         if($this->error){
             $html.="<span class='help-inline'>".$this->error."</span>";
         }
@@ -42,22 +42,25 @@ use('jquery_form',function(){
     var container;
     $(".simple_file").find("iframe").each(function(i,e){
         var iframe=$(this);
-        iframe.contents().find("form").submit(function(e){
-            e.stopPropagation();
-            e.preventDefault();
-            container=iframe.parents(".simple_file");
-            $(this).ajaxSubmit({
-                dataType:"json",
-                success:function(data){
-                    if(data.errno!=0){
-                        alert("上传失败");
+        iframe.load(function(){
+            iframe.contents().find("form").submit(function(e){
+                e.stopPropagation();
+                e.preventDefault();
+                container=iframe.parents(".simple_file");
+                $(this).ajaxSubmit({
+                    dataType:"json",
+                    success:function(data){
+                        if(data.errno!=0){
+                            alert("上传失败");
+                        }
+                        var _imgs=data.rst;
+                        container.find("input").val(_imgs[0]);
                     }
-                    var _imgs=data.rst;
-                    container.find("input").val(_imgs[0]);
-                }
+                });
+                return false;
             });
-            return false;
         });
+        iframe.attr("src","/winphp/simple_json_files_upload.html?"+Math.random());
     });
 
 });

@@ -45,7 +45,7 @@
 
         <thead>
             <tr role="row">
-                <th>&nbsp;</th>
+                <th><input type="checkbox" id="selectAll"/></th>
                 {%foreach from=$pageAdmin->list_display item=list_item%}
                 <th>
                     {%if is_string($list_item)%}
@@ -85,10 +85,11 @@
                 </td>
                 {%/foreach%}
                 <td>
-                    <a href="?action=read&id={%$modelData->mId%}">编辑</a>
-                    <a confirm="你确定要删除么？" href="?action=delete&id={%$modelData->mId%}">删除</a>
+                    {%if !$pageAdmin->single_actions_default||$pageAdmin->single_actions_default.edit %}<a href="?action=read&id={%$modelData->mId%}">编辑</a>{%/if%}
+                    {%if !$pageAdmin->single_actions_default||$pageAdmin->single_actions_default.delete %}<a confirm="你确定要删除么？" href="?action=delete&id={%$modelData->mId%}">删除</a>{%/if%}
                     {%foreach from=$pageAdmin->single_actions item=action%}
-                    <a {%if $action.target%}target="{%$action.target%}"{%/if%} href="{%strip%}
+                    {%if !$action.enable||(is_callable($action.enable)&&call_user_func($action.enable,$modelData,$pageAdmin)) %}
+                    <a {%if $action.target%}target="{%$action.target%}"{%/if%} {%if $action.confirm %}confirm="{%$action.confirm%}"{%/if%} href="{%strip%}
                         {%if is_string($action.action)%}
                         {%$action.action%}
                         {%elseif is_callable($action.action)%}
@@ -97,6 +98,7 @@
                         {%strval($action.action)%}
                         {%/if%}
                         {%/strip%}">{%$action.label%}</a>
+                    {%/if%}
                     {%/foreach%}
                 </td>
             </tr>

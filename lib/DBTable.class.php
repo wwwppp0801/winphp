@@ -1,12 +1,12 @@
 <?php
 class DBTable{
-    private $tableName;
-    private $cols=array();
-    private $wheres=array();
-    private $orderBys=array();
-    private $groupBys=array();
-    private $limits=array();
-    private $computed_cols=array();
+    protected $tableName;
+    protected $cols=array();
+    protected $wheres=array();
+    protected $orderBys=array();
+    protected $groupBys=array();
+    protected $limits=array();
+    protected $computed_cols=array();
     private $auto_clear=true;
     public function __construct($tableName,$auto_clear=true){
         $this->tableName=$tableName;
@@ -16,6 +16,10 @@ class DBTable{
     public function setAutoClear($auto_clear=true){
         $this->auto_clear=$auto_clear;
     }
+    public function getAutoClear(){
+        return $this->auto_clear;
+    }
+
     private function _auto_clear(){
         if($this->auto_clear){
             $this->clear();
@@ -42,7 +46,11 @@ class DBTable{
         return $results;
     }
     public function setCols($cols=null){
-        $this->cols=$cols;
+        if(is_array($cols)){
+            $this->cols=$cols;
+        }elseif($cols!==null){
+            $this->cols=explode(",",$cols);
+        }
         return $this;
     }
     private function _cols(){
@@ -154,7 +162,7 @@ class DBTable{
     
     private function _where(){
         if (!$this->wheres){
-            return "";
+            return ["",[]];
         }
         $sql="";
         $values=array();

@@ -13,7 +13,7 @@ class Form_JsonArrayField extends Form_Field{
             return "<li><a target='_blank' href='javascript:;'>".htmlspecialchars($a)."</a><button type='button' class='close' aria-hidden='true'>&times;</button></li>";
         },$arr);
         $links=implode("\n",$links);
-        $links=$links?"<ul>$links</ul>":"";
+        $links=$links?"<ul>$links</ul>":"<ul></ul>";
         $html="<div class='control-group json_array'>";
         $html.= "<label class='control-label'>".htmlspecialchars($this->label)."</label>".
             "<div class='controls'>".

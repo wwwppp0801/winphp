@@ -1,8 +1,25 @@
 <?php
 abstract class Page_Admin_Base extends BaseController{
-    const PAGE_SIZE=10;
-    
+    protected static $PAGE_SIZE=10;
     private $_assigned=array();
+    protected static $_objCache = [];
+
+    protected static function _getResource($id, $key, $finder, $selCol = 'id') {
+        $resource = null;
+        if(isset(self::$_objCache[$key][$selCol][$id])) {
+            $resource = self::$_objCache[$key][$selCol][$id];
+        } elseif($finder) {
+            $resource = $finder->addWhere($selCol, $id)->find();
+            if($selCol == 'id') {
+                $resource = $resource[0];
+            }
+        }
+        if(!empty($resource)) {
+            self::$_objCache[$key][$selCol][$id] = $resource;
+        }
+        return $resource;
+    }
+
     protected function assign($k,$v=null){
         if(!is_null($v)){
             $this->_assigned[$k]=$v;
@@ -70,7 +87,7 @@ abstract class Page_Admin_Base extends BaseController{
         $model=$this->model;
         $model->setAutoClear(false);
         $page=$this->_GET('page',0);
-        $model->limit($page*self::PAGE_SIZE,self::PAGE_SIZE);
+        $model->limit($page*self::$PAGE_SIZE,self::$PAGE_SIZE);
         if($this->list_filter){
             foreach($this->list_filter as $filter){
                 $filter->setFilter($model);
@@ -91,8 +108,8 @@ abstract class Page_Admin_Base extends BaseController{
         $this->assign("modelDataList",$modelDataList);
 
         $this->assign("_page",$page);
-        $this->assign("_pageSize",self::PAGE_SIZE);
-        $this->assign("_startIndex",$page*self::PAGE_SIZE);
+        $this->assign("_pageSize",self::$PAGE_SIZE);
+        $this->assign("_startIndex",$page*self::$PAGE_SIZE);
         
         $model->setAutoClear(true);
         $this->assign("_allCount",$model->count());
@@ -213,6 +230,12 @@ abstract class Page_Admin_Base extends BaseController{
         */
         if(isset($_COOKIE['msg'])){
             $this->assign("msg",$_COOKIE['msg']);
+        }
+
+        $fieldsDefault=explode('&', $this->_GET('fields'));
+        foreach($fieldsDefault as $field) {
+            list($fKey, $fValue) = explode('=', $field);
+            $this->fieldsDefault[$fKey] = $fValue;
         }
         //$this->register_function('__list_item', array($this, '__list_item'));
         //$this->register_function('__list_item_label', array($this, '__list_item_label'));

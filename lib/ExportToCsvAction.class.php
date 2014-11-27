@@ -16,7 +16,7 @@ trait ExportToCsvAction{
         $tmp_str = substr($tmp_str, 0, -1);
         $insert .= $tmp_str;
 
-        echo $insert;
+        echo Utils::toGBK($insert);
         echo $csv_terminated;
     }
     public function exportToCsvAction(){
@@ -29,7 +29,6 @@ trait ExportToCsvAction{
         foreach($this->list_filter as $filter){
             $filter->setFilter($this->model);
         }
-        $csv_data=$this->model->find();
 
 
         $row=[];
@@ -44,24 +43,29 @@ trait ExportToCsvAction{
         }
         self::printCsvRow($row);
 
-
-		foreach ($csv_data as $modelData) {
-            $row=[];
-            foreach ($this->list_display as $list_item){
-                if(is_array($list_item)&&isset($list_item['label'])){
-                    $list_item=$list_item['field'];
+        $this->model->setAutoClear(false);
+        $count=$this->model->count();
+        for($i=0;$i<=$count/100;$i++){
+            $this->model->limit($i*100,100);
+            $csv_data=$this->model->find();
+            foreach ($csv_data as $modelData) {
+                $row=[];
+                foreach ($this->list_display as $list_item){
+                    if(is_array($list_item)&&isset($list_item['label'])){
+                        $list_item=$list_item['field'];
+                    }
+                    if(is_string($list_item)){
+                        $val=$modelData->getData($list_item);
+                    } elseif(is_callable($list_item)){
+                        $val=call_user_func($list_item,$modelData,$this,$csv_data);
+                    }else{
+                        $val=strval($list_item);
+                    }
+                    $row[]=trim(strip_tags($val));
                 }
-                if(is_string($list_item)){
-                    $val=$modelData->getData($list_item);
-                } elseif(is_callable($list_item)){
-                    $val=call_user_func($list_item,$modelData,$this,$csv_data);
-                }else{
-                    $val=strval($list_item);
-                }
-                $row[]=strip_tags($val);
+                self::printCsvRow($row);
             }
-            self::printCsvRow($row);
-		}
+        }
 
 		//echo $out;
 		die();
