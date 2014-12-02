@@ -4,6 +4,7 @@ class UrlMapper
     private $url;
     private $controller;
     private $action;
+    private $method;
     public function __construct($url)
     {
         $this->url = trim($url," \t\n/");

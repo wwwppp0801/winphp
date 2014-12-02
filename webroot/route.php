@@ -9,8 +9,8 @@ if (isset($_SERVER['REQUEST_URI'])&&preg_match('/(.*\.(php|png|jpg|jpeg|gif|js|c
     return false;    // serve the requested resource as-is.
 }
 
-define('ROOT_PATH', dirname(dirname(__FILE__)));
-require (ROOT_PATH."/config/classpath.php");
+define('WINPHP_PATH', dirname(dirname(__FILE__)));
+require (WINPHP_PATH."/config/classpath.php");
 require (ROOT_PATH."/config/conf.php");
 
 if(php_sapi_name()=='cli'){

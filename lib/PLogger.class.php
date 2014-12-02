@@ -13,7 +13,7 @@ class PLogger {
 
     private function __construct($options=[]){
         $options=array_merge([
-            'level'=>$this->ERROR,
+            'level'=>self::ERROR,
             'path'=>'/tmp/',
             'file_prefix'=>'',
             ],$options);

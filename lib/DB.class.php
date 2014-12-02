@@ -41,6 +41,7 @@ class DB{
         try{
             $dbh=self::getDBH();
             $sth=$dbh->prepare($sql);
+
             $res=$sth->execute($params);
             if($res===false){
                 Logger::error("sql:$sql;".var_export($dbh->errorInfo(),true)

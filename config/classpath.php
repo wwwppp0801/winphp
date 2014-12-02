@@ -31,7 +31,7 @@ function __autoload($classname)
         }
         else
         {
-            include_once (ROOT_PATH.'/'.$file);
+            include_once (WINPHP_PATH.'/'.$file);
         }
     }
     else
@@ -61,11 +61,12 @@ function __autoload($classname)
             
             
             $classFile = ROOT_PATH."/app/$path/$classname.class.php";
+
 			if (file_exists($classFile))
             {
                 include_once ($classFile);
             }else{
-                $classFile = ROOT_PATH."/lib/$path/$classname.class.php";
+                $classFile = WINPHP_PATH."/lib/$path/$classname.class.php";
                 if (file_exists($classFile))
                 {
                     include_once ($classFile);
