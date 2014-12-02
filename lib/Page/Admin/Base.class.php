@@ -240,18 +240,6 @@ abstract class Page_Admin_Base extends BaseController{
         //$this->register_function('__list_item', array($this, '__list_item'));
         //$this->register_function('__list_item_label', array($this, '__list_item_label'));
     }
-    protected function _GET($name, $default = null)
-    {   
-        return isset($_GET[$name]) ? trim($_GET[$name]) : $default;
-    }
-    protected function _POST($name, $default = null)
-    {   
-        return isset($_POST[$name]) ? trim($_POST[$name]) : $default;
-    }
-    protected function _REQUEST($name, $default = null)
-    {   
-        return isset($_REQUEST[$name]) ? trim($_REQUEST[$name]) : $default;
-    }
     function _setMsg($msg){
         $this->assign("msg",$msg);
         setcookie('msg',$msg);

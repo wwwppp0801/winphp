@@ -93,11 +93,19 @@ class BaseController
         $viewObj = new $this->viewClass($view, WinRequest::getModel());
         return $viewObj->render();
     }
-
+    protected function _GET($name, $default = null)
+    {   
+        return isset($_GET[$name]) ? trim($_GET[$name]) : $default;
+    }
+    protected function _POST($name, $default = null)
+    {   
+        return isset($_POST[$name]) ? trim($_POST[$name]) : $default;
+    }
     protected function _REQUEST($name, $default = null)
     {   
         return isset($_REQUEST[$name]) ? trim($_REQUEST[$name]) : $default;
     }
+
     
     private function getViewAndModel($modelAndView){
         if(isset($modelAndView['view'])){
