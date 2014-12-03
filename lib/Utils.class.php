@@ -1,6 +1,12 @@
 <?php
 class Utils {
-
+    public static function getUrl($url){
+        if(defined("REL_PATH")){
+            return rtrim(REL_PATH,"/")."/".ltrim($url,"/");
+        }
+        else return $url;
+    
+    }
     public static function get_default_back_url(){
         if(isset($_SERVER['HTTP_REFERER'])){
             $ref_url=$_SERVER['HTTP_REFERER'];

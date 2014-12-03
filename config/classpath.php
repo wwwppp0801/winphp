@@ -44,19 +44,11 @@ function __autoload($classname)
                 include_once ($classFile);
             }
         }
-        else if (preg_match("/Interceptor/", $classname))
-        {
-            $classFile = ROOT_PATH."/app/interceptor/$classname.class.php";
-            if (file_exists($classFile))
-            {
-                include_once ($classFile);
-            }
-        }
         else
         {
             $path = explode("_",$classname);
-            $path = array_map("strtolower", $path);
             $classname=array_pop($path);
+            //$path = array_map("strtolower", $path);
             $path = implode("/", $path);
             
             
