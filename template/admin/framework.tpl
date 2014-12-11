@@ -13,7 +13,7 @@ Purchase: http://themeforest.net/item/metronic-responsive-admin-dashboard-templa
 <head>
 	<meta charset="utf-8" />
     {%block name="title"%}
-	<title>淘世界运营平台</title>
+	<title>后台</title>
     {%/block%}
 	<meta content="width=device-width, initial-scale=1.0" name="viewport" />
 	<meta content="" name="description" />
@@ -106,7 +106,7 @@ Purchase: http://themeforest.net/item/metronic-responsive-admin-dashboard-templa
 	<!-- BEGIN FOOTER -->
 	<div class="footer">
 		<div class="footer-inner">
-			&copy; 2013 &nbsp; 爱美主义 
+			&copy; 2014 &nbsp; powered by wp 
 		</div>
 		<div class="footer-tools">
 			<span class="go-top">

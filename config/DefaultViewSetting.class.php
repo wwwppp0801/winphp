@@ -20,7 +20,7 @@ class DefaultViewSetting
         $template->php_handling = false;
 
         $template->template_dir = self::getRootDir();
-        $template->addTemplateDir(ROOT_PATH."/winphp/template/",'winphp');
+        $template->addTemplateDir(WINPHP_PATH."/template/",'winphp');
         $template->compile_dir = ROOT_PATH."/ctemplates/";
         //		echo $template->template_dir;
         $template->config_dir   = ROOT_PATH."/config/";

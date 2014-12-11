@@ -23,8 +23,8 @@ else
 date_default_timezone_set('Asia/Shanghai');
 
 
-#DB::init("mysql:host=127.0.0.1;dbname=aimeizhuyi;port:3306",'root','');
-#DB::init("mysql:host=127.0.0.1;dbname=aimeizhuyi;port:3306",'root','');
+#DB::init("mysql:host=127.0.0.1;dbname=db_test;port:3306",'root','');
+#DB::init("mysql:host=127.0.0.1;dbname=db_test;port:3306",'root','');
 
 DB::init("sqlite:".ROOT_PATH."/order_food.db","","");
 
