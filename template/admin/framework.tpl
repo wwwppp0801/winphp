@@ -50,7 +50,7 @@ Purchase: http://themeforest.net/item/metronic-responsive-admin-dashboard-templa
 			<div class="container-fluid">
 				<!-- BEGIN LOGO -->
 				<a class="brand" href="index">
-				<img src="/winphp/metronic/media/image/tsj_logo.png" width="24" alt="logo"/>
+				<img src="/winphp/metronic/media/image/tsj_logo.png" alt="logo"/>
 				</a>
 				<!-- END LOGO -->
 				<!-- BEGIN RESPONSIVE MENU TOGGLER -->

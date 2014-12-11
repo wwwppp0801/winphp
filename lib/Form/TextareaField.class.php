@@ -1,11 +1,11 @@
 <?php
 
-class Form_TextareaField extends Form_Field{
+class Form_TextAreaField extends Form_Field{
     public function __construct($config){
         parent::__construct($config);
     }
 
-    public function to_html($is_new){
+    public function to_html(){
         $class=$this->config['class'];
         $html="<div class='control-group'>";
         $html.= "<label class='control-label'>".htmlspecialchars($this->label)."</label>".
