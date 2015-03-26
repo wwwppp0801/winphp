@@ -7,7 +7,14 @@ class Form_ChoiceField extends Form_Field{
         if(!isset($config['choices'])){
             throw new Exception("field {$this->name} need set choices");
         }
-        $this->choices=$config['choices'];
+        if(Utils::is_assoc($config['choices'])){
+            $this->choices=[];
+            foreach($config['choices']as $k=>$v){
+                $this->choices[]=[$k,$v];
+            }
+        }else{
+            $this->choices=$config['choices'];
+        }
     }
 
     public function to_html($is_new){
