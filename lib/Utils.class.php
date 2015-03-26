@@ -7,6 +7,9 @@ class Utils {
         else return $url;
     
     }
+    public static function is_assoc($arr) {  
+        return array_keys($arr) !== range(0, count($arr) - 1);  
+    }  
     public static function get_default_back_url(){
         if(isset($_SERVER['HTTP_REFERER'])){
             $ref_url=$_SERVER['HTTP_REFERER'];

@@ -197,6 +197,24 @@ abstract class DBModel{
             return new $class_name($data);
         },$datas);
     }
+    public function findData($fields){
+        if(is_string($fields)){
+            $fields=[$fields];
+        }
+        $models=$this->find();
+        $results=[];
+        foreach($models as $model){
+            $result=[];
+            foreach($fields as $field){
+                $result[$field]=$model->getData($field);
+            }
+            if(count($fields)==1){
+                $result=current($result);
+            }
+            $results[]=$result;
+        }
+        return $results;
+    }
     public function findMap($fieldName='id'){
         $field=null;
         foreach($this->getFieldList() as $f){
