@@ -37,7 +37,7 @@
 	<!-- BEGIN LOGIN -->
 	<div class="content">
 		<!-- BEGIN LOGIN FORM -->
-		<form class="form-vertical login-form" method="post" action="/index/login">
+		<form class="form-vertical login-form" method="post" action="{%$__controller->getUrlPrefix()%}/index/login">
 			<h3 class="form-title">Login to your account</h3>
 			<div class="alert alert-error hide">
 				<button class="close" data-dismiss="alert"></button>

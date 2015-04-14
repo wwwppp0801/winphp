@@ -8,6 +8,7 @@ class XMLUtils
         $body="";
         if(!is_array($array)){
             $body=self::entities($array);
+            //$body="<![CDATA[$array]]>";
         }else{
             if(array_keys($array)===range(0,count($array)-1)){
                 foreach($array as $k=>$v){
