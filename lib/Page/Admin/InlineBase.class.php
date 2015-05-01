@@ -1,5 +1,6 @@
 <?php
-trait Page_Admin_InlineBase{
+namespace Page\Admin;
+trait InlineBase{
     public $foreignKeyName;
     public function setForeignKey($id){
         //var_dump(DBModel::zipKey($this->foreignKeyName));

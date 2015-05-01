@@ -1,5 +1,6 @@
 <?php
-class Page_Admin_TextForeignFilter extends Page_Admin_IFilter{
+namespace Page\Admin;
+class TextForeignFilter extends IFilter{
 
 
     public function setFilter(DBModel $model){

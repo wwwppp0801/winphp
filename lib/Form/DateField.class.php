@@ -1,6 +1,8 @@
 <?php
 
-class Form_DateField extends Form_Field{
+namespace Form;
+use Form\Field;
+class DateField extends Field{
     public function __construct($config){
         parent::__construct($config);
     }

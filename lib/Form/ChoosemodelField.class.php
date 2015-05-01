@@ -1,6 +1,8 @@
 <?php
+namespace Form;
+use Form\Field;
 
-class Form_ChoosemodelField extends Form_Field{
+class ChoosemodelField extends Field{
     private $model;
     public function __construct($config){
         parent::__construct($config);

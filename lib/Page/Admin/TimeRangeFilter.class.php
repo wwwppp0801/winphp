@@ -1,5 +1,6 @@
 <?php
-class Page_Admin_TimeRangeFilter extends Page_Admin_IFilter{
+namespace Page\Admin;
+class TimeRangeFilter extends IFilter{
 
     public function setFilter(DBModel $model){
         parse_str($_GET['__filter'],$params);

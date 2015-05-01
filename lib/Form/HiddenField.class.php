@@ -1,6 +1,8 @@
 <?php
+namespace Form;
+use Form\Field;
 
-class Form_HiddenField extends Form_Field{
+class HiddenField extends Field{
     public function __construct($config){
         parent::__construct($config);
     }

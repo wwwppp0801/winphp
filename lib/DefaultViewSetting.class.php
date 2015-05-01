@@ -4,6 +4,7 @@ class DefaultViewSetting
 {
     public static function getTemplate()
     {
+        include_once (WINPHP_PATH.'/lib/Smarty/Smarty.class.php');
         $template = new Smarty();
         return $template;
     }

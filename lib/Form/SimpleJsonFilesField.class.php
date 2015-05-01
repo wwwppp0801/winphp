@@ -1,6 +1,8 @@
 <?php
+namespace Form;
+use Form\Field;
 
-class Form_SimpleJsonFilesField extends Form_Field{
+class SimpleJsonFilesField extends Field{
     public function __construct($config){
         parent::__construct($config);
     }

@@ -1,5 +1,7 @@
 <?php
-class Form_PasswordField extends Form_Field{
+namespace Form;
+use Form\Field;
+class PasswordField extends Field{
     public function __construct($config){
         parent::__construct($config);
     }

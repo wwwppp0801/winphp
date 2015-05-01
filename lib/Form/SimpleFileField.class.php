@@ -1,6 +1,8 @@
 <?php
+namespace Form;
+use Form\Field;
 
-class Form_SimpleFileField extends Form_Field{
+class SimpleFileField extends Field{
     public function __construct($config){
         parent::__construct($config);
     }

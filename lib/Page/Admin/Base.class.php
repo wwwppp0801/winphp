@@ -1,5 +1,9 @@
 <?php
-abstract class Page_Admin_Base extends BaseController{
+namespace Page\Admin;
+use BaseController;
+use Utils;
+
+abstract class Base extends BaseController{
     protected static $PAGE_SIZE=10;
     private $_assigned=array();
     protected static $_objCache = [];

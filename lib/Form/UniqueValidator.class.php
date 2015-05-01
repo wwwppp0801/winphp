@@ -1,6 +1,8 @@
 <?php
+namespace Form;
+use Form\Field;
 
-class Form_UniqueValidator{
+class UniqueValidator{
     public function __construct($model,$field_name){
         $this->model=$model;
         $this->field_name=$field_name;

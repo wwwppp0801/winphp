@@ -1,4 +1,5 @@
 <?php
+
 class Form{
     private $fields;
     private $values;
@@ -38,7 +39,7 @@ class Form{
                 $fieldClass=$this->get_field_class($field['type']);
                 unset($field['type']);
                 $this->fields[]=new $fieldClass($field);
-            }elseif(is_subclass_of($field,"Form_Field")){
+            }elseif(is_subclass_of($field,"Form\\Field")){
                 $this->fields[]=$field;
             }
         }
@@ -56,9 +57,9 @@ class Form{
     private function get_field_class($type){
         switch($type){
             case "radio":
-                return "Form_ChoiceField";
+                return "Form\\ChoiceField";
             default:
-                return "Form_".ucfirst($type)."Field";
+                return "Form\\".ucfirst($type)."Field";
         }
     }
     public function bind($values=null){

@@ -1,6 +1,7 @@
 <?php
-
-class Form_ChoiceField extends Form_Field{
+namespace Form;
+use Utils;
+class ChoiceField extends Field{
     protected $choices;
     public function __construct($config){
         parent::__construct($config);

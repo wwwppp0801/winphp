@@ -1,6 +1,8 @@
 <?php
+namespace Form;
+use Form\Field;
 
-class Form_TextAreaField extends Form_Field{
+class TextAreaField extends Field{
     public function __construct($config){
         parent::__construct($config);
     }

@@ -1,6 +1,7 @@
 <?php
+namespace Form;
 
-abstract class Form_Field{
+abstract class Field{
     protected $value;
     protected $name;
     protected $required;

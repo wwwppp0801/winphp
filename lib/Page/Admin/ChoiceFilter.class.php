@@ -1,5 +1,6 @@
 <?php
-class Page_Admin_ChoiceFilter extends Page_Admin_IFilter{
+namespace Page\Admin;
+class ChoiceFilter extends IFilter{
 
     public function setFilter(DBModel $model){
         parse_str($_GET['__filter'],$params);

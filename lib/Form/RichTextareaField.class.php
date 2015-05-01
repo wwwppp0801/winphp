@@ -1,6 +1,8 @@
 <?php
+namespace Form;
+use Form\Field;
 
-class Form_RichTextareaField extends Form_Field{
+class RichTextareaField extends Field{
     public function __construct($config){
         parent::__construct($config);
     }

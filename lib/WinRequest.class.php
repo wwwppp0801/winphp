@@ -1,5 +1,4 @@
 <?php 
-WinRequest::init();
 class WinRequest
 {
     private static $request;
@@ -126,3 +125,4 @@ class WinRequest
         return self::$view;
     }
 }
+WinRequest::init();

@@ -1,5 +1,8 @@
 <?php
-abstract class Page_Admin_IFilter{
+
+namespace Page\Admin;
+
+abstract class IFilter{
     abstract public function setFilter(DBModel $model);
     abstract public function toHtml();
     public function getName(){
