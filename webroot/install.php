@@ -10,7 +10,7 @@ $modelTemplate = DefaultViewSetting::getTemplateWithSettings();
 foreach ($tables as $table){
     $fields=DBTool::descTable($table);
     $paths=array_map("ucfirst",explode("_",$table));
-    $className="Base_".implode("_",$paths);
+    $className=implode("_",$paths);
     $fileName=array_pop($paths).".class.php";
     $realpath=ROOT_PATH."/app/Base/".implode("/",$paths);
     @mkdir($realpath,0777,true);
@@ -19,6 +19,8 @@ foreach ($tables as $table){
     $modelTemplate->assign('className',$className);
     $baseModelClass=<<<END_CLASS
 <?php
+namespace Base;
+use DBModel;
 class {%\$className%} extends DBModel{
 
     public function getFieldList(){
