@@ -1,6 +1,8 @@
 <?php
-define('ROOT_PATH', dirname(dirname(dirname(__FILE__))));
-require (ROOT_PATH."/config/classpath.php");
+#define('ROOT_PATH', dirname(dirname(dirname(__FILE__))));
+define('ROOT_PATH', getcwd());
+define('WINPHP_PATH',"/home/wp/Projects/winphp/");
+require (WINPHP_PATH."/config/classpath.php");
 require (ROOT_PATH."/config/conf.php");
 $tables=array_slice($argv,1);
 if(!$tables){
@@ -10,16 +12,19 @@ $modelTemplate = DefaultViewSetting::getTemplateWithSettings();
 foreach ($tables as $table){
     $fields=DBTool::descTable($table);
     $paths=array_map("ucfirst",explode("_",$table));
-    $className=implode("_",$paths);
-    $fileName=array_pop($paths).".class.php";
-    $realpath=ROOT_PATH."/app/Base/".implode("/",$paths);
+    array_unshift($paths,"Base");
+    $className=array_pop($paths);
+    $namespaces=implode("\\",$paths);
+    $fileName=$className.".class.php";
+    $realpath=ROOT_PATH."/app/".implode("/",$paths);
     @mkdir($realpath,0777,true);
     $modelTemplate->assign('fields',$fields);
     $modelTemplate->assign('table',$table);
     $modelTemplate->assign('className',$className);
+    $modelTemplate->assign('namespaces',$namespaces);
     $baseModelClass=<<<END_CLASS
 <?php
-namespace Base;
+namespace {%\$namespaces%};
 use DBModel;
 class {%\$className%} extends DBModel{
 

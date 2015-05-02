@@ -8,6 +8,11 @@ class DefaultViewSetting
         $template = new Smarty();
         return $template;
     }
+    public static function getTemplateWithSettings(){
+        $template=self::getTemplate();
+        self::setTemplateSetting($template);
+        return $template;
+    }
     public static function getRootDir()
     {
         return ROOT_PATH."/template/";
