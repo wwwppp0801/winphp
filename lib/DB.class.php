@@ -24,6 +24,10 @@ class DB{
         Logger::debug('rollbackTransaction');
         self::getDBH()->rollBack();
     }
+    public static function getDriverName(){
+        Logger::debug("getDriverName");
+        return self::getDBH()->getAttribute(PDO::ATTR_DRIVER_NAME);
+    }
     private static function getDBH(){
         if(!self::$dbh){
             self::$dbh = new PDO(self::$dsn,self::$username,self::$password);

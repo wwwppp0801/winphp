@@ -1,9 +1,9 @@
 <?php
 #define('ROOT_PATH', dirname(dirname(dirname(__FILE__))));
 define('ROOT_PATH', getcwd());
-define('WINPHP_PATH',"/home/wp/Projects/winphp/");
-require (WINPHP_PATH."/config/classpath.php");
+#define('WINPHP_PATH',"/home/wp/Projects/winphp/");
 require (ROOT_PATH."/config/conf.php");
+#require (WINPHP_PATH."/config/classpath.php");
 $tables=array_slice($argv,1);
 if(!$tables){
     $tables=DBTool::showTables();
@@ -54,4 +54,74 @@ END_CLASS;
     $modelTemplate->clearAllAssign();
     //var_dump($table,$fields);
     echo "gen table $table;\n";
+}
+
+
+//generate base admin
+
+foreach ($tables as $table){
+    $fields=DBTool::descTable($table);
+    $paths=array_map("ucfirst",explode("_",$table));
+    //array_unshift($paths,"Base");
+    $className=array_pop($paths);
+    $namespaces=implode("\\",$paths);
+    $fileName=$className."Controller.class.php";
+    $realpath=ROOT_PATH."/app/controller/admin/".implode("/",$paths);
+    @mkdir($realpath,0777,true);
+    
+    foreach($fields as $i=>$field){
+        $fields[$i]['AttrName']=DBModel::zipKey($fields[$i]['Field']);
+    }
+    $modelTemplate->assign('fields',$fields);
+    $modelTemplate->assign('table',$table);
+    $modelTemplate->assign('className',$className);
+    $modelTemplate->assign('namespaces',$namespaces);
+    $baseModelClass=<<<END_CLASS
+<?php
+class {%\$className%}Controller extends Page\Admin\Base {
+    public function __construct(){
+        parent::__construct();
+        //\$this->addInterceptor(new AdminLoginInterceptor());
+        //\$this->addInterceptor(new AdminAuthInterceptor());
+        //\$this->addInterceptor(new AdminLogInterceptor());
+        \$this->model=new {%\$className%}();
+        \$this->model->orderBy("id","desc");
+        //\$this->model->on('beforeinsert','beforeinsert',\$this);
+        //\$this->model->on('beforeupdate','beforeupdate',\$this);
+
+        \$this->form=new Form(array(
+{%foreach \$fields as \$field%}{%if \$field.Field!='id'%}
+            ['name'=>'{%\$field.Field%}','label'=>'{%\$field.Field%}','type'=>"text",'default'=>null,'required'=>false,],
+{%/if%}{%/foreach%}
+        ));
+        \$this->list_display=array(
+            'id',
+{%foreach \$fields as \$field%}{%if \$field.Field!='id'%}
+            ['label'=>'{%\$field.Field%}','field'=>function(\$model){
+                return \$model->{%\$field.AttrName%};
+            }],
+{%/if%}{%/foreach%}
+        );
+        /*
+        \$this->list_filter=array(
+{%foreach \$fields as \$field%}{%if \$field.Field!='id'%}
+            new Page_Admin_TextFilter(['name'=>'{%\$field.Field%}','paramName'=>'{%\$field.Field%}','fusion'=>false]),
+{%/if%}{%/foreach%}
+        );*/
+
+    }
+
+}
+
+END_CLASS;
+
+    if(!file_exists("$realpath/$fileName")){
+        file_put_contents("$realpath/$fileName",$modelTemplate->fetch("string:".$baseModelClass));
+        //var_dump($table,$fields);
+        echo "gen table admin $table;\n";
+    }else{
+        echo "table $table already has an admin;\n";
+    }
+
+    $modelTemplate->clearAllAssign();
 }
