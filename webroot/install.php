@@ -53,7 +53,48 @@ END_CLASS;
     file_put_contents("$realpath/$fileName",$modelTemplate->fetch("string:".$baseModelClass));
     $modelTemplate->clearAllAssign();
     //var_dump($table,$fields);
-    echo "gen table $table;\n";
+    echo "gen table base model $table;\n";
+}
+
+//generate model class
+
+foreach ($tables as $table){
+    $fields=DBTool::descTable($table);
+    $paths=array_map("ucfirst",explode("_",$table));
+    //array_unshift($paths,"Base");
+    $className=array_pop($paths);
+    $namespaces=implode("\\",$paths);
+    $fileName=$className.".class.php";
+    $realpath=ROOT_PATH."/app/".implode("/",$paths);
+    @mkdir($realpath,0777,true);
+    
+    foreach($fields as $i=>$field){
+        $fields[$i]['AttrName']=DBModel::zipKey($fields[$i]['Field']);
+    }
+    $modelTemplate->assign('fields',$fields);
+    $modelTemplate->assign('table',$table);
+    $modelTemplate->assign('className',$className);
+    $modelTemplate->assign('namespaces',$namespaces);
+    $baseModelClass=<<<END_CLASS
+<?php
+{%if \$namespaces%}
+namespace {%implode("\\\\",\$namespaces)%};
+{%/if%}
+class {%\$className%} extends Base\{%if \$namespaces%}{%implode("\\\\",\$namespaces)%}\{%/if%}{%\$className%} {
+
+}
+
+END_CLASS;
+
+    if(!file_exists("$realpath/$fileName")){
+        file_put_contents("$realpath/$fileName",$modelTemplate->fetch("string:".$baseModelClass));
+        //var_dump($table,$fields);
+        echo "gen table model $table;\n";
+    }else{
+        echo "table $table model already has an admin;\n";
+    }
+
+    $modelTemplate->clearAllAssign();
 }
 
 
