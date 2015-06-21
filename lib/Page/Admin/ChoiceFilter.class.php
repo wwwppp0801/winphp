@@ -1,5 +1,6 @@
 <?php
 namespace Page\Admin;
+use DBModel;
 class ChoiceFilter extends IFilter{
 
     public function setFilter(DBModel $model){
@@ -21,9 +22,12 @@ class ChoiceFilter extends IFilter{
             '<li '.($reqVal?"":'class="active"').'><label class="radio-inline"><input '.($reqVal?"":'checked="checked"').' type="radio" name="'.$this->getParamName().'" value="">全部</label></li>'."\n";
         
         foreach($this->choices as $choice){
+            if($choice[0]&&!$choice[1]){
+                $choice[1]=$choice[0];
+            }
             $html.="<li><label><input type='radio' name='".$this->getParamName()."' ".
                 ($choice[0]==$reqVal?"checked=checked":"").
-                " value={$choice[0]}>{$choice[1]}</label></li>\n";
+                " value=\"".$choice[0]."\">".htmlspecialchars($choice[1])."</label></li>\n";
         }
         $html.='</ul>';
         return $html;

@@ -1,5 +1,6 @@
 <?php
 namespace Page\Admin;
+use DBModel;
 class TextFilter extends IFilter{
 
     public function setFilter(DBModel $model){

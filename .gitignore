@@ -1,0 +1,8 @@
+*.swp
+*.tmp
+.svn
+.DS_Store
+ctemplates
+DEBUG
+log
+config/conf.php

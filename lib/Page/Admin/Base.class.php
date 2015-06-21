@@ -2,6 +2,7 @@
 namespace Page\Admin;
 use BaseController;
 use Utils;
+use WinRequest;
 
 abstract class Base extends BaseController{
     protected static $PAGE_SIZE=10;
@@ -231,10 +232,10 @@ abstract class Base extends BaseController{
         }
         $this->assign("user_englishname",$this->mCurrentUser->getName());
         $this->assign("_user",$this->mCurrentUser);
-        */
         if(isset($_COOKIE['msg'])){
             $this->assign("msg",$_COOKIE['msg']);
         }
+        */
 
         $fieldsDefault=explode('&', $this->_GET('fields'));
         foreach($fieldsDefault as $field) {
@@ -244,13 +245,10 @@ abstract class Base extends BaseController{
         //$this->register_function('__list_item', array($this, '__list_item'));
         //$this->register_function('__list_item_label', array($this, '__list_item_label'));
     }
-    function _setMsg($msg){
-        $this->assign("msg",$msg);
-        setcookie('msg',$msg);
-    }
     protected function back($msg,$ref_url=false){
         if($msg){
-            $this->_setMsg($msg);
+            //$this->_setMsg($msg);
+            WinRequest::setFlash("msg",$msg);
         }
         if(!$ref_url){
             $ref_url=Utils::get_default_back_url();

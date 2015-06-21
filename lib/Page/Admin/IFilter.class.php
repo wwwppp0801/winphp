@@ -1,6 +1,7 @@
 <?php
 
 namespace Page\Admin;
+use DBModel;
 
 abstract class IFilter{
     abstract public function setFilter(DBModel $model);
