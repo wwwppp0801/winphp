@@ -17,7 +17,7 @@ class ChoiceFilter extends IFilter{
         $html='';
         parse_str($_GET['__filter'],$params);
         $reqVal=$params[$this->getParamName()];
-        $html.='<ul style="margin:0;" class="nav nav-pills filter">'.
+        $html.='<ul style="margin:0;" class="nav nav-pills filter choice-filter">'.
             '<li class="span1">'.htmlspecialchars($this->getName()).'</li>'.
             '<li '.($reqVal?"":'class="active"').'><label class="radio-inline"><input '.($reqVal?"":'checked="checked"').' type="radio" name="'.$this->getParamName().'" value="">全部</label></li>'."\n";
         
@@ -25,7 +25,7 @@ class ChoiceFilter extends IFilter{
             if($choice[0]&&!$choice[1]){
                 $choice[1]=$choice[0];
             }
-            $html.="<li><label><input type='radio' name='".$this->getParamName()."' ".
+            $html.="<li><label class='radio-inline'><input type='radio' name='".$this->getParamName()."' ".
                 ($choice[0]==$reqVal?"checked=checked":"").
                 " value=\"".$choice[0]."\">".htmlspecialchars($choice[1])."</label></li>\n";
         }

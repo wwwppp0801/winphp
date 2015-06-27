@@ -8,7 +8,7 @@ class UrlMapper
     public function __construct($url)
     {
         $this->url = trim($url," \t\n/");
-        $tokens = array_filter(explode('/', $this->url));
+        $tokens = array_map(strtolower,array_filter(explode('/', $this->url)));
 
         $this->controller=$this->getController($tokens);
         if(isset($tokens[0]) && method_exists($this->controller,$tokens[0]."Action")){
@@ -71,6 +71,12 @@ class UrlMapper
                 }
             }
         }
+
+        if($tokens[count($tokens)-1]!='index'){
+            $tokens[]='index';
+            return $this->getController($tokens);
+        }
+
         $this->actionPath='';
         $this->controller=new BaseController();
         return $this->controller;

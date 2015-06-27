@@ -19,10 +19,10 @@ class RangeFilter extends IFilter{
         $html='';
         parse_str($_GET['__filter'],$params);
         $reqVal=$params[$this->getParamName()];
-        $html.='<ul style="margin:0;" class="nav nav-pills filter">'.
+        $html.='<ul style="margin:0;" class="nav nav-pills filter range-filter">'.
             '<li class="span1">'.htmlspecialchars($this->getName()).'</li>'.
-            '<li>from:<label class="radio-inline"><input class="" value="'.htmlspecialchars($params[$this->getParamName()."__start"]).'" type="text" name="'.$this->getParamName().'__start"></label></li>'."\n".
-            '<li>to:<label class="radio-inline"><input class="" value="'.htmlspecialchars($params[$this->getParamName()."__end"]).'" type="text" name="'.$this->getParamName().'__end"></label></li>'."\n";
+            '<li>from:<label><input class="" value="'.htmlspecialchars($params[$this->getParamName()."__start"]).'" type="text" name="'.$this->getParamName().'__start"></label></li>'."\n".
+            '<li>to:<label><input class="" value="'.htmlspecialchars($params[$this->getParamName()."__end"]).'" type="text" name="'.$this->getParamName().'__end"></label></li>'."\n";
         $html.='</ul>';
 
         return $html;

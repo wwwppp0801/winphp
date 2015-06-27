@@ -43,9 +43,9 @@ class TextFilter extends IFilter{
                     $html.="<input type='hidden' name='".$paramName."' ".
                     " value={$params[$paramName]}>";
                  */
-            $html.='<ul style="margin:0;" class="nav nav-pills filter">'.
+            $html.='<ul style="margin:0;" class="nav nav-pills filter text-filter">'.
                 '<li class="span1">'.htmlspecialchars($Names[$i]).'</li>'.
-                '<li><label class="radio-inline"><input value="'.htmlspecialchars($params[$paramName]).'" type="text" name="'.$paramName.'"></label></li>'."\n";
+                '<li><label><input value="'.htmlspecialchars($params[$paramName]).'" type="text" name="'.$paramName.'"></label></li>'."\n";
             $html.='</ul>';
         }
         return $html;
