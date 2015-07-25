@@ -7,9 +7,10 @@ class PLogger {
     private $_filename;
 
     const ERROR=1;
-    const INFO=2;
-    const DEBUG=3;
-    const PRINT_OUT=4;
+    const WARN=2;
+    const INFO=3;
+    const DEBUG=4;
+    const PRINT_OUT=5;
 
     private function __construct($options=[]){
         $options=array_merge([
@@ -29,13 +30,12 @@ class PLogger {
         return self::$loggers[$name];
     }
 
-    
     /**
      * 设置log级别
      *
      * @param num $level
      */
-    public function setLevel($level = 1) {
+    public function setLevel($level = self::ERROR) {
         $this->_level = $level;
     }
     
@@ -68,25 +68,30 @@ class PLogger {
         $t = gettimeofday();
         if ($this->_fp)
             fwrite($this->_fp, $now.$t["usec"]."] ".$str."\n");
-        if ($this->_level == 4) {
+        if ($this->_level == self::PRINT_OUT) {
             echo "<div style='color:red'>".$now.$t["usec"]."] ".$str."</div>\n";
         }
     }
     
     public function error($str) {
-        if ($this->_level >= 1) {
+        if ($this->_level >= self::ERROR) {
             $this->put("[ERROR] $str".$this->backtrace());
         }
     }
     
     public function info($str) {
-        if ($this->_level >= 2) {
+        if ($this->_level >= self::INFO) {
             $this->put("[INFO] $str");
+        }
+    }
+    public function warn($str) {
+        if ($this->_level >= self::WARN) {
+            $this->put("[WARN] $str".$this->caller());
         }
     }
     
     public function debug($str) {
-        if ($this->_level >= 3) {
+        if ($this->_level >= self::DEBUG) {
             $this->put("[DEBUG] $str".$this->caller());
         }
     }

@@ -1,5 +1,7 @@
 <?php
 namespace Page\Admin;
+use \Form\NoHtmlField;
+use \Form;
 trait InlineBase{
     public $foreignKeyName;
     public function setForeignKey($id){
@@ -33,7 +35,7 @@ trait InlineBase{
             if($field->name()!=$foreignKeyName){
                 return $field;
             }else{
-                return new Form_NoHtmlField(["name"=>$this->foreignKeyName,"default"=>$id]);
+                return new NoHtmlField(["name"=>$this->foreignKeyName,"default"=>$id]);
             }
         },$this->form->getConfig());
         //var_dump($foreignKeyName,$formConfig);

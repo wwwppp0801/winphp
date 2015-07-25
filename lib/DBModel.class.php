@@ -101,6 +101,7 @@ abstract class DBModel{
 
     protected function getTableName(){
         $tableName = preg_replace('/(.)([A-Z])/', '${1}_${2}',get_class($this));
+        $tableName = preg_replace('/\\\\/', '',$tableName);
         return strtolower($tableName);
     }
     protected function getTable(){
@@ -240,6 +241,9 @@ abstract class DBModel{
         return $this->getTable()->insert($data);
     }
     public function update($data){
+        if($this->mId){
+            $this->addWhere("id",$this->mId);
+        }
         return $this->getTable()->update($data);
     }
     public function iterator(){

@@ -30,21 +30,21 @@ $postStr="<xml><ToUserName><![CDATA[gh_18dbd63feb51]]></ToUserName>
 Soso_Logger::setLevel(3);
 $GLOBALS["HTTP_RAW_POST_DATA"]=$postStr;
 
-$c=new MessageController();
+$c=new WeixinController();
 //ob_start();
 $ret=$c->indexAction();
 //$xml=ob_get_contents();
 $xml=preg_replace('/^text\:/',"",$ret[0]);
 var_dump($xml);
-$msg=MessageModel::parseMessage($xml);
+$msg=WeixinMessageModel::parseMessage($xml);
 var_dump($msg);
 
 /*
-$msg=MessageModel::parseMessage($postStr);
+$msg=WeixinMessageModel::parseMessage($postStr);
 Soso_Logger::debug($msg->toStr());
 $msg->save();
 
-$sendMsg=MessageModel::createMessage(array(
+$sendMsg=WeixinMessageModel::createMessage(array(
     'ToUserName'=>$msg->FromUserName,
     'FromUserName'=>$msg->ToUserName,
     'MsgType'=>'text',
@@ -58,11 +58,11 @@ Soso_Logger::debug(var_export(XMLUtils::to_array($sendMsg->toStr()),1));
 $resource=new Resource();
 $resource=$resource->addWhere("id","3")->select();
 
-$msg=MessageModel::createMessageFromResource($resource);
+$msg=WeixinMessageModel::createMessageFromResource($resource);
 echo $msg->toStr();
 
 
-$msg=MessageModel::createMessage(array(
+$msg=WeixinMessageModel::createMessage(array(
     'ToUserName'=>$msg->FromUserName,
     'FromUserName'=>$msg->ToUserName,
     'MsgType'=>'text',

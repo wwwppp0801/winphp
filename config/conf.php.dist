@@ -1,5 +1,5 @@
 <?php 
-define('WINPHP_PATH', "/home/wp/Projects/winphp");
+define('WINPHP_PATH', dirname(ROOT_PATH)."/winphp");
 require (WINPHP_PATH."/config/classpath.php");
 
 
@@ -13,12 +13,12 @@ if (file_exists(ROOT_PATH.'/DEBUG'))
     ini_set('track_errors', true);
     ini_set("display_errors", "On");
     ini_set('error_reporting', E_ALL & ~E_NOTICE);
-    Logger::setLevel(3);
+    Logger::setLevel(PLogger::DEBUG);
 }
 else
 {
     $IS_DEBUG=false;
-    Logger::setLevel(1);
+    Logger::setLevel(PLogger::ERROR);
 }
 date_default_timezone_set('Asia/Shanghai');
 

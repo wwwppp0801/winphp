@@ -1,4 +1,6 @@
+
 ## 目录结构 ##
+* 分两个目录，应用目录（ROOT_PATH）和框架目录（WINPHP_PATH）
 * app 放项目的php类文件，靠名字空间查找
 * app/controller 放对外的controller类，靠url查找
 * webroot 直接对外提供服务的目录（最好由nginx直接服务），除了route.php，其它都是静态文件
@@ -8,6 +10,24 @@
 * template smarty模版的根目录
 * script 放项目脚本的目录
 
+## 请求处理流程 ##
+以/weixin/message请求为例
+* nginx
+* route.php
+* WINPHP_PATH/lib/UrlMapper.class.php
+* ROOT_PATH/app/controller/WeixinController.class.php的Interceptor的beforeAction方法
+* ROOT_PATH/app/controller/WeixinController.class.php中的messageAction方法
+* ROOT_PATH/app/controller/WeixinController.class.php的Interceptor的afterAction方法
+
+action 方法的返回值：
+* 两个元素的数组，第一个参数是view，第二个参数是data，如:["index.tpl",['name'=>'wangpeng']]
+* 模版的根目录在ROOT_PATH/template
+* 如需重定向可返回如["redirect:http://www.baidu.com"];
+* 如需显示json数据可返回如["json:",['json'=>$data]]（除json外别的key都不读）
+
+如果
+
+
 
 ## 找类的逻辑 ##
 
@@ -16,6 +36,8 @@
 * /weixin 使用app/controller/WeixinController::indexAction
 * /weixin/message 使用app/controller/WeixinController::messageAction, 或app/controller/weixin/MessageController::indexAction
 * /weixin/message/delete 使用app/controller/weixin/MessageController::deleteAction 或 使用app/controller/weixin/message/DeleteController::indexAction
+
+
 
 
 ### autoload 找类的逻辑 ###

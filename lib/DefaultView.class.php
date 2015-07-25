@@ -67,6 +67,7 @@ class DefaultView
         }
         else if ($suffix=strstr($this->templateFile, "json:")){
 			//$json = substr($this->templateFile, strlen("json:"));
+            header("Content-Type: application/json");
             if(!$suffix){
                 $suffix="json";
             }
