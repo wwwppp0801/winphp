@@ -1,3 +1,43 @@
+## 项目介绍 ##
+一个php框架，主要功能如下：
+* 基于php5.4以上版本开发
+* 基于php的namespace机制实现的autoload
+* 简易的mvc
+* 简易的orm框架，可支持mysql和sqlite（基于pdo_mysql和pdo_sqlite）
+* 程序化配置的admin管理界面，很容易实现可扩展的后台管理系统
+* 简易的脚手架功能，可以使用php内置的web server搭建测试环境，可以自动生成orm类和admin界面类
+
+
+
+## 脚手架 ##
+### 在ROOT_PATH下建立常规的目录结构 ###
+```shell
+sh ${WINPHP_PATH}/start.sh ${ROOT_PATH}
+```
+
+### 根据数据库中的表结构自动生成orm类和admin界面 ###
+```shell
+cd ${ROOT_PATH};php ${WINPHP_PATH}/webroot/install.php
+```
+* 以上命令，对于数据库中的“my_table”表默认会生成以下文件
+  * ${ROOT_PATH}/app/Base/My/Table.class.php
+  * ${ROOT_PATH}/app/My/Table.class.php
+  * ${ROOT_PATH}/app/controller/admin/my/TableController.php
+* 后两个文件，如果文件已经存在，则不会被覆盖。第一个文件，一定会被覆盖（所以不要在这个文件里添加自己的代码）
+
+### 使用php内置的server进行调试 ###
+```shell
+php  -S locahost:8080 -t ${ROOT_PATH}/webroot ${ROOT_PATH}/webroot/route.php
+```
+
+
+### 执行基于框架的php脚本 ###
+* 脚本文件都要放在 ${ROOT_PATH}/script 目录下
+* 假设有脚本文件 ${ROOT_PATH}/script/test.php ，执行方法是
+```shell
+php ${ROOT_PATH}/webroot/route.php test.php
+```
+* test.php中可以引用所有项目的配置、类
 
 ## 目录结构 ##
 * 分两个目录，应用目录（ROOT_PATH）和框架目录（WINPHP_PATH）
@@ -24,9 +64,6 @@ action 方法的返回值：
 * 模版的根目录在ROOT_PATH/template
 * 如需重定向可返回如["redirect:http://www.baidu.com"];
 * 如需显示json数据可返回如["json:",['json'=>$data]]（除json外别的key都不读）
-
-如果
-
 
 
 ## 找类的逻辑 ##
