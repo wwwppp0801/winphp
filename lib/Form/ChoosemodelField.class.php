@@ -40,6 +40,10 @@ EOF;
         return $css;
     }
     public function foot_js(){
+        $admin_url=$this->config['admin_url'];
+        if(!$admin_url){
+            $admin_url="/admin";
+        }
         $js=<<<EOF
 <script>
 use("popup",function(){
@@ -57,7 +61,7 @@ use("popup",function(){
             content:'iframe', //'ajax', 'iframe' or 'image'
             contentContainer:'.content',
             iframeAttr:'scrolling="yes" frameborder="0"',
-            loadUrl:'{%\$__controller->getUrlPrefix()%}/'+encodeURIComponent(model)+'?action=select&field='+encodeURIComponent(field) //Uses jQuery.load()
+            loadUrl:'$admin_url/'+encodeURIComponent(model)+'?action=select&field='+encodeURIComponent(field) //Uses jQuery.load()
         });
         return false;
     

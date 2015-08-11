@@ -67,7 +67,11 @@ class DefaultView
         }
         else if ($suffix=strstr($this->templateFile, "json:")){
 			//$json = substr($this->templateFile, strlen("json:"));
-            header("Content-Type: application/json");
+            if($this->data['content-type']){
+                header("Content-Type: {$this->data['content-type']}");
+            }else{
+                header("Content-Type: application/json");
+            }
             if(!$suffix){
                 $suffix="json";
             }

@@ -72,6 +72,46 @@ class Utils {
 
         return $res;
     }
+    public static function curl($opts){
+        $default_opts=[
+            'url'=>'',
+            'method'=>'get',
+            'timeout'=>1000,
+            'cookies'=>'',
+            'headers'=>'',
+        ];
+        $opts=array_merge($default_opts,$opts);
+        
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $opts['url']);
+        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, strtoupper($opts['method']));
+        //curl_setopt($ch, CURLOPT_POST, true);
+        if($opts['data']){
+            curl_setopt($ch, CURLOPT_POSTFIELDS, $opts['data']);
+        }
+        if($opts['cookies']){
+            if(is_array($opts['cookies'])){
+                $opts['cookies']=implode("; ",array_map(function($cookie){
+                    if(is_array($cookie)){
+                        return urlencode($cookie[0])."=".urlencode($cookie[1]);
+                    }else{
+                        return $cookie;
+                    }
+                },$opts['cookies']));
+            }
+            curl_setopt($ch, CURLOPT_COOKIE,  $opts['cookies']);
+        }
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
+        curl_setopt($ch, CURLOPT_CONNECTTIMEOUT_MS, $opts['timeout']);
+        curl_setopt($ch, CURLOPT_TIMEOUT_MS, $opts['timeout']);
+        curl_setopt($ch, CURLOPT_HEADER, false);
+        if ($opts['headers']!= '') {
+            curl_setopt($ch, CURLOPT_HTTPHEADER, $opts['headers']);
+        }
+        $res = curl_exec($ch);
+        return $res;
+    }
 
 
     public static function curlPost($url, $data, $timeout = 3, $headerAry = '') {

@@ -345,5 +345,33 @@ abstract class DBModel{
             unset($this->_data[$key]);
         }
 	}
+    
+    /*id,weixin_id,baidu_uid...*/
+    public static function __callStatic($name,$args){
+        if(function_exists(get_class()."::".$name)){
+            return call_user_func_array([self,$name],$args);
+        }
+        
+        if (substr($name,0,5) == 'getBy') {
+            $key=lcfirst(substr($name,5));
+            $key = preg_replace('/([A-Z])/', '_${1}', $key);
+            $key = strtolower($key);
+            $class=get_called_class();
+            $m = new $class();
+            return $m->addWhere($key, $args[0])->select();
+        }
+        if (substr($name,0,8) == 'getAllBy') {
+            $key=lcfirst(substr($name,8));
+            $key = preg_replace('/([A-Z])/', '_${1}', $key);
+            $key = strtolower($key);
+            $class=get_called_class();
+            $m = new $class();
+            return $m->addWhere($key, $args[0])->find();
+        }
+
+        //return call_user_func_array([self::$redis,$name],$args);
+        $trace = debug_backtrace();
+        trigger_error('Undefined property via __call(): '.$name.' in '.$trace[0]['file'].' on line '.$trace[0]['line'], E_USER_ERROR);
+    }
     abstract public function getFieldList();
 }

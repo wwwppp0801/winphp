@@ -15,6 +15,10 @@ class DatetimeField extends Field{
             "<div class='controls'>".(isset($this->config['readonly']) && $this->config['readonly']
             ? '<input size="16" type="text" value="'.date('Y-m-d H:i:s', $value).'" readonly><input size="16" name='.$this->name.'  type="hidden" value="'.$value.'">'
             : '<input size="16" name='.$this->name.' type="hidden" value="'.$value.'" class="m-wrap m-ctrl-medium datetimepicker">'); 
+
+        $html.=$this->createPrompt();
+        $html.=$this->createUserPrompt();
+
         if($this->error){
             $html.="<span class='help-inline'>".$this->error."</span>";
         }
@@ -31,15 +35,18 @@ class DatetimeField extends Field{
     }
     public function head_css(){
         $css=<<<EOF
-	<link rel="stylesheet" type="text/css" href="/winphp/metronic/media/css/datetimepicker.css" />
+	<link rel="stylesheet" type="text/css" href="/kefu/metronic/media/css/datetimepicker.css" />
 EOF;
         return $css;
     }
     public function foot_js(){
         $js=<<<EOF
-<script type="text/javascript" src="/winphp/metronic/media/js/bootstrap-datetimepicker.js"></script>
+<script type="text/javascript" src="/kefu/metronic/media/js/bootstrap-datetimepicker.js"></script>
 <script>
 (function(){
+window.reInit = window.reInit || [];
+
+  function init(){
     (function(controlType){
         $('.'+controlType).each(function(i,elem){
             var dt_picker=$(elem);
@@ -56,6 +63,10 @@ EOF;
             });
         });
     })('datetimepicker');
+  }
+
+  init();
+  window.reInit.push(init); 
 })();
 </script>
 EOF;
