@@ -50,3 +50,11 @@ define("SMTP_HOST","smtp.exmail.qq.com");
 define("SMTP_USERNAME", '');                 // SMTP username
 define("SMTP_PASSWORD", '');                 // SMTP username
  */
+define("REDIS_IP","127.0.0.1");
+define("REDIS_PORT",6379);
+
+define("COMET_SIGN_URL","http://10.92.93.75:8000/sign");
+define("COMET_PUB_URL","http://10.92.93.75:8000/pub");
+define("COMET_SUB_URL","http://10.92.93.75:8109/sub");
+
+require ("const.php");

@@ -13,7 +13,7 @@ class TextField extends Field{
         $value=htmlspecialchars($this->value, ENT_QUOTES);
         $html.= "<label class='control-label'>".htmlspecialchars($this->label)."</label>".
             "<div class='controls'>".
-            "<input class='$class span6' ".($this->config['readonly']&&($this->config['default']||!$is_new&&strlen(trim($value))!=0)?'readonly':"")." type='text' name='{$this->name}'  value='".$value."'>";
+            "<input class='$class span4' ".($this->config['readonly']&&($this->config['default']||!$is_new&&strlen(trim($value))!=0)?'readonly':"")." type='text' name='{$this->name}'  value='".$value."'>";
 
         $html.=$this->createPrompt();
         $html.=$this->createUserPrompt();

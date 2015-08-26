@@ -48,7 +48,7 @@ window.reInit = window.reInit || [];
 
   function init(){
     (function(controlType){
-        $('.'+controlType).each(function(i,elem){
+        $('input.'+controlType).each(function(i,elem){
             var dt_picker=$(elem);
             var input=dt_picker.clone().attr({"type":"text","name":''}).insertAfter(dt_picker);
             input[controlType]({
@@ -58,8 +58,10 @@ window.reInit = window.reInit || [];
             input.data(controlType).update(new Date(dt_picker.val()*1000));
             //console.debug(dt_picker.parents("form"));
             dt_picker.parents("form").submit(function(e){
-                var d=input.data(controlType).getDate();
-                dt_picker.val(parseInt(d.getTime()/1000));
+                if(input.data(controlType)){
+                    var d=input.data(controlType).getDate();
+                    dt_picker.val(parseInt(d.getTime()/1000));
+                }
             });
         });
     })('datetimepicker');

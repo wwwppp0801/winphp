@@ -87,6 +87,12 @@ class BaseController
                 $interceptor=$interceptors[$i];
                 $interceptor->failAction();
             }
+            $logData = array(
+                'uri' => $_SERVER['REQUEST_URI'],
+                'get' => $_GET,
+                'e' => $e,
+            );
+            Logger::error('[FATAL] ' . var_export($logData, true));
             throw $e;
         }
         

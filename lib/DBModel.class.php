@@ -53,6 +53,9 @@ abstract class DBModel{
     public function setAutoClear($auto_clear=true){
         $this->getTable()->setAutoClear($auto_clear);
     }
+    public function getAutoClear(){
+        $this->getTable()->getAutoClear();
+    }
     public function clear(){
         $this->_data=array();
         if($this->_table){
@@ -77,7 +80,11 @@ abstract class DBModel{
                 $tmpData[$field['name']]=$data[$field['name']];
             }
         }
-        $this->_data=array_merge($this->_data,$tmpData);
+        if(!$this->_data){
+            $this->_data=$tmpData;
+        }else{
+            $this->_data=array_merge($this->_data,$tmpData);
+        }
         return $this;
     }
 
@@ -115,14 +122,14 @@ abstract class DBModel{
         if($this->mId){
             if($this->trigger("before_update",[$this])!==false){
                 $ret=$table->addWhere("id",$this->mId)->update($this->_data);
-                $this->trigger("after_update",[$this,$ret]);
+                $this->trigger("after_update",[$this,$ret,$this->_data]);
             }
             return $ret;
         }else{
             $this->trigger("before_insert",[$this]);
             $id=$table->insert($this->_data);
             $this->mId=$id;
-            $this->trigger("after_insert",[$this]);
+            $this->trigger("after_insert",[$this,$this->mId,$this->_data]);
             return !!$id;
         }
         return false;
@@ -238,13 +245,30 @@ abstract class DBModel{
         return $map;
     }
     public function insert($data){
-        return $this->getTable()->insert($data);
+        $this->setData($data);
+        //$this->setDataMerge($data);
+        $this->trigger("before_insert",[$this]);
+        $id=$this->getTable()->insert($this->_data);
+        $this->mId=$id;
+        $this->trigger("after_insert",[$this,$this->mId,$this->_data]);
+        return $id;
     }
     public function update($data){
         if($this->mId){
             $this->addWhere("id",$this->mId);
+            if($this->trigger("before_update",[$this])!==false){
+                $ret=$this->getTable()->update($data);
+                if($ret){
+                    $this->setDataMerge($data);
+                }
+                $this->trigger("after_update",[$this,$ret,$data]);
+                return $ret;
+            }else{
+                return false;
+            }
+        }else{
+            return $this->getTable()->update($data);
         }
-        return $this->getTable()->update($data);
     }
     public function iterator(){
         $iterator=$this->getTable()->iterator();

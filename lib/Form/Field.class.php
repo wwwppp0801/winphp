@@ -66,7 +66,7 @@ abstract class Field{
         $data = $this->jsonToChoice($this->prompt);
         if($data){
             $li = array_map(function($item){
-                return '<li><a href="javascript:void(0);">'.$item.'</a></li>';
+                return '<li><a href="javascript:void(0);" style="white-space:normal">'.$item.'</a></li>';
             }, $data['lists']); 
 
             $li=implode("\n",$li);
@@ -76,7 +76,7 @@ abstract class Field{
                             '快捷回复'.
                             '<span class="caret"></span>'.
                         '</button>'.
-                        '<ul class="dropdown-menu tags" aria-labelledby="dropdownMenu1">'.
+                        '<ul class="dropdown-menu pull-right tags" style="width:450px" aria-labelledby="dropdownMenu1">'.
                            $li. 
                         '</ul>'.
                       '</div>';

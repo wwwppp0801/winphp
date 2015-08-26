@@ -12,7 +12,7 @@ class TextareaField extends Field{
         $html="<div class='control-group'>";
         $html.= "<label class='control-label'>".htmlspecialchars($this->label)."</label>".
             "<div class='controls'>".
-            "<textarea class='$class span6' name='{$this->name}'>{$this->value}</textarea>";
+            "<textarea class='$class span4' name='{$this->name}'>{$this->value}</textarea>";
         if($this->error){
             $html.="<span class='help-inline'>".$this->error."</span>";
         }
