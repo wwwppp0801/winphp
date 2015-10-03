@@ -3,6 +3,7 @@ namespace Page\Admin;
 use BaseController;
 use Utils;
 use WinRequest;
+use ACL;
 
 abstract class Base extends BaseController{
     protected static $PAGE_SIZE=10;
@@ -49,22 +50,62 @@ abstract class Base extends BaseController{
             unset($_REQUEST['__inline_admin_index']);
             $inlineAdmin=$this->inline_admin[$__inline_admin_index];
             $foreignKey=$this->_REQUEST($inlineAdmin->foreignKeyName);
-            $_REQUEST['__success_url']=preg_replace("/Controller$/","",get_class($this))."?action=read&id=$foreignKey#inline_{$__inline_admin_index}_".$this->_REQUEST("id","");
+            $_REQUEST['__success_url']=preg_replace("/Controller$/","",get_class($this))."?__action=read&id=$foreignKey#inline_{$__inline_admin_index}_".$this->_REQUEST("id","");
             $inlineAdmin->setForeignKey($foreignKey);
             return $inlineAdmin->indexAction();
             //return;
         }
         $this->assign('pageAdmin',$this);
-        $tAction =$this->_REQUEST('action',$tAction);
-        
-        $allowMethods = array("select", "select_search","search",'index','create','update','read','delete');
+        $tAction =$this->_REQUEST('__action',$tAction);
 
+        $allowMethods = $this->get_allow_methods();
+        
         if ($tAction != null && $tAction[0]!='_' && in_array($tAction, $allowMethods) && method_exists($this, $tAction)) {
             $this->$tAction();
             return array($this->_templateName,$this->_assigned);
         }
+        if (!in_array($tAction, $allowMethods)){
+            $this->no_permission($tAction);
+            return array($this->_templateName, $this->_assigned);
+        }
         return array('text:error param');
     }
+
+    /**
+     * 获取admin基础行为权限列表
+     * @return array 权限列表
+     */
+    public function get_allow_methods(){
+        $allowMethods = array();
+        if (ACL::checkDBObjectPermissionInsert($this->model))
+        {
+        	$allowMethods[]='create';
+        }
+        if (ACL::checkDBObjectPermissionSelect($this->model))
+        {
+            $allowMethods[]='select';
+            $allowMethods[]='select_search';
+            $allowMethods[]='search';
+            $allowMethods[]='index';
+            $allowMethods[]='read';
+        }
+        if (ACL::checkDBObjectPermissionUpdate($this->model))
+        {
+            $allowMethods[]='update';
+        }
+        if (ACL::checkDBObjectPermissionDelete($this->model))
+        {
+            $allowMethods[]='delete';
+        }
+        return $allowMethods; 
+    }
+
+    public function no_permission()
+    {
+        $this->assign("notice", "no permission");
+        $this->display("admin/base/nopermission.html"); 
+    }
+
     public function select(){
         $this->_index();
         $this->display("admin/base/select.html");
@@ -207,7 +248,10 @@ abstract class Base extends BaseController{
     }
     public function _delete(){
         //$this->model->reset();
-        $this->model->addWhere("id",$_REQUEST['id'])->delete();
+        $item = $this->model->addWhere("id",$_REQUEST['id'])->select();
+        if($item){
+            $item->delete();  
+        }
     }
     public function delete(){
         $__success_url=$this->_REQUEST('__success_url',Utils::get_default_back_url());

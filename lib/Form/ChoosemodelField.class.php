@@ -40,6 +40,10 @@ EOF;
         return $css;
     }
     public function foot_js(){
+        $admin_url=$this->config['admin_url'];
+        if(!$admin_url){
+            $admin_url="/admin";
+        }
         $js=<<<EOF
 <script>
 use("popup",function(){
@@ -47,23 +51,26 @@ use("popup",function(){
         return;
     }
     window.__init_choosemodel_field=true;
+
+    var form;
     $(".choosemodel").click(function(){
         if($(this).hasClass('readonly')){
             return;
         }
-        var model=$(this).attr("model");
+        form = $(this).parents('form');
+        var model=$(this).attr("model").replace(/\\\\/g,'/');
         var field=$(this).attr("name");
         window.choosemodelPopup=$('#popup').find('.content').html('').end().bPopup({
             content:'iframe', //'ajax', 'iframe' or 'image'
             contentContainer:'.content',
             iframeAttr:'scrolling="yes" frameborder="0"',
-            loadUrl:'{%\$__controller->getUrlPrefix()%}/'+encodeURIComponent(model)+'?action=select&field='+encodeURIComponent(field) //Uses jQuery.load()
+            loadUrl:'$admin_url/'+encodeURIComponent(model)+'?__action=select&field='+encodeURIComponent(field) //Uses jQuery.load()
         });
         return false;
     
     });
     window.choosemodel=function(model,field,id){
-        $(document.forms.main).find('[name="'+field+'"]').val(id);
+        form && form.find('[name="'+field+'"]').val(id);
     };
 });
 </script>

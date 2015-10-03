@@ -2,7 +2,7 @@
 namespace Page\Admin;
 class TimeRangeFilter extends IFilter{
 
-    public function setFilter(DBModel $model){
+    public function setFilter(\DBModel $model){
         parse_str($_GET['__filter'],$params);
         $start_time=$params[$this->getParamName()."__start"];
         $end_time=$params[$this->getParamName()."__end"];

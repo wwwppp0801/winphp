@@ -13,7 +13,10 @@ spl_autoload_register(function ($classname){
     if (file_exists(ROOT_PATH."/app/$file")) {
         include_once ROOT_PATH."/app/$file";
     }
-    if (file_exists(WINPHP_PATH."/lib/$file")) {
+    else if (file_exists(ROOT_PATH."/lib/$file")) {
+        include_once ROOT_PATH."/lib/$file";
+    }
+    else if (file_exists(WINPHP_PATH."/lib/$file")) {
         include_once WINPHP_PATH."/lib/$file";
     }
 });

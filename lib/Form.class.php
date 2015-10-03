@@ -99,7 +99,7 @@ class Form{
             return $this->values[$name];
         }
     }
-    public function to_html($is_new){
+    public function to_html($is_new=false){
         $html='';
         foreach($this->fields as $field){
             $html.=$field->to_html($is_new);

@@ -37,7 +37,7 @@
 	<!-- BEGIN LOGIN -->
 	<div class="content">
 		<!-- BEGIN LOGIN FORM -->
-		<form class="form-vertical login-form" method="post" action="{%$__controller->getUrlPrefix()%}/index/login">
+		<form class="form-vertical login-form" method="post" action="{%$__controller->getUrlPrefix()%}/login">
 			<h3 class="form-title">Login to your account</h3>
 			<div class="alert alert-error hide">
 				<button class="close" data-dismiss="alert"></button>
@@ -79,7 +79,7 @@
 	<!-- END LOGIN -->
 	<!-- BEGIN COPYRIGHT -->
 	<div class="copyright">
-		2013 &copy; &nbsp;&nbsp;&nbsp; wwwppp0801@qq.com
+		2015 &copy; &nbsp;&nbsp;&nbsp; baidu inc.
 	</div>
 	<!-- END COPYRIGHT -->
 	<!-- BEGIN JAVASCRIPTS(Load javascripts at bottom, this will reduce page load time) -->

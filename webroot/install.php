@@ -78,9 +78,9 @@ foreach ($tables as $table){
     $baseModelClass=<<<END_CLASS
 <?php
 {%if \$namespaces%}
-namespace {%implode("\\\\",\$namespaces)%};
+namespace {%\$namespaces%};
 {%/if%}
-class {%\$className%} extends Base\{%if \$namespaces%}{%implode("\\\\",\$namespaces)%}\{%/if%}{%\$className%} {
+class {%\$className%} extends \Base\{%if \$namespaces%}{%\$namespaces%}\{%/if%}{%\$className%} {
 
 }
 
@@ -107,7 +107,7 @@ foreach ($tables as $table){
     $className=array_pop($paths);
     $namespaces=implode("\\",$paths);
     $fileName=$className."Controller.class.php";
-    $realpath=ROOT_PATH."/app/controller/admin/".implode("/",$paths);
+    $realpath=ROOT_PATH."/app/controller/admin/".implode("/",array_map("strtolower",$paths));
     @mkdir($realpath,0777,true);
     
     foreach($fields as $i=>$field){
@@ -119,6 +119,7 @@ foreach ($tables as $table){
     $modelTemplate->assign('namespaces',$namespaces);
     $baseModelClass=<<<END_CLASS
 <?php
+use {%if \$namespaces%}\{%\$namespaces%}{%/if%}\{%\$className%};
 class {%\$className%}Controller extends Page\Admin\Base {
     public function __construct(){
         parent::__construct();
@@ -165,4 +166,18 @@ END_CLASS;
     }
 
     $modelTemplate->clearAllAssign();
+}
+
+foreach ($tables as $table)
+{
+	$default_action = ['insert', 'delete', 'update', 'select'];
+    $sql_tpl = "insert ignore into admin_psermission (name, module, action, ptype) values ('%s', '%s', '%s', '%s');";
+    foreach ($default_action as $action){
+        $name = $table."@".$action;
+        $module = $table;
+        $ptype = '0';        
+    	$sql = sprintf($sql_tpl, $name, $module, $action, $ptype);
+    	DB::execute_sql($sql);
+    	echo $sql."\n";
+    }
 }

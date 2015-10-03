@@ -58,9 +58,9 @@
                     <!-- BEGIN FORM-->
                     <form name="main" action="{%$pageAdmin->getUrl()%}" method="post" class="form-horizontal">
                         {%if $__is_new%}
-                        <input type=hidden name="action" value="create">
+                        <input type=hidden name="__action" value="create">
                         {%else%}
-                        <input type=hidden name="action" value="update">
+                        <input type=hidden name="__action" value="update">
                         <input type=hidden name="id" value="{%$modelData->mId%}">
                         {%/if%}
                         <input type=hidden name="__success_url" value="{%$__success_url%}">
@@ -82,7 +82,7 @@
                         <div class="inline_form">
                             <a name="inline_{%$inlineIndex%}_{%$inlineModelData->mId%}"></a>
                             <form class='formWrap form-horizontal' method='post' action="{%$pageAdmin->getUrl()%}">
-                                <input type='hidden' name='action' value='update'>
+                                <input type='hidden' name='__action' value='update'>
                                 <input type='hidden' name='__inline_admin_index' value='{%$inlineIndex%}'>
                                 <input type='hidden' name='id' value='{%$inlineModelData->mId%}'>
                                 <input type='hidden' name='{%$inline.admin->foreignKeyName%}' value='{%$modelData->mId%}'>
@@ -94,7 +94,7 @@
                             </form>
 
                             <form class='formWrap form-horizontal' style="position:absolute" method='post' action="{%$pageAdmin->getUrl()%}">
-                                <input type='hidden' name='action' value='delete'>
+                                <input type='hidden' name='__action' value='delete'>
                                 <input type='hidden' name='__inline_admin_index' value='{%$inlineIndex%}'>
                                 <input type='hidden' name='id' value='{%$inlineModelData->mId%}'>
                                 <input type='hidden' name='{%$inline.admin->foreignKeyName%}' value='{%$modelData->mId%}'>
@@ -108,7 +108,7 @@
                             <a name="inline_{%$inlineIndex%}_"></a>
                             <form class='formWrap form-horizontal' method="post" action="{%$pageAdmin->getUrl()%}">
                                 <input type=hidden name="__inline_admin_index" value="{%$inlineIndex%}">
-                                <input type=hidden name="action" value="create">
+                                <input type=hidden name="__action" value="create">
                                 <input type=hidden name="{%$inline.admin->foreignKeyName%}" value="{%$modelData->mId%}">
                                 {%$inline.admin->form->clear()%}
                                 {%$inline.admin->form->to_html("div",'item')%}

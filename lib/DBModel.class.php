@@ -53,6 +53,9 @@ abstract class DBModel{
     public function setAutoClear($auto_clear=true){
         $this->getTable()->setAutoClear($auto_clear);
     }
+    public function getAutoClear(){
+        $this->getTable()->getAutoClear();
+    }
     public function clear(){
         $this->_data=array();
         if($this->_table){
@@ -77,7 +80,11 @@ abstract class DBModel{
                 $tmpData[$field['name']]=$data[$field['name']];
             }
         }
-        $this->_data=array_merge($this->_data,$tmpData);
+        if(!$this->_data){
+            $this->_data=$tmpData;
+        }else{
+            $this->_data=array_merge($this->_data,$tmpData);
+        }
         return $this;
     }
 
@@ -101,8 +108,19 @@ abstract class DBModel{
 
     protected function getTableName(){
         $tableName = preg_replace('/(.)([A-Z])/', '${1}_${2}',get_class($this));
+        $tableName = preg_replace('/\\\\/', '',$tableName);
         return strtolower($tableName);
     }
+    
+    /**
+     * 获取在权限系统中的对象表名，暂时直接用getTableName
+     * TODO 分表后升级此方法
+     * @return string 权限系统中的对象表名
+     */
+    public function getTablePermissionName(){
+    	return $this->getTableName();
+    }
+    
     protected function getTable(){
         if(!$this->_table){
             $this->_table=new DBTable($this->getTableName());
@@ -112,16 +130,16 @@ abstract class DBModel{
     public function save(){
         $table=$this->getTable();
         if($this->mId){
-            if($this->trigger("before_update",[$this])!==false){
+            if($this->trigger("before_update",[$this,$this->_data])!==false){
                 $ret=$table->addWhere("id",$this->mId)->update($this->_data);
-                $this->trigger("after_update",[$this,$ret]);
+                $this->trigger("after_update",[$this,$ret,$this->_data]);
             }
             return $ret;
         }else{
-            $this->trigger("before_insert",[$this]);
+            $this->trigger("before_insert",[$this,$this->_data]);
             $id=$table->insert($this->_data);
             $this->mId=$id;
-            $this->trigger("after_insert",[$this]);
+            $this->trigger("after_insert",[$this,$this->mId,$this->_data]);
             return !!$id;
         }
         return false;
@@ -237,10 +255,30 @@ abstract class DBModel{
         return $map;
     }
     public function insert($data){
-        return $this->getTable()->insert($data);
+        $this->setData($data);
+        //$this->setDataMerge($data);
+        $this->trigger("before_insert",[$this]);
+        $id=$this->getTable()->insert($this->_data);
+        $this->mId=$id;
+        $this->trigger("after_insert",[$this,$this->mId,$this->_data]);
+        return $id;
     }
     public function update($data){
-        return $this->getTable()->update($data);
+        if($this->mId){
+            $this->addWhere("id",$this->mId);
+            if($this->trigger("before_update",[$this,$data])!==false){
+                $ret=$this->getTable()->update($data);
+                if($ret){
+                    $this->setDataMerge($data);
+                }
+                $this->trigger("after_update",[$this,$ret,$data]);
+                return $ret;
+            }else{
+                return false;
+            }
+        }else{
+            return $this->getTable()->update($data);
+        }
     }
     public function iterator(){
         $iterator=$this->getTable()->iterator();
@@ -341,5 +379,33 @@ abstract class DBModel{
             unset($this->_data[$key]);
         }
 	}
+    
+    /*id,weixin_id,baidu_uid...*/
+    public static function __callStatic($name,$args){
+        if(function_exists(get_class()."::".$name)){
+            return call_user_func_array([self,$name],$args);
+        }
+        
+        if (substr($name,0,5) == 'getBy') {
+            $key=lcfirst(substr($name,5));
+            $key = preg_replace('/([A-Z])/', '_${1}', $key);
+            $key = strtolower($key);
+            $class=get_called_class();
+            $m = new $class();
+            return $m->addWhere($key, $args[0])->select();
+        }
+        if (substr($name,0,8) == 'getAllBy') {
+            $key=lcfirst(substr($name,8));
+            $key = preg_replace('/([A-Z])/', '_${1}', $key);
+            $key = strtolower($key);
+            $class=get_called_class();
+            $m = new $class();
+            return $m->addWhere($key, $args[0])->find();
+        }
+
+        //return call_user_func_array([self::$redis,$name],$args);
+        $trace = debug_backtrace();
+        trigger_error('Undefined property via __call(): '.$name.' in '.$trace[0]['file'].' on line '.$trace[0]['line'], E_USER_ERROR);
+    }
     abstract public function getFieldList();
 }

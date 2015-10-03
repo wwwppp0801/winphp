@@ -10,7 +10,7 @@
             <div class="portlet-body">
                 <div class="clearfix">
                     <div class="btn-group">
-                        <a target="_blank" href="?action=read" id="sample_editable_1_new" class="btn green">
+                        <a target="_blank" href="?__action=read" id="sample_editable_1_new" class="btn green">
                             新建 <i class="icon-plus"></i>
                         </a>
                         <a style="margin-left:20px;" href="javascript:;" onclick="location.reload();return false;" class="btn green">
@@ -32,7 +32,8 @@
         var itemDatas={%json_encode(array_map(create_function('$item','return $item->getData();'),$modelDataList))%};
         $("tbody>tr").dblclick(function(){
             var index=$(this).index();
-            parent.window.choosemodel('{%$executeInfo.controllerName%}','{%$smarty.get.field%}',itemDatas[index]['id']);
+            parent.window.choosemodel && parent.window.choosemodel('{%$executeInfo.controllerName%}','{%$smarty.get.field%}',itemDatas[index]['id']);
+            parent.window.choosemodelField && parent.window.choosemodelField('{%$executeInfo.controllerName%}','{%$smarty.get.field%}',itemDatas[index]['{%$smarty.get.field%}']);
             parent.window.choosemodelPopup.close();
         });
         $("form[name='search']").submit(function(){

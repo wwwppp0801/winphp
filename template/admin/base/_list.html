@@ -29,7 +29,7 @@
             <div class="dataTables_filter" id="sample_1_filter">
                 <label>
                     <form style="margin:0;" name="search">
-                        <input type="hidden" name="action" value="search">
+                        <input type="hidden" name="__action" value="search">
                         搜索: <input name="search" value="{%$smarty.get.search|escape%}" type="text" aria-controls="sample_1" class="m-wrap medium">
                         {%if $smarty.get.field%}
                         <input name="field" value="{%$smarty.get.field|escape%}" type="hidden">
@@ -85,8 +85,8 @@
                 </td>
                 {%/foreach%}
                 <td>
-                    {%if !$pageAdmin->single_actions_default||$pageAdmin->single_actions_default.edit %}<a href="?action=read&id={%$modelData->mId%}">编辑</a>{%/if%}
-                    {%if !$pageAdmin->single_actions_default||$pageAdmin->single_actions_default.delete %}<a confirm="你确定要删除么？" href="?action=delete&id={%$modelData->mId%}">删除</a>{%/if%}
+                    {%if !$pageAdmin->single_actions_default||$pageAdmin->single_actions_default.edit %}<a href="?__action=read&id={%$modelData->mId%}">编辑</a>{%/if%}
+                    {%if !$pageAdmin->single_actions_default||$pageAdmin->single_actions_default.delete %}<a confirm="你确定要删除么？" href="?__action=delete&id={%$modelData->mId%}">删除</a>{%/if%}
                     {%foreach from=$pageAdmin->single_actions item=action%}
                     {%if !$action.enable||(is_callable($action.enable)&&call_user_func($action.enable,$modelData,$pageAdmin)) %}
                     <a {%if $action.target%}target="{%$action.target%}"{%/if%} {%if $action.confirm %}confirm="{%$action.confirm%}"{%/if%} href="{%strip%}

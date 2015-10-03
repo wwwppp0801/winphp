@@ -10,7 +10,7 @@ class JsonArrayField extends Field{
     public function to_html($is_new){
         $class=$this->config['class'];
         $arr=json_decode($this->value(),true);
-        $arr=$arr?$arr:[];
+        $arr=is_array($arr)?$arr:[];
         $links=array_map(function($a){
             return "<li><a target='_blank' href='javascript:;'>".htmlspecialchars($a)."</a><button type='button' class='close' aria-hidden='true'>&times;</button></li>";
         },$arr);

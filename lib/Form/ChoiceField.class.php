@@ -19,7 +19,7 @@ class ChoiceField extends Field{
     }
 
     public function to_html($is_new){
-        $html="<div class='control-group'>";
+        $html="<div class='control-group' data-group='{$this->data_group}'>";
         $html.= "<label class='control-label'>".htmlspecialchars($this->label)."</label>";
         $html.="<div class='controls'>";
         foreach($this->choices as $choice){
@@ -30,9 +30,12 @@ class ChoiceField extends Field{
                 && $this->config['readonly']) {
                 $html.=$checked ? '<input size="16" type="text" value="'.$display.'" readonly /><input size="16" name='.$this->name.' type="hidden" value="'.htmlspecialchars($value).'" readonly />' : '';
             } else {
-                $html.="<label class='radio'><div class='radio'><span><input type='radio' $checked name='{$this->name}' value='".htmlspecialchars($value)."'></span></div>$display</label>";
+                $html.="<label class='radio inline'><input type='radio' $checked name='{$this->name}' value='".htmlspecialchars($value)."'>$display</label>";
             }
         }
+        $html.=$this->createPrompt();
+        $html.=$this->createUserPrompt();
+
         if($this->error){
             $html.="<span class='error'>".$this->error."</span>";
         }

@@ -1,6 +1,6 @@
 <?php 
 class Logger {
-    public static function setLevel($level = 1) {
+    public static function setLevel($level = PLogger::ERROR) {
         PLogger::get()->setLevel($level);
     }
     
@@ -13,6 +13,9 @@ class Logger {
     }
     public static function error($str) {
         PLogger::get()->error($str);
+    }
+    public static function warn($str) {
+        PLogger::get()->warn($str);
     }
     
     public static function info($str) {

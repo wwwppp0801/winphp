@@ -7,19 +7,22 @@ class PLogger {
     private $_filename;
 
     const ERROR=1;
-    const INFO=2;
-    const DEBUG=3;
-    const PRINT_OUT=4;
+    const WARN=2;
+    const INFO=3;
+    const DEBUG=4;
+    const PRINT_OUT=5;
 
     private function __construct($options=[]){
         $options=array_merge([
             'level'=>self::ERROR,
             'path'=>'/tmp/',
             'file_prefix'=>'',
+            'in_line'=>true,///每条日志仅打一行
             ],$options);
         $this->_file_prefix=$options['file_prefix'];
         $this->_level=$options['level'];
         $this->_path=$options['path'];
+        $this->_in_line=$options['in_line'];
     }
     private static $loggers=[];
     public static function get($name='root',$options=[]){
@@ -29,13 +32,12 @@ class PLogger {
         return self::$loggers[$name];
     }
 
-    
     /**
      * 设置log级别
      *
      * @param num $level
      */
-    public function setLevel($level = 1) {
+    public function setLevel($level = self::ERROR) {
         $this->_level = $level;
     }
     
@@ -66,27 +68,35 @@ class PLogger {
         
         $now = date('[Y-m-d H:i:s:');
         $t = gettimeofday();
+        if($this->_in_line){
+            $str=str_replace(["\r","\n"],'',$str);
+        }
         if ($this->_fp)
-            fwrite($this->_fp, $now.$t["usec"]."] ".$str."\n");
-        if ($this->_level == 4) {
+            fwrite($this->_fp, $now.$t["usec"]."] ".LOG_ID." ".$str."\n");
+        if ($this->_level == self::PRINT_OUT) {
             echo "<div style='color:red'>".$now.$t["usec"]."] ".$str."</div>\n";
         }
     }
     
     public function error($str) {
-        if ($this->_level >= 1) {
+        if ($this->_level >= self::ERROR) {
             $this->put("[ERROR] $str".$this->backtrace());
         }
     }
     
     public function info($str) {
-        if ($this->_level >= 2) {
+        if ($this->_level >= self::INFO) {
             $this->put("[INFO] $str");
+        }
+    }
+    public function warn($str) {
+        if ($this->_level >= self::WARN) {
+            $this->put("[WARN] $str".$this->caller());
         }
     }
     
     public function debug($str) {
-        if ($this->_level >= 3) {
+        if ($this->_level >= self::DEBUG) {
             $this->put("[DEBUG] $str".$this->caller());
         }
     }

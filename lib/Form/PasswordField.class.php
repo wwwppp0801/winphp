@@ -24,9 +24,12 @@ class PasswordField extends Field{
     public function validate(&$values){
         $ret=parent::validate($values);
         if($ret){
-            $this->value=$values[$this->name]=md5($values[$this->name]);
+            $this->value=$values[$this->name]=$this->hashPassword($values[$this->name]);
         }
         return $ret;
+    }
+    public function hashPassword($pass){
+        return md5($pass);
     }
     public function foot_js(){
         $js=<<<EOF

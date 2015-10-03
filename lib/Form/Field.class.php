@@ -7,6 +7,7 @@ abstract class Field{
     protected $required;
     protected $error;
     protected $config;
+    protected $prompt;
     protected $is_set=false;
 
     public function __construct($config){
@@ -35,6 +36,18 @@ abstract class Field{
         if (isset($config['validator'])){
             $this->validator=$config['validator'];
         }
+        if (isset($config['prompt'])){
+            $this->prompt = $config['prompt']; 
+        }
+        if (isset($config['user_prompt'])){
+            $this->user_prompt = $config['user_prompt']; 
+        }
+        if (isset($config['mult_prompt'])){
+            $this->mult_prompt = $config['mult_prompt']; 
+        }
+        if (isset($config['data_group'])){
+            $this->data_group = $config['data_group']; 
+        }
     }
     public abstract function to_html($is_new);
     public function foot_js(){
@@ -42,6 +55,22 @@ abstract class Field{
     }
     public function head_css(){
         return "";
+    }
+    public function jsonToChoice($str){
+        if(!$str) return false;
+
+        $arr = json_decode($str, true); 
+        if($arr && $arr['type'] == "choice"){
+            return $arr; 
+        }
+        return false;
+    }
+    public function createPrompt($direct = "right"){
+        //var_dump($this->name.$this->mult_prompt);
+        return "<kefu-help-prompt jsonkefu='{$this->prompt}' jsonuser='{$this->user_prompt}' pull='{$direct}'></kefu-help-prompt><kefu-help-mult-prompt jsonmult='{$this->mult_prompt}'></kefu-help-mult-prompt>";
+    }
+    public function createUserPrompt(){
+        return '';
     }
     public function validate(&$values){
         if($this->required && strlen($values[$this->name])==0){

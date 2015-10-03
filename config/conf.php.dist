@@ -1,5 +1,5 @@
 <?php 
-define('WINPHP_PATH', "/home/wp/Projects/winphp");
+define('WINPHP_PATH', dirname(ROOT_PATH)."/winphp");
 require (WINPHP_PATH."/config/classpath.php");
 
 
@@ -13,12 +13,12 @@ if (file_exists(ROOT_PATH.'/DEBUG'))
     ini_set('track_errors', true);
     ini_set("display_errors", "On");
     ini_set('error_reporting', E_ALL & ~E_NOTICE);
-    Logger::setLevel(3);
+    Logger::setLevel(PLogger::DEBUG);
 }
 else
 {
     $IS_DEBUG=false;
-    Logger::setLevel(1);
+    Logger::setLevel(PLogger::ERROR);
 }
 date_default_timezone_set('Asia/Shanghai');
 
@@ -50,3 +50,11 @@ define("SMTP_HOST","smtp.exmail.qq.com");
 define("SMTP_USERNAME", '');                 // SMTP username
 define("SMTP_PASSWORD", '');                 // SMTP username
  */
+define("REDIS_IP","127.0.0.1");
+define("REDIS_PORT",6379);
+
+define("COMET_SIGN_URL","http://10.92.93.75:8000/sign");
+define("COMET_PUB_URL","http://10.92.93.75:8000/pub");
+define("COMET_SUB_URL","http://10.92.93.75:8109/sub");
+
+require ("const.php");

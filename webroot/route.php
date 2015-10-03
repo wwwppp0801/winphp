@@ -11,6 +11,7 @@ if (isset($_SERVER['REQUEST_URI'])&&preg_match('/(.*\.(php|png|jpg|jpeg|gif|js|c
 
 define('ROOT_PATH', dirname(dirname(__FILE__)));
 require (ROOT_PATH."/config/conf.php");
+define('LOG_ID', ''.time().mt_rand(1000, 10000));
 
 if(php_sapi_name()=='cli'){
     Logger::setLevel(4);

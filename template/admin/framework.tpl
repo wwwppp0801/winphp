@@ -41,7 +41,7 @@ Purchase: http://themeforest.net/item/metronic-responsive-admin-dashboard-templa
 </head>
 <!-- END HEAD -->
 <!-- BEGIN BODY -->
-<body class="page-header-fixed">
+<body class="page-header-fixed" ng-app="admin">
 {%block name="body"%}
 	<!-- BEGIN HEADER -->
 	<div class="header navbar navbar-inverse navbar-fixed-top">
@@ -77,7 +77,7 @@ Purchase: http://themeforest.net/item/metronic-responsive-admin-dashboard-templa
 							<li><a href="extra_lock.html"><i class="icon-lock"></i> Lock Screen</a></li>
                             -->
                             {%block name='right_top_nav'%}
-                            <li><a href="{%$__controller->getUrlPrefix()%}/index/logout"><i class="icon-key"></i>退出登录</a></li>
+                            <li><a href="/admin/login"><i class="icon-key"></i>退出登录</a></li>
                             {%/block%}
 						</ul>
 					</li>

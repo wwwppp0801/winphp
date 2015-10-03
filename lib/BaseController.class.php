@@ -79,6 +79,10 @@ class BaseController
                 $interceptor=$interceptors[$i];
                 $interceptor->failAction();
             }
+        }catch(PermissionException $e)
+        {
+            header('HTTP/1.0 401 Unauthorized');
+        	return 'permission deny';
         }
         catch(Exception $e)
         {
@@ -87,6 +91,12 @@ class BaseController
                 $interceptor=$interceptors[$i];
                 $interceptor->failAction();
             }
+            $logData = array(
+                'uri' => $_SERVER['REQUEST_URI'],
+                'get' => $_GET,
+                'e' => $e,
+            );
+            Logger::error('[FATAL] ' . var_export($logData, true));
             throw $e;
         }
         
@@ -115,4 +125,5 @@ class BaseController
             return $modelAndView;
         }
     }
+    
 }
