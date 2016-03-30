@@ -191,25 +191,49 @@ class Bargain extends DBModel{
         return $FIELD_LIST;
     }   
 }
+//根据id查一个Bargain对象的简单方法：
+Bargain::getById($id);
+
+
 $b=new Bargain();
-//支持addWhere，但如果指定了id，id会作为唯一的查询条件
-$b->mId=1;
-//执行一次查询，之后字段就有值了
-$b->select();
+//支持addWhere，但如果指定了id，id会作为唯一的查询条件，返回对象（或者查不到返回false）
+$b->addWhere("id",$id)->select();
 //可以用访问属性的方式访问所有字段
 var_dump($b->mImage,$b->mAllCount);
+
+
 
 //使用save可以修改一个属性
 $b->mImage="aaaaaaaaaaaaaaaaa";
 $b->save();
 var_dump($b->mImage);
 
+
+//拿到对象的关联数组数据
+$b->getData();
+
+//获取单个字段，推荐第一种方式
+$b->mAllCount;
+$b->getData("all_count");
+
+
+//修改记录，如果有id，执行update，如果没有id，执行insert(id保存在$b->mId)
+$b->mUrl="http://www.baidu.com/";
+//也可以用setData设置字段
+$b->setData("url","http://www.baidu.com/");
+$b->save();
+
+
+//强制insert,返回新记录的id
+$id=$b->insert(['url'=>"xxx","address"=>"yyy"]);
+
+
 //clear可以清空对象里的所有数据
 $b->clear();
-var_dump($b->mImage);
+var_dump($b->mImage);//应该为空
+
 //重新查一次，可以检查刚才的save是否生效
-$b->mId=1;
-$b->select();
+$b=$b->addWhere('id',10)->select();
 var_dump($b->mImage);
 
 //同样也支持iterator和find，不同之处在于返回值不再是关联数组，而是一个真正的对象
