@@ -1,0 +1,8 @@
+FROM ubuntu:16.04
+MAINTAINER wwwppp0801@gmail.com
+WORKDIR /root
+USER root
+#RUN git clone https://github.com/wwwppp0801/winphp
+RUN mkdir -p /root/winphp
+ADD winphp.tgz /root/winphp/
+RUN apt-get install -y nginx php7.0-fpm
