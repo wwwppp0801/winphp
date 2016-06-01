@@ -1,4 +1,10 @@
-rm -g winphp.tgz
-tar czvf winphp.tgz *
-#sudo docker build -f nginx.docker wwwppp0801@gmail.com/winphp-nginx
-sudo docker build -f php-fpm.docker -t winphp-php-fpm .
+#rm -g winphp.tgz
+#tar czvf winphp.tgz *
+
+#sudo docker rmi winphp-php-fpm
+#sudo docker build --force-rm -f php-fpm.docker -t winphp-php-fpm .
+
+sudo docker rmi winphp-nginx
+sudo docker build --force-rm  -f nginx.docker -t winphp-nginx .
+
+

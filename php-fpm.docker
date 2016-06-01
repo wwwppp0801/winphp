@@ -4,5 +4,6 @@ WORKDIR /root
 USER root
 #RUN git clone https://github.com/wwwppp0801/winphp
 RUN mkdir -p /root/winphp
-ADD winphp.tgz /root/winphp/
-RUN apt-get install -y nginx php7.0-fpm
+#ADD winphp.tgz /root/winphp/
+RUN apt-get update
+RUN apt-get install -y php7.0-fpm
