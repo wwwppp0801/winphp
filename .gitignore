@@ -6,3 +6,5 @@ ctemplates
 DEBUG
 log
 config/conf.php
+
+/vendor/

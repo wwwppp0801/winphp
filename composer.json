@@ -1,0 +1,11 @@
+{
+    "name": "wangpeng/winphp",
+    "type": "library",
+    "authors": [
+        {
+            "name": "wangpeng20",
+            "email": "wangpeng20@baidu.com"
+        }
+    ],
+    "require": {}
+}
