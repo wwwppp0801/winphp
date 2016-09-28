@@ -57,4 +57,4 @@ define("COMET_SIGN_URL","http://10.92.93.75:8000/sign");
 define("COMET_PUB_URL","http://10.92.93.75:8000/pub");
 define("COMET_SUB_URL","http://10.92.93.75:8109/sub");
 
-require ("const.php");
+//require ("const.php");

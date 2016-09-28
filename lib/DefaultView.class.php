@@ -5,7 +5,7 @@ class DefaultView
     private $local;
     private $data;
 
-    public function DefaultView($view, $model)
+    public function __construct($view, $model)
     {
         $this->data = $model;
         $this->templateFile = $view;
