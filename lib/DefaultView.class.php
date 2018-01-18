@@ -5,7 +5,7 @@ class DefaultView
     private $local;
     private $data;
 
-    public function __construct($view, $model)
+    public function DefaultView($view, $model)
     {
         $this->data = $model;
         $this->templateFile = $view;
@@ -37,10 +37,10 @@ class DefaultView
             }
             else
             {
-                throw new SystemException('json parameter error');
+                throw new SystemException('json parameter error', 500);
             }
             if($checkList&& !$_SERVER['HTTP_REFERER']){
-                throw new SystemException("forbidden");
+                throw new SystemException("forbidden", 403);
             }
             $preg = '/^http:\/\/[^\/?;]*\.('.$checkList.')(\/|$)/';
             $data = parse_url($_SERVER['HTTP_REFERER']);
@@ -58,7 +58,7 @@ class DefaultView
 
             $callback = preg_replace("/[^a-zA-Z0-9_]/", "", $callback);
 
-            return $callback."(".json_encode($this->data['json']).");";
+            return $callback."(".json_encode($this->data['json'],JSON_UNESCAPED_UNICODE).");";
         }
         else if (strstr($this->templateFile, "text:"))
         {
@@ -75,7 +75,7 @@ class DefaultView
             if(!$suffix){
                 $suffix="json";
             }
-            return json_encode($this->data['json']);
+            return json_encode($this->data['json'],JSON_UNESCAPED_UNICODE);
         }
 		else
         {
@@ -89,7 +89,7 @@ class DefaultView
         DefaultViewSetting::setTemplateSetting($template);
         if (!$template->templateExists($this->templateFile))
         {
-            throw new SystemException("no this template:".$this->templateFile);
+            throw new SystemException("no this template:".$this->templateFile, 500);
         }
 		//var_dump($this->data);
         $template->assign($this->data);

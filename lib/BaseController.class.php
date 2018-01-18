@@ -46,7 +46,7 @@ class BaseController
         
         $executeInfo = array('controllerName'=>preg_replace("/[A-Z][a-z]+$/","",get_class($mapper->getController())), 
 							'methodName'=>$method[1],
-                            'actionName'=>preg_replace("/[A-Z][a-z]+$/","",get_class($method[0])),
+                            'actionName'=>preg_replace("/[A-Z][a-z]+$/","",$method[1]),
                             'requestActionName'=>$tAction);
 
 		WinRequest::mergeModel(array('executeInfo'=>$executeInfo));

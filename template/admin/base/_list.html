@@ -97,6 +97,14 @@
                         {%else%}
                         {%strval($action.action)%}
                         {%/if%}
+                        {%/strip%}" onclick="{%strip%}
+                        {%if is_string($action.onclick)%}
+                        {%$action.onclick%}
+                        {%elseif is_callable($action.onclick)%}
+                        {%call_user_func($action.onclick,$modelData,$pageAdmin)%}
+                        {%else%}
+                        {%strval($action.onclick)%}
+                        {%/if%}
                         {%/strip%}">{%$action.label%}</a>
                     {%/if%}
                     {%/foreach%}

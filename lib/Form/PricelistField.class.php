@@ -17,7 +17,7 @@ class PricelistField extends Field{
         $sum = $value?$value['sum']:0;
         $defaultValue = $this->value()?$this->value():json_encode(["type"=>"pricelist", "lists"=>[['product'=>'', 'price'=>'', 'count'=>'']]]);
 
-        return "<div price-list json='{$this->value()}' label='{$this->label}' input='{$this->name}' jsonkefu='{$this->prompt}' jsonuser='{$this->user_prompt}' jsonmult='{$this->mult_prompt}'></div>";
+        return "<div price-list json='{$this->value()}' label='{$this->label}' input='{$this->name}' jsonkefu='{$this->prompt}' jsonuser='{$this->user_prompt}' jsonmult='{$this->mult_prompt}' field-data='data.fields[\"".htmlspecialchars($this->label)."\"]'></div>";
     }
 
     public function template(){
@@ -29,8 +29,8 @@ class PricelistField extends Field{
             <label class="control-label">{{label}}</label>
              <div class="controls controls-row">
                     <input type="text" class="span4" style="visibility:hidden;"/>
-                    <kefu-help-prompt jsonkefu="{{kefuPrompt}}" jsonuser="{{userPrompt}}"></kefu-help-prompt>
-                    <kefu-help-mult-prompt json="{{multPrompt}}"></kefu-help-mult-prompt>
+                    <kefu-help-mult-prompt jsonmult="{{multPrompt}}"></kefu-help-mult-prompt>
+                    <kefu-help-qu-prompt data="fieldData" ng-if="fieldData"></kefu-help-qu-prompt>
              </div>
         </div>
         <div class="list-input" style="margin-top:-35px;">
@@ -53,9 +53,10 @@ class PricelistField extends Field{
         </div>
         <div class="total row" style="margin-bottom:20px;">
             <a class="price-list-add span1" style="margin-left:140px;" href="javascript:;" ng-click="add()">增加</a>
-            <input type="hidden" name="{{inputName}}" value="{{data|json}}">
+            <input type="hidden" name="{{inputName}}" value="{{data|priceListNoCount|json}}">
             <span class="total-price span2 offset1 text-right" style="font-size:18px;font-weight:bold;cursor:pointer;" value="{{data.sum}}">总价:{{data.lists|priceListSum}}</span>
         </div>
+        <div class="row" style="margin-left:140px;"><div qu-sug no-use="1" data="fieldData" ng-if="fieldData"></div></div>
 EOF;
         return $html;
     }
@@ -146,6 +147,17 @@ EOF;
             return sum || 0;
         };
     });
+
+    app.filter('priceListNoCount', function(){
+        return function(data){
+            var ret = angular.copy(data);
+            ret.lists = data.lists.filter(function(item){
+                return item.count;
+            });
+            return ret;
+        }
+    });
+
     app.directive("priceList", function(){
         return {
             restrict : "A",
@@ -155,7 +167,8 @@ EOF;
                 label : '@label',
                 kefuPrompt : '@jsonkefu',
                 userPrompt : '@jsonuser',
-                multPrompt : '@jsonmult'
+                multPrompt : '@jsonmult',
+                fieldData : '=fieldData'
             },
             transclude:true,
             template:'$template',
@@ -179,7 +192,7 @@ EOF;
         
                 scope.add = function(){
                     //check last if name is '' 
-                    if(scope.data.lists[scope.data.lists.length - 1].name.match(/^\s*$/)) {
+                    if(scope.data.lists.length && scope.data.lists[scope.data.lists.length - 1].name.match(/^\s*$/)) {
                         alert("请完成当前项");
                         return;
                     }
@@ -207,9 +220,14 @@ EOF;
 
                 scope.\$watch('data.lists', function(){
                     scope.data.sum = filter('priceListSum')(scope.data.lists);
-                    var arr = scope.data.lists.map(function(item){
-                        return item.name + '(单价:'+ item.price +' 数量:'+item.count+')';    
-                    });
+                    var arr = scope.data.lists
+                                        .filter(function(item){
+                                            return item.count;
+                                        })
+                                        .map(function(item){
+                                            return item.name + '(单价:'+ item.price +' 数量:'+item.count+')';    
+                                        });
+
                     scope.data.value = arr.join();
                     //scope.data.value
 

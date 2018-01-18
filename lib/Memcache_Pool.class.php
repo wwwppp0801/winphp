@@ -4,7 +4,7 @@ class Memcache_Pool{
     public static function getConnection($ip,$port){
         $port=intval($port);
         if(!IPUtils::is_ip($ip)){
-            throw new SystemException("ip: $ip:$port, error");
+            throw new SystemException("ip: $ip:$port, error", 500);
         }
         $key="{$ip}_{$port}";
         if(!self::$pool[$key]){
@@ -13,7 +13,7 @@ class Memcache_Pool{
             if($res){
                 self::$pool[$key]=$conn;
             }else{
-                throw new SystemException("ip: $ip:$port, can't connect");
+                throw new SystemException("ip: $ip:$port, can't connect", 500);
             }
         }
         return self::$pool[$key];

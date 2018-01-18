@@ -8,9 +8,14 @@ class DBTable{
     protected $limits=array();
     protected $computed_cols=array();
     private $auto_clear=true;
+    private $dbobj=null;
     public function __construct($tableName,$auto_clear=true){
         $this->tableName=$tableName;
         $this->auto_clear=$auto_clear;
+        $this->dbobj=DBObject::getInstance();
+    }
+    public function setDBObject($dbobj){
+        $this->dbobj=$dbobj;
     }
 
     public function setAutoClear($auto_clear=true){
@@ -27,7 +32,7 @@ class DBTable{
     }
     public function iterator(){
         list($where_sql,$where_vals)=$this->_where();
-        list($dbh,$sth)=DB::execute_sql("select ".$this->_cols()." ".$this->_computed_cols()." from `{$this->tableName}`".$where_sql.$this->_groupby().$this->_orderby().$this->_limit(),$where_vals);
+        list($dbh,$sth)=$this->dbobj->execute_sql("select ".$this->_cols()." ".$this->_computed_cols()." from `{$this->tableName}`".$where_sql.$this->_groupby().$this->_orderby().$this->_limit(),$where_vals);
         $this->_auto_clear();
         return $sth;
     }
@@ -41,7 +46,7 @@ class DBTable{
     }
     public function find(){
         list($where_sql,$where_vals)=$this->_where();
-        $results=DB::query("select ".$this->_cols()." ".$this->_computed_cols()." from `{$this->tableName}`".$where_sql.$this->_groupby().$this->_orderby().$this->_limit(),$where_vals);
+        $results=$this->dbobj->query("select ".$this->_cols()." ".$this->_computed_cols()." from `{$this->tableName}`".$where_sql.$this->_groupby().$this->_orderby().$this->_limit(),$where_vals);
         $this->_auto_clear();
         return $results;
     }
@@ -76,7 +81,7 @@ class DBTable{
     }
     public function count(){
         list($where_sql,$where_vals)=$this->_where();
-        $results=DB::queryForCount("select count(*) from `{$this->tableName}`".$where_sql.$this->_groupby(),
+        $results=$this->dbobj->queryForCount("select count(*) from `{$this->tableName}`".$where_sql.$this->_groupby(),
             $where_vals
         );
         $this->_auto_clear();
@@ -96,7 +101,7 @@ class DBTable{
         },array_keys($values)));
         $params=array("insert into `{$this->tableName}`(".$this->_cols().") values ($placeholder);");
         $params=array_merge($params,array_values($values));
-        $results=call_user_func_array('DB::insert',$params);
+        $results=call_user_func_array([$this->dbobj,'insert'],$params);
         $this->_auto_clear();
         return $results;
     }
@@ -146,7 +151,7 @@ class DBTable{
         }
         $params=array("update `{$this->tableName}` set $cols  $where_sql;");
         $params=array_merge($params,array_values($values),$where_vals);
-        $results=call_user_func_array('DB::update',$params);
+        $results=call_user_func_array([$this->dbobj,'update'],$params);
         $this->_auto_clear();
         return $results;
     }
@@ -155,7 +160,7 @@ class DBTable{
             return;
         }
         list($where_sql,$where_vals)=$this->_where();
-        $results=DB::delete("delete from `{$this->tableName}` ". $where_sql,$where_vals);
+        $results=$this->dbobj->delete("delete from `{$this->tableName}` ". $where_sql,$where_vals);
         $this->_auto_clear();
         return $results;
     }

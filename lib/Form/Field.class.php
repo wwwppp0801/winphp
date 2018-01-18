@@ -67,7 +67,7 @@ abstract class Field{
     }
     public function createPrompt($direct = "right"){
         //var_dump($this->name.$this->mult_prompt);
-        return "<kefu-help-prompt jsonkefu='{$this->prompt}' jsonuser='{$this->user_prompt}' pull='{$direct}'></kefu-help-prompt><kefu-help-mult-prompt jsonmult='{$this->mult_prompt}'></kefu-help-mult-prompt>";
+        return "<kefu-help-mult-prompt jsonmult='{$this->mult_prompt}'></kefu-help-mult-prompt><kefu-help-qu-prompt data='data.fields[\"".htmlspecialchars($this->label)."\"]' ng-if='data && data.fields[\"".htmlspecialchars($this->label)."\"]'></kefu-help-qu-prompt>";
     }
     public function createUserPrompt(){
         return '';

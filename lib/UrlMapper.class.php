@@ -26,7 +26,7 @@ class UrlMapper
             }
         }
         if(!$this->method){
-            throw new SystemException("no match method: $url");
+            throw new SystemException("no match method: $url", 404);
         }
 
         foreach($tokens as $i=>$token){
@@ -67,7 +67,7 @@ class UrlMapper
                     $tokens=array_slice($tokens,$i);
                     return $this->controller;
                 }else{
-                    throw new SystemException("file: $classFile does not have class: $controllerClass");
+                    throw new SystemException("file: $classFile does not have class: $controllerClass", 404);
                 }
             }
         }
@@ -107,7 +107,7 @@ class UrlMapper
                     $tokens=array_slice($tokens,$i);
                     return $this->action;
                 }else{
-                    throw new SystemException("file: $classFile does not have class: $actionClass");
+                    throw new SystemException("file: $classFile does not have class: $actionClass", 404);
                 }
             }
         }
@@ -119,7 +119,7 @@ class UrlMapper
         if($this->method){
             return $this->method;
         }
-        throw new SystemException("no method:".implode($tokens,"/"));
+        throw new SystemException("no method:".implode($tokens,"/"), 404);
     }
 
 }

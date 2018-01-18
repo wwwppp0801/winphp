@@ -22,6 +22,7 @@ class TextField extends Field{
             $html.="<span class='help-inline'>".$this->error."</span>";
         }
         $html.='</div>';
+        $html.='<div class="controls"><div qu-sug data="data.fields[\''.htmlspecialchars($this->label).'\']" ng-if="data.fields && data.fields[\''.htmlspecialchars($this->label).'\']"></div></div>';
         $html.='</div>';
         return $html;
     }

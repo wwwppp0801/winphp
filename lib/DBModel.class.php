@@ -56,6 +56,9 @@ abstract class DBModel{
     public function getAutoClear(){
         $this->getTable()->getAutoClear();
     }
+    public function setDBObject(DBObject $dbobject){
+        $this->getTable()->setDBObject($dbobject);
+    }
     public function clear(){
         $this->_data=array();
         if($this->_table){

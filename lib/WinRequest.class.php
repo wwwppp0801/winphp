@@ -21,6 +21,14 @@ class WinRequest
         }
         return self::$model;
     }
+    public static function getActionName(){
+		$executeInfo=WinRequest::getModel('executeInfo');
+        return $executeInfo['actionName'];
+    }
+    public static function getControllerName(){
+		$executeInfo=WinRequest::getModel('executeInfo');
+        return $executeInfo['controllerName'];
+    }
     
     public static function setModel($model)
     {
@@ -30,7 +38,7 @@ class WinRequest
         }
         else
         {
-            throw new SystemException("model must be an php key-value array");
+            throw new SystemException("model must be an php key-value array", 404);
         }
     }
 
@@ -50,11 +58,11 @@ class WinRequest
         }
         else
         {
-            throw new SystemException("model must be an php key-value array");
+            throw new SystemException("model must be an php key-value array", 404);
         }
     }
     /**
-     * 删除Model中的特定数据(由key指定)
+     * 鍒犻櫎Model涓殑鐗瑰畾鏁版嵁(鐢眐ey鎸囧畾)
      * @param string/array $key
      * @return nothing
      */

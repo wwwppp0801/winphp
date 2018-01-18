@@ -10,6 +10,4 @@ chmod -R 777 ctemplates log webroot/upload
 cp $WINPHP_PATH/webroot/route.php webroot/
 cp $WINPHP_PATH/config/conf.php.dist config/conf.php
 cp $WINPHP_PATH/template/sidebar.tpl template/sidebar.tpl
-touch DEBUG
-
 cd -

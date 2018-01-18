@@ -168,7 +168,8 @@ abstract class Base extends BaseController{
         $this->display("admin/base/index.html");
     }
     public function _create(){
-        if($this->form->bind($_REQUEST)){
+        $requestData=array_merge($_GET,$_POST);
+        if($this->form->bind($requestData)){
             $this->model->setData($this->form->values());
             if(false!==$this->model->save()){
                 return true;
@@ -219,7 +220,7 @@ abstract class Base extends BaseController{
         $this->display("admin/base/read.html");
     }
     public function _update(){
-        $requestData=$_REQUEST;
+        $requestData=array_merge($_GET,$_POST);
         if($this->form->bind($requestData)){
             $data=$this->form->values();
             $data['id']=$requestData["id"];
