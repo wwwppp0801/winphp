@@ -77,6 +77,7 @@ class DBObject{
                     .var_export($dbh->errorCode(),true)
                     .var_export($params,true)
                 );
+                throw new Exception("get sth error");
             }
             $res=$sth->execute($params);
             if($res===false){

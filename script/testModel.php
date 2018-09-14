@@ -1,51 +1,52 @@
 <?php
+//创建一个测试用的sqlite3数据库
+//example: sqlite3 order_food.db '.read script/testModel.sql'
 assert_options(ASSERT_ACTIVE, 1);
-DB::init("mysql:host=localhost;dbname=inav_proj;port:3306",'root','');
+//DB::init("mysql:host=localhost;dbname=inav_proj;port:3306",'root','');
 class Bargain extends DBModel{
     public function getFieldList(){
         static $FIELD_LIST=array (
             array('name'=>'id',         'type'=>"int",'key'=>true,'defalut'=>null,'null'=>false,),
             array('name'=>'title',      'type'=>"string",'defalut'=>null,'null'=>false,),
             array('name'=>'image',      'type'=>"string",'defalut'=>null,'null'=>false,),
-            array('name'=>'price',      'type'=>"string",'defalut'=>null,'null'=>false,),
-            array('name'=>'value',      'type'=>"string",'defalut'=>null,'null'=>false,),
-            array('name'=>'rebate',     'type'=>"float",'defalut'=>null,'null'=>false,),
-            array('name'=>'bought',     'type'=>"int",'defalut'=>null,'null'=>false,),
-            array('name'=>'source',     'type'=>"string",'defalut'=>null,'null'=>false,),
-            array('name'=>'url',        'type'=>"string",'defalut'=>null,'null'=>false,),
-            array('name'=>'address',    'type'=>"string",'defalut'=>null,'null'=>false,),
-            array('name'=>'endtime',    'type'=>"int",'defalut'=>null,'null'=>false,),
-            array('name'=>'fanli',      'type'=>"string",'defalut'=>null,'null'=>false,),
-            array('name'=>'type',       'type'=>"int",'defalut'=>null,'null'=>false,),
-            array('name'=>'city',       'type'=>"string",'defalut'=>null,'null'=>false,),
             array('name'=>'all_count',  'type'=>"int",'defalut'=>null,'null'=>false,),
         );
         return $FIELD_LIST;
     }
 }
 $b=new Bargain();
-$b->mId=1;
+$b->delete(true);
+$b->mTitle="title";
+$b->mImage="image";
+$b->mAllCount=1;
+$b->save();
+
+
+$b=new Bargain();
 $b->select();
 var_dump($b->getData());
 $b->mImage="aaaaaaaaaaaaaaaaa";
 $b->save();
-var_dump($b->mImage);
+assert("\$b->mImage === 'aaaaaaaaaaaaaaaaa'");
 $b->clear();
-var_dump($b->mImage);
-$b->mId=1;
+assert("\$b->mImage === null");
+
 $b->select();
-var_dump($b->mImage);
-foreach($b->addWhere("id",10,"<")->iterator() as $model){
-    var_dump($model->mId);
-}
-foreach($b->addWhere("id",10,"<")->find() as $model){
-    var_dump($model->mId);
-}
+assert("\$b->mImage === 'aaaaaaaaaaaaaaaaa'");
+
+$b->update([
+    'all_count'=>['all_count+1',DBTable::NO_ESCAPE],
+]);
+
+$b->select();
+var_dump($b->getData());
+assert("\$b->mAllCount == 2");
 
 
 
-$objs=$b->addWhere('id',5854,">")->addWhere("id",1,"<=",'or')->orderby('id','desc')->find();
-assert("count(\$objs) === 2");
-assert("\$objs[1]->mId== 1");
 
-var_dump(memory_get_peak_usage(true)/1000);
+$objs=$b->orderby('id','desc')->find();
+assert("count(\$objs) === 1");
+assert("\$objs[0]->mTitle== 'title'");
+
+var_dump("max memory: ".(memory_get_peak_usage(true)/1000)."KB");

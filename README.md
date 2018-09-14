@@ -159,6 +159,11 @@ $table->addWhere('id',$id)->update(array('name'=>'博客2'));
 $row=$table->addWhere('id',$id)->select();
 assert("\$row['name']=='博客2'");
 
+//update 字段自增的case
+$table->update([
+    'all_count'=>['all_count+1',DBTable::NO_ESCAPE],
+]);
+
 //delete，如果不加任何where条件，必须用参数true来强制执行。这是为了防止不小心清空整个表
 $table->delete(true);
 #$table->addWhere('id',$id)->delete();
@@ -222,6 +227,15 @@ $b->mUrl="http://www.baidu.com/";
 //也可以用setData设置字段
 $b->setData("url","http://www.baidu.com/");
 $b->save();
+
+//update 当然要加where条件指定被update的记录
+$b->addWhere('id',$id)->update(array('name'=>'博客2'));
+$b=$b->addWhere('id',$id)->select();
+
+//update 字段自增的case
+$b->update([
+    'all_count'=>['all_count+1',DBTable::NO_ESCAPE],
+]);
 
 
 //强制insert,返回新记录的id
